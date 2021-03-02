@@ -1,0 +1,147 @@
+.navbarA{
+    width: 100%;
+    height: 50px;
+    background-color: #adafad;
+    display: flex;
+    flex-direction: row;
+}
+.navbarA button{
+    margin-right: 2px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    margin-left: 10px;
+    height: 30px;
+    background-color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    float: right;
+}
+.navbarA h2{
+    width: 89%;
+    margin-left: 20px;
+    color: black;
+}
+.add{
+    display: flex;
+    flex-direction: row;
+    background-color: #e1e1e1;
+    border: 1px solid black;
+}
+.add .add-kiri{
+    width: 50%;
+    border: 1px solid black;
+}
+
+.add .add-kiri .form-data{
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+    border: 1px rgb(10, 10, 10);
+}
+.add .add-kiri .form-data label{
+    width: 40%;
+    color:white;
+    padding-left: 20px;
+    padding-top: 10px;
+    height: 11px;
+    margin-top: 10px;
+    font-size: 12px;
+    background-color: black;
+}
+.add .add-kiri .form-data input{
+    width: 60%;
+    height: 25px;
+    margin-top: 10px;
+    margin-right: 10px;
+    padding-left: 10px;
+}
+.add .add-kiri .form-data .submitA{
+    height: 30px;
+    width: 10%; 
+    margin-top: 15px;
+    color: aliceblue;
+    background-color: rgb(253, 7, 7);
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: 40%;
+
+}
+.add .add-kiri .form-data .text-area{
+    width: 62%;
+    height: 200px;
+    margin-top: 10px;
+    margin-right: 10px;
+    padding: 10px 10px 10px 10px;
+    border: 20px;
+}
+.add .add-kiri .form-data .text-area-label{
+    width: 42%;
+    height: 202px;
+    margin-top: 10px;
+}
+.add .add-kanan{
+    width: 50%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 520px;
+    width: 50%;
+    scrollbar-face-color: #CE7E00; 
+    scrollbar-shadow-color: #FFFFFF; 
+    scrollbar-highlight-color: #6F4709;
+    border: 1px solid black;
+}
+.add .add-product{
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgb(8, 8, 8);
+    margin-bottom: 10px;
+    border-radius: 20px;
+    margin-left:10px;
+    margin-top:10px
+}
+.add .add-product .form-data{
+    display: flex;
+    flex-direction: row;
+}
+.add .add-product .form-data label{
+    width: 40%;
+    color:white;
+    padding-left: 20px;
+    padding-top: 10px;
+    height: 11px;
+    margin-top: 10px;
+    font-size: 12px;
+    background-color: black;
+    margin-left: 10px;
+}
+.add .add-product .form-data input{
+    width: 60%;
+    height: 25px;
+    margin-top: 10px;
+    margin-right: 10px;
+    padding-left: 10px;
+}
+.add .add-product .form-data .selectA{
+    width: 62.4%;
+    height: 29px;
+    margin-top: 10px;
+    margin-right: 10px;
+    padding-left: 10px;
+}
+.add .add-product .form-data .inputL{
+    margin-bottom: 10px;
+}
+.add .add-kanan .submitProduct{
+    margin-left: 30px;
+    border-radius: 100%;
+    width: 4%;
+    height: 5%;
+    border:none;
+    background-color: red;
+    color: antiquewhite;
+    cursor: pointer;
+}
+.add .add-kanan p{
+    margin-left: 10px; 
+    color: black;
+}
