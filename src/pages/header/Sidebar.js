@@ -38,6 +38,7 @@ const NavIconSh = styled(Link)`
   align-items: center;
   padding-left:1rem;
   padding-right:1rem;
+  text-decoration:none;
 `;
 
 const P = styled(Link)`

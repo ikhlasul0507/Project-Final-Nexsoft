@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import "./produk.css"
 import * as FaIcons from 'react-icons/fa';
 import DivClassSingle from "../../../componen/div/divClassSingle"
-import { Button, H3, Input, Label, P, Small ,A,Li,Ul,} from "../../../componen"
-import Tooltip from '@material-ui/core/Tooltip';
+import { Button, H3, H2, Input, Label, P, Small ,A,Li,Ul,Hr,Textarea} from "../../../componen"
 class Produk extends Component {
     constructor(props) {
         super(props);
@@ -42,7 +41,7 @@ class Produk extends Component {
                             <Button className="btn-cari" onClick={this.cari}><FaIcons.FaSearch /></Button>
                             
                         </DivClassSingle>
-                        <hr/>
+                        <Hr/>
                         <DivClassSingle className="list">
                             <DivClassSingle className="list-data" onClick={this.detail}>
                                 <H3>000011ERWEWET</H3>
@@ -97,12 +96,12 @@ class Produk extends Component {
                     <DivClassSingle className="data-right">
 
                         <DivClassSingle className="navbar">
-                            <h2>{(this.state.disabled) ? "Monitoring" : "Kelola"} Stock</h2>
+                            <H2>{(this.state.disabled) ? "Monitoring" : "Kelola"} Stock</H2>
                             <Button onClick={this.save} className="tooltip"><FaIcons.FaPlus /></Button>
                             <Button><FaIcons.FaPencilAlt /></Button>
                             <Button><FaIcons.FaTrash /></Button>
                         </DivClassSingle>
-                        <hr className="hr" />
+                        <Hr className="hr" />
                         <DivClassSingle className="form-data">
                             <Label>Product ID</Label>
                             <Input type="text" className="input" name="" disabled={(this.state.disabled) ? "disabled" : ""} placeholder="Product ID..." />
@@ -113,8 +112,8 @@ class Produk extends Component {
                         </DivClassSingle>
                         <DivClassSingle className="form-data">
                             <Label className="textarea">Product description</Label>
-                            <textarea name="" className="textarea-input" disabled={(this.state.disabled) ? "disabled" : ""} placeholder="Product description...">
-                            </textarea>
+                            <Textarea name="" className="textarea-input" disabled={(this.state.disabled) ? "disabled" : ""} placeholder="Product description...">
+                            </Textarea>
                         </DivClassSingle>
                         <DivClassSingle className="form-data">
                             <Label>Product Price (Rp)</Label>

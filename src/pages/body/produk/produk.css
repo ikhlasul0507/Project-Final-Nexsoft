@@ -1,7 +1,7 @@
 .navbar{
     width: 100%;
     height: 50px;
-    background-color: aliceblue;
+    background-color: #adafad;
     display: flex;
     flex-direction: row;
 }
@@ -15,15 +15,18 @@
     margin-bottom: 5px;
     margin-left: 10px;
     height: 30px;
-    background-color: #adafad;
+    background-color: #2196f3;
     border-radius: 5px;
+    border: none;
+    width: 3%;
+    color: white;
 }
 .navbar h4{
     color: black;
 }
 .content{
     width: 100%;
-    background-color: #e1e1e1;
+    background-color: #adafad;
     display: flex;
     flex-direction: row;
     height: 88vh;
@@ -40,12 +43,13 @@
 }
 .data-left .cari input{
     width: 40%;
-    height: 23px;
+    height: 26px;
     margin-left:10px;
     margin-top: 16px;
     margin-bottom: -10;
     background-color: aliceblue;
     border-radius: 5px;
+    border: none;
 }
 .data-left .cari button{
     height: 30px;
@@ -55,9 +59,10 @@
     margin-top: 15px;
     margin-bottom: 15px;
     color: aliceblue;
-    background-color: black;
+    background-color: #2196f3;
     cursor: pointer;
     border-radius: 5px;
+    border: none;
 }
 hr{
     margin-top: -5px;
@@ -124,6 +129,7 @@ hr{
     height: 170px;
     border-radius: 5px;
     padding-top: 10px;
+    border: none;
 }
 .data-right .form-data .input{
     width: 45%;
@@ -131,6 +137,7 @@ hr{
     padding-left: 20px;
     background-color: white;
     border-radius: 5px;
+    border: none;
 }
 .data-right .form-data textarea{
     width: 45%;
@@ -147,6 +154,7 @@ hr{
     background-color: rgb(253, 7, 7);
     cursor: pointer;
     border-radius: 5px;
+    border: none;
 }
 ul.pagination {
     display: inline-block;

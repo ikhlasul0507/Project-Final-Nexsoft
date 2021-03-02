@@ -1,5 +1,6 @@
 import Button from "./button"
 import H1 from "./h1"
+import H2 from "./h2"
 import H3 from "./h3"
 import Input from "./input"
 import Label from "./label"
@@ -9,6 +10,10 @@ import Small from "./small"
 import A from "./a"
 import Li from "./li"
 import Ul from "./ul"
+import Hr from "./hr"
+import Select from "./select"
+import Option from "./option"
+import Textarea from "./textarea"
 
 
-export {Button, H1,H3,Input,Label,P,A,Li,Ul, Img, Small}
+export {Button,Option, H1,H2,H3,Input,Select,P,A,Li,Ul,Hr, Img,Textarea, Small,Label}

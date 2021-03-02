@@ -6,20 +6,24 @@
     flex-direction: row;
 }
 .navbarA button{
-    margin-right: 2px;
+    margin-right: 1;
     margin-top: 10px;
     margin-bottom: 5px;
     margin-left: 10px;
     height: 30px;
-    background-color: white;
+    background-color: #2196f3;
     border-radius: 5px;
     cursor: pointer;
     float: right;
+    border: none;
+    justify-content: flex-end;
+    width: 3%;
+    color: white;
 }
 .navbarA h2{
     width: 89%;
     margin-left: 20px;
-    color: black;
+    color: white;
 }
 .add{
     display: flex;
@@ -50,20 +54,22 @@
 }
 .add .add-kiri .form-data input{
     width: 60%;
-    height: 25px;
+    height: 30px;
     margin-top: 10px;
     margin-right: 10px;
     padding-left: 10px;
+    border: none;
 }
 .add .add-kiri .form-data .submitA{
     height: 30px;
     width: 10%; 
     margin-top: 15px;
     color: aliceblue;
-    background-color: rgb(253, 7, 7);
+    background-color: #2196f3;
     cursor: pointer;
     border-radius: 5px;
     margin-left: 40%;
+    border: none;
 
 }
 .add .add-kiri .form-data .text-area{
@@ -116,17 +122,19 @@
 }
 .add .add-product .form-data input{
     width: 60%;
-    height: 25px;
-    margin-top: 10px;
-    margin-right: 10px;
-    padding-left: 10px;
-}
-.add .add-product .form-data .selectA{
-    width: 62.4%;
     height: 29px;
     margin-top: 10px;
     margin-right: 10px;
     padding-left: 10px;
+    border: none;
+}
+.add .add-product .form-data .selectA{
+    width: 62.4%;
+    height: 30px;
+    margin-top: 10px;
+    margin-right: 10px;
+    padding-left: 10px;
+    border: none;
 }
 .add .add-product .form-data .inputL{
     margin-bottom: 10px;
@@ -137,7 +145,7 @@
     width: 4%;
     height: 5%;
     border:none;
-    background-color: red;
+    background-color: #2196f3;
     color: antiquewhite;
     cursor: pointer;
 }

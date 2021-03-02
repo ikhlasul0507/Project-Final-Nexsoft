@@ -1,0 +1,89 @@
+.navbarReport{
+    width: 100%;
+    height: 50px;
+    background-color: #adafad;
+    display: flex;
+    flex-direction: row;
+}
+.navbarReport .cari{
+    display: flex;
+    flex-direction: row;
+    margin-left: 20px;
+    width: 50%;
+}
+.navbarReport .cari input{
+    width: 100%;
+    height: 30px;
+    margin-left:5px;
+    margin-top: 10px;
+    margin-bottom: -10;
+    background-color: aliceblue;
+    border-radius: 5px;
+    border: none;
+}
+.navbarReport .cari button{
+    height: 30px;
+    width: 30%;
+    margin-left: 15px;
+    margin-right: 10px;
+    margin-top: 9px;
+    margin-bottom: 15px;
+    color: aliceblue;
+    background-color: #2196f3;
+    cursor: pointer;
+    border-radius: 5px;
+    border: none;
+}
+.navbarReport .judul{
+    width: 40%;
+}
+.navbarReport .judul h2{
+    width: 60%;
+    color: rgb(252, 252, 252);
+}
+.navbarReport .proses{
+    width: 30%;
+    display: flex;
+    flex-direction: row;
+    justify-content:flex-end;
+    margin-right: 30px;
+}
+.navbarReport .proses .pM{
+    margin-top: 17px;
+    margin-left: 10px;
+}
+.navbarReport .proses select{
+    height: 30px;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+.navbarReport .proses button{
+    margin-right: 2px;
+    margin-top: 10px;
+    margin-left: 10px;
+    height: 30px;
+    background-color: #2196f3;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    width: 10%;
+    color: white;
+}
+.notFound{
+    margin-top: -10;
+    width: 100%;
+    background-color: aliceblue;
+    text-align: center;
+}
+.notFound h3{
+    color: red;
+    font-size: 18px;
+    padding-top: 20px;
+}
+.notFound img{
+    width: 30%;
+    height: 30%;
+}
+.table-dataM{
+    color: black;
+}
