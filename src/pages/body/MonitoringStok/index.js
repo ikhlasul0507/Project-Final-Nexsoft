@@ -43,12 +43,12 @@ class MonitoringStok extends Component {
                         <Button className="btn-cari" onClick={this.cari}><FaIcons.FaSearch /></Button>
                     </DivClassSingle>
                     <DivClassSingle className="judul">
-                        <H2>List Monitoring Stock</H2>
+                        <H2></H2>
                     </DivClassSingle>
                     <DivClassSingle className="proses">
                         {(this.state.detail)?
                         <>
-                        <Button><FaIcons.FaEye /></Button>
+                        <Button onClick={()=>{this.props.history.push("/detail-monitoring")}}><FaIcons.FaEye /></Button>
                         <Button><FaIcons.FaPencilAlt /></Button>
                         <Button><FaIcons.FaTrash /></Button>
                         </>

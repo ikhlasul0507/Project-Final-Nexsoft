@@ -1,0 +1,98 @@
+.navbarD{
+    width: 100%;
+    height: 50px;
+    background-color: #adafad;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.navbarD h2{
+    margin-left: 3.4%;
+    color: black;
+}
+.navbarD button{
+    height: 28px;
+    width: 3%;
+    margin-left: 15px;
+    margin-right: 10px;
+    margin-top: 9px;
+    margin-bottom: 15px;
+    color: aliceblue;
+    background-color: #2196f3;
+    cursor: pointer;
+    border-radius: 5px;
+    border: none;
+}
+.navbarD .btn-detail{
+    justify-content: flex-end;
+    margin-right: 35px;
+    margin-top: 10px;
+    height: 30px;
+}
+.content-detail{
+    margin: auto;
+    width: 60%;
+    height: 700px;
+    background-color: white;
+}
+.content-detail .faktur-header{
+    color: black;
+    padding-top: 20px;
+    padding-left: 6%;
+    padding-right: 6%;
+}
+.content-detail .faktur-header .hr1{
+    height: 3px;
+    background-color: black;
+}
+.content-detail .faktur-content{
+    color: black;
+    padding-left: 6%;
+    padding-right: 6%;
+}
+.content-detail .faktur-content h1{
+    text-align: center;
+}
+.content-detail .faktur-content .faktur-content-header{
+    display: flex;
+    flex-direction: row;
+}
+.content-detail .faktur-content .faktur-content-header .faktur-content-header-kiri{
+    width: 50%;
+}
+.content-detail .faktur-content .faktur-content-header .faktur-content-header-kanan{
+    width: 50%;
+    padding-left: 30%;
+}
+.content-detail .faktur-content .faktur-content-header .faktur-content-header-kiri .field-label{
+    display: flex;
+    flex-direction: row;
+}
+.content-detail .faktur-content .faktur-content-header .faktur-content-header-kanan .field-label{
+    display: flex;
+    flex-direction: row;
+}
+.content-detail .faktur-content .faktur-content-header .faktur-content-header-kiri label{
+    color: black;
+}
+.content-detail .faktur-content .faktur-content-header .faktur-content-header-kanan label{
+    color: black;
+}
+
+.content-detail .faktur-content .faktur-content-header .faktur-content-header-kiri .label{
+   width: 50%;
+}
+.content-detail .faktur-content .faktur-content-header .faktur-content-header-kanan .label{
+   width: 50%;
+}
+.content-detail .table .label{
+    color: black;
+}
+.content-detail .table table{
+    width: 100%;
+}
+.footer-content label{
+    margin-top: 20px;
+    color: black;
+}
+

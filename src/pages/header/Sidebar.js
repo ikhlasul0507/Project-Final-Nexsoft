@@ -81,7 +81,7 @@ const getDateWithMoment = () => {
 
 
 const Sidebar = (props) => {
-    // console.log(props)
+    console.log(props)
     const [sidebar, setSidebar] = useState(false);
     const showSidebar = () => setSidebar(!sidebar);
     return (
@@ -91,6 +91,15 @@ const Sidebar = (props) => {
             <NavIcon to='#'>
               <FaIcons.FaBars onClick={showSidebar} />
             </NavIcon>
+            <h4>
+            {
+             props.match.url === "/master-produk" ? "Master Product" :
+             props.match.url === "/add-monitoring" ? "Add Monitoring" :
+             props.match.url === "/report-monitoring" ? "Report Monitoring" :
+             props.match.url === "/detail-monitoring" ? "Detail Monitoring" :
+             props.match.url === "/monitoring-produk" && "Monitoring Produk"
+            }
+            </h4>
             {getDateWithMoment()}
             
             <NavIconSh to='#' >

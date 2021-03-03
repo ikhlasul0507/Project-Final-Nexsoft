@@ -18,7 +18,7 @@ class ComponentToPrint extends Component {
 
     render() {
         return (
-            <Table className="table-dataM" border="1px" cellPadding="10px">
+            <Table className="table-dataM" border="1px" cellSpacing="0" cellPadding="10px">
                 <Thead>
                     <Th>Document date</Th>
                     <Th>Document number</Th>
@@ -132,7 +132,7 @@ class ReportMonitoring extends Component {
                         <Button className="btn-cari" onClick={this.cari}><FaIcons.FaSearch /></Button>
                     </DivClassSingle>
                     <DivClassSingle className="judul">
-                        <H2>Report Monitoring Stock</H2>
+                        <H2></H2>
                     </DivClassSingle>
                     <DivClassSingle className="proses">
                         <Button className="btn-kiri" onClick={() => { this.props.history.push("/monitoring-produk") }}><FaIcons.FaList /></Button>

@@ -18,6 +18,7 @@ class Proses extends Component {
                     <Route path="/monitoring-produk" exact component={(props)=><Data {...props}/>}></Route>
                     <Route path="/add-monitoring" exact component={(props)=><Data {...props}/>}></Route>
                     <Route path="/report-monitoring" exact component={(props)=><Data {...props}/>}></Route>
+                    <Route path="/detail-monitoring" exact component={(props)=><Data {...props}/>}></Route>
                 </Switch>
             </Router>
          );

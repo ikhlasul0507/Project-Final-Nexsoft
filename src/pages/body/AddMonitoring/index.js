@@ -28,7 +28,7 @@ class AddMonitoring extends Component {
         return (
             <>
                 <DivClassSingle className="navbarA">
-                    <H2>Add Monitoring Stock</H2>
+                    <H2></H2>
                     <Button className="btn-kiri" onClick={()=>{this.props.history.push("/monitoring-produk")}}><FaIcons.FaList /></Button>
                 </DivClassSingle>
                 <DivClassSingle className="add">
