@@ -6,7 +6,6 @@ import ReportMonitoring from './pages/body/ReportMonitoring'
 import DetailMonitoring from './pages/body/DetailMonitoring'
 
 function Data(props) {
-  console.log(props)
     return (
         <div>
           <Sidebar {...props}/>
@@ -14,7 +13,7 @@ function Data(props) {
             props.match.url === "/master-produk" ? <Produk {...props}/> :
             props.match.url === "/add-monitoring" ? <AddMonitoring {...props} /> :
             props.match.url === "/report-monitoring" ? <ReportMonitoring {...props} /> :
-            props.match.url === "/detail-monitoring" ? <DetailMonitoring {...props} /> :
+            props.match.path === "/detail-monitoring/:id" ? <DetailMonitoring {...props} /> :
             props.match.url === "/monitoring-produk" && <MonitoringStok {...props}/>
           }
           

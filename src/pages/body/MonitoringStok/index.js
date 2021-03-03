@@ -20,7 +20,8 @@ class MonitoringStok extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            detail: false
+            detail: false,
+            id : 1234567
         }
 
         this.detail =()=>{
@@ -48,7 +49,7 @@ class MonitoringStok extends Component {
                     <DivClassSingle className="proses">
                         {(this.state.detail)?
                         <>
-                        <Button onClick={()=>{this.props.history.push("/detail-monitoring")}}><FaIcons.FaEye /></Button>
+                        <Button onClick={()=>{this.props.history.push(`/detail-monitoring/${this.state.id}`)}}><FaIcons.FaEye /></Button>
                         <Button><FaIcons.FaPencilAlt /></Button>
                         <Button><FaIcons.FaTrash /></Button>
                         </>

@@ -3,6 +3,7 @@ import "./produk.css"
 import * as FaIcons from 'react-icons/fa';
 import DivClassSingle from "../../../componen/div/divClassSingle"
 import { Button, H3, H2, Input, Label, P, Small ,A,Li,Ul,Hr,Textarea} from "../../../componen"
+import Tooltip from '@material-ui/core/Tooltip';
 class Produk extends Component {
     constructor(props) {
         super(props);
@@ -38,7 +39,9 @@ class Produk extends Component {
                         <DivClassSingle className="cari">
                             <Input type="text" name="" placeholder="Product code" />
                             <Input type="text" name="" placeholder="Product name" />
+                            <Tooltip title="Cari">
                             <Button className="btn-cari" onClick={this.cari}><FaIcons.FaSearch /></Button>
+                            </Tooltip>
                             
                         </DivClassSingle>
                         <Hr/>

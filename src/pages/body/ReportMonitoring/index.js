@@ -41,69 +41,7 @@ class ComponentToPrint extends Component {
                         <Td>50 Pcs</Td>
                         <Td>100 Pcs</Td>
                     </Tr>
-                    <Tr onClick={this.detail}>
-                        <Td>2020/01/22</Td>
-                        <Td>PROR1231</Td>
-                        <Td>Bertambah</Td>
-                        <Td>50 Pcs</Td>
-                        <Td>100 Pcs</Td>
-                    </Tr>
-                    <Tr onClick={this.detail}>
-                        <Td>2020/01/22</Td>
-                        <Td>PROR1231</Td>
-                        <Td>Bertambah</Td>
-                        <Td>50 Pcs</Td>
-                        <Td>100 Pcs</Td>
-                    </Tr>
-                    <Tr onClick={this.detail}>
-                        <Td>2020/01/22</Td>
-                        <Td>PROR1231</Td>
-                        <Td>Bertambah</Td>
-                        <Td>50 Pcs</Td>
-                        <Td>100 Pcs</Td>
-                    </Tr>
-                    <Tr onClick={this.detail}>
-                        <Td>2020/01/22</Td>
-                        <Td>PROR1231</Td>
-                        <Td>Bertambah</Td>
-                        <Td>50 Pcs</Td>
-                        <Td>100 Pcs</Td>
-                    </Tr>
-                    <Tr onClick={this.detail}>
-                        <Td>2020/01/22</Td>
-                        <Td>PROR1231</Td>
-                        <Td>Bertambah</Td>
-                        <Td>50 Pcs</Td>
-                        <Td>100 Pcs</Td>
-                    </Tr>
-                    <Tr onClick={this.detail}>
-                        <Td>2020/01/22</Td>
-                        <Td>PROR1231</Td>
-                        <Td>Bertambah</Td>
-                        <Td>50 Pcs</Td>
-                        <Td>100 Pcs</Td>
-                    </Tr>
-                    <Tr onClick={this.detail}>
-                        <Td>2020/01/22</Td>
-                        <Td>PROR1231</Td>
-                        <Td>Bertambah</Td>
-                        <Td>50 Pcs</Td>
-                        <Td>100 Pcs</Td>
-                    </Tr>
-                    <Tr onClick={this.detail}>
-                        <Td>2020/01/22</Td>
-                        <Td>PROR1231</Td>
-                        <Td>Bertambah</Td>
-                        <Td>50 Pcs</Td>
-                        <Td>100 Pcs</Td>
-                    </Tr>
-                    <Tr onClick={this.detail}>
-                        <Td>2020/01/22</Td>
-                        <Td>PROR1231</Td>
-                        <Td>Bertambah</Td>
-                        <Td>50 Pcs</Td>
-                        <Td>100 Pcs</Td>
-                    </Tr>
+                    
                 </Tbody>
             </Table>
         );
@@ -115,7 +53,7 @@ class ReportMonitoring extends Component {
         super(props);
         this.state = {
             disabled: true,
-            dataReport: true
+            dataReport: false
         }
     }
 

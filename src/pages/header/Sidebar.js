@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import * as FaIcons from 'react-icons/fa';
@@ -81,9 +81,18 @@ const getDateWithMoment = () => {
 
 
 const Sidebar = (props) => {
-    console.log(props)
     const [sidebar, setSidebar] = useState(false);
     const showSidebar = () => setSidebar(!sidebar);
+
+    var [date,setDate] = useState(new Date());
+    
+    useEffect(() => {
+        var timer = setInterval(()=>setDate(new Date()), 1000 )
+        return function cleanup() {
+            clearInterval(timer)
+        }
+    
+    });
     return (
       <>
         <IconContext.Provider value={{ color: '#fff' }}>
@@ -96,11 +105,13 @@ const Sidebar = (props) => {
              props.match.url === "/master-produk" ? "Master Product" :
              props.match.url === "/add-monitoring" ? "Add Monitoring" :
              props.match.url === "/report-monitoring" ? "Report Monitoring" :
-             props.match.url === "/detail-monitoring" ? "Detail Monitoring" :
+             props.match.path === "/detail-monitoring/:id" ? "Detail Monitoring" :
              props.match.url === "/monitoring-produk" && "Monitoring Produk"
             }
             </h4>
-            {getDateWithMoment()}
+            {/* {date.toLocaleDateString()} */}
+            {getDateWithMoment()} | 
+            { " "+date.toLocaleTimeString()} 
             
             <NavIconSh to='#' >
               <P>Admin</P>
