@@ -5,4 +5,4 @@ import Th from "./th"
 import Thead from "./thead"
 import Tr from "./tr"
 
-export {Table,Tbody,Td,Th,Thead,Tr}
+export {Table, Tbody, Td, Th, Thead, Tr}

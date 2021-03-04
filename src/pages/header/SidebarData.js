@@ -8,16 +8,16 @@ export const SidebarData = [
     {
         title: 'Beranda',
         path: '/beranda',
-        icon: <FaIcons.FaHome />
-      },
-    {
-      title: 'Master Produk',
-      path: '/master-produk',
-      icon: <IoIcons.IoIosPaper />,
+        icon: <FaIcons.FaHome/>
     },
     {
-      title: 'Monitoring Produk',
-      path: '/monitoring-produk',
-      icon: <IoIcons.IoMdCalendar />
+        title: 'Master Produk',
+        path: '/master-produk',
+        icon: <IoIcons.IoIosPaper/>,
+    },
+    {
+        title: 'Monitoring Produk',
+        path: '/monitoring-produk',
+        icon: <IoIcons.IoMdCalendar/>
     }
-  ];
+];

@@ -1,17 +1,18 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 
 class Td extends Component {
     constructor(props) {
         super(props);
-        this.state = {  }
+        this.state = {}
     }
-    render() { 
-        return ( 
+
+    render() {
+        return (
             <td>
                 {this.props.children}
             </td>
-         );
+        );
     }
 }
- 
+
 export default Td;

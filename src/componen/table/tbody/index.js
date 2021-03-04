@@ -1,17 +1,18 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 
 class Tbody extends Component {
     constructor(props) {
         super(props);
-        this.state = {  }
+        this.state = {}
     }
-    render() { 
-        return ( 
+
+    render() {
+        return (
             <tbody>
-                {this.props.children}
+            {this.props.children}
             </tbody>
-         );
+        );
     }
 }
- 
+
 export default Tbody;

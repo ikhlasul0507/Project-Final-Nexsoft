@@ -8,16 +8,17 @@ import DetailMonitoring from './pages/body/DetailMonitoring'
 function Data(props) {
     return (
         <div>
-          <Sidebar {...props}/>
-          {
-            props.match.url === "/master-produk" ? <Produk {...props}/> :
-            props.match.url === "/add-monitoring" ? <AddMonitoring {...props} /> :
-            props.match.url === "/report-monitoring" ? <ReportMonitoring {...props} /> :
-            props.match.path === "/detail-monitoring/:id" ? <DetailMonitoring {...props} /> :
-            props.match.url === "/monitoring-produk" && <MonitoringStok {...props}/>
-          }
-          
+            <Sidebar {...props}/>
+            {
+                props.match.url === "/master-produk" ? <Produk {...props}/> :
+                    props.match.url === "/add-monitoring" ? <AddMonitoring {...props} /> :
+                        props.match.url === "/report-monitoring" ? <ReportMonitoring {...props} /> :
+                            props.match.path === "/detail-monitoring/:id" ? <DetailMonitoring {...props} /> :
+                                props.match.url === "/monitoring-produk" && <MonitoringStok {...props}/>
+            }
+
         </div>
     )
 }
+
 export default Data;

@@ -1,17 +1,18 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 
 class Form extends Component {
     constructor(props) {
         super(props);
-        this.state = {  }
+        this.state = {}
     }
-    render() { 
-        return ( 
+
+    render() {
+        return (
             <form>
                 {this.props.children}
-                </form>
-         );
+            </form>
+        );
     }
 }
- 
+
 export default Form;

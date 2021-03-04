@@ -1,27 +1,30 @@
-.navbarM{
+.navbarM {
     width: 100%;
     height: 50px;
     background-color: #adafad;
     display: flex;
     flex-direction: row;
 }
-.navbarM .cari{
+
+.navbarM .cari {
     display: flex;
     flex-direction: row;
     margin-left: 20px;
     width: 30%;
 }
-.navbarM .cari input{
+
+.navbarM .cari input {
     width: 40%;
     height: 25px;
-    margin-left:1px ;
+    margin-left: 1px;
     margin-top: 10px;
     margin-bottom: -10;
     background-color: aliceblue;
     border-radius: 5px;
     border: none;
 }
-.navbarM .cari button{
+
+.navbarM .cari button {
     height: 28px;
     width: 14%;
     margin-left: 15px;
@@ -34,25 +37,30 @@
     border-radius: 5px;
     border: none;
 }
-.navbarM .judul{
+
+.navbarM .judul {
     width: 40%;
 }
-.navbarM .judul h2{
+
+.navbarM .judul h2 {
     width: 60%;
     color: rgb(255, 255, 255);
 }
-.navbarM .proses{
+
+.navbarM .proses {
     width: 30%;
     display: flex;
     flex-direction: row;
-    justify-content:flex-end;
+    justify-content: flex-end;
     margin-right: 30px;
 }
-.navbarM .proses .pM{
+
+.navbarM .proses .pM {
     margin-top: 17px;
     margin-left: 10px;
 }
-.navbarM .proses select{
+
+.navbarM .proses select {
     height: 30px;
     margin-top: 10px;
     margin-left: 10px;
@@ -60,7 +68,8 @@
     background-color: #2196f3;
     color: white;
 }
-.navbarM .proses button{
+
+.navbarM .proses button {
     margin-right: 2px;
     margin-top: 10px;
     margin-bottom: 5px;
@@ -73,34 +82,40 @@
     width: 9%;
     color: white;
 }
-.table{
+
+.table {
     width: 96.5%;
     margin-left: 1.3%;
     margin-top: 10px;
     border: 2px solid white;
     color: black;
 }
-.table .table-dataM{
+
+.table .table-dataM {
     width: 100%;
     border: 1px solid black;
 }
-.table .table-dataM thead{
+
+.table .table-dataM thead {
     background-color: #2196f3;
     color: rgb(250, 250, 250);
     text-align: left;
 }
-.table .table-dataM tbody tr{
+
+.table .table-dataM tbody tr {
     background-color: rgb(233, 233, 233);
     color: black;
     cursor: pointer;
 }
-.table .table-dataM tbody tr:hover{
+
+.table .table-dataM tbody tr:hover {
     background-color: rgb(167, 167, 167);
     color: rgb(255, 255, 255);
     cursor: pointer;
 }
-.pagination{
-    background-color:rgb(250, 250, 250);
+
+.pagination {
+    background-color: rgb(250, 250, 250);
     border: 1px solid rgb(8, 8, 8);
     width: 25.05%;
     margin-top: 10px;

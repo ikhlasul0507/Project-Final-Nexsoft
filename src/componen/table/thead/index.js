@@ -1,17 +1,18 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 
 class Thead extends Component {
     constructor(props) {
         super(props);
-        this.state = {  }
+        this.state = {}
     }
-    render() { 
-        return ( 
+
+    render() {
+        return (
             <thead>
-                {this.props.children}
+            {this.props.children}
             </thead>
-         );
+        );
     }
 }
- 
+
 export default Thead;

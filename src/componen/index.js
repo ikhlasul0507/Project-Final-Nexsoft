@@ -16,4 +16,4 @@ import Option from "./option"
 import Textarea from "./textarea"
 
 
-export {Button,Option, H1,H2,H3,Input,Select,P,A,Li,Ul,Hr, Img,Textarea, Small,Label}
+export {Button, Option, H1, H2, H3, Input, Select, P, A, Li, Ul, Hr, Img, Textarea, Small, Label}

@@ -1,13 +1,15 @@
-.navbarD{
+.navbarD {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
-.navbarD h2{
+
+.navbarD h2 {
     margin-left: 3.4%;
     color: black;
 }
-.navbarD button{
+
+.navbarD button {
     height: 28px;
     width: 3%;
     margin-left: 15px;
@@ -20,74 +22,91 @@
     border-radius: 5px;
     border: none;
 }
-.navbarD .btn-detail{
+
+.navbarD .btn-detail {
     justify-content: flex-end;
     margin-right: 35px;
     margin-top: 10px;
     height: 30px;
 }
-.content-detail{
+
+.content-detail {
     margin: auto;
     width: 60%;
     height: 700px;
     background-color: white;
 }
-.content-detail .faktur-header{
+
+.content-detail .faktur-header {
     color: black;
     padding-top: 20px;
     padding-left: 6%;
     padding-right: 6%;
 }
-.content-detail .faktur-header .hr1{
+
+.content-detail .faktur-header .hr1 {
     height: 3px;
     background-color: black;
 }
-.content-detail .faktur-content{
+
+.content-detail .faktur-content {
     color: black;
     padding-left: 6%;
     padding-right: 6%;
 }
-.content-detail .faktur-content h1{
+
+.content-detail .faktur-content h1 {
     text-align: center;
 }
-.content-detail .faktur-content .faktur-content-header{
+
+.content-detail .faktur-content .faktur-content-header {
     display: flex;
     flex-direction: row;
 }
-.content-detail .faktur-content .faktur-content-header .faktur-content-header-kiri{
+
+.content-detail .faktur-content .faktur-content-header .faktur-content-header-kiri {
     width: 50%;
 }
-.content-detail .faktur-content .faktur-content-header .faktur-content-header-kanan{
+
+.content-detail .faktur-content .faktur-content-header .faktur-content-header-kanan {
     width: 50%;
 }
-.content-detail .faktur-content .faktur-content-header .faktur-content-header-kiri .field-label{
+
+.content-detail .faktur-content .faktur-content-header .faktur-content-header-kiri .field-label {
     display: flex;
     flex-direction: row;
 }
-.content-detail .faktur-content .faktur-content-header .faktur-content-header-kanan .field-label{
+
+.content-detail .faktur-content .faktur-content-header .faktur-content-header-kanan .field-label {
     display: flex;
     flex-direction: row;
 }
-.content-detail .faktur-content .faktur-content-header .faktur-content-header-kiri label{
-    color: black;
-}
-.content-detail .faktur-content .faktur-content-header .faktur-content-header-kanan label{
+
+.content-detail .faktur-content .faktur-content-header .faktur-content-header-kiri label {
     color: black;
 }
 
-.content-detail .faktur-content .faktur-content-header .faktur-content-header-kiri .label{
-   width: 40%;
-}
-.content-detail .faktur-content .faktur-content-header .faktur-content-header-kanan .label{
-   width: 50%;
-}
-.content-detail .table .label{
+.content-detail .faktur-content .faktur-content-header .faktur-content-header-kanan label {
     color: black;
 }
-.content-detail .table table{
+
+.content-detail .faktur-content .faktur-content-header .faktur-content-header-kiri .label {
+    width: 40%;
+}
+
+.content-detail .faktur-content .faktur-content-header .faktur-content-header-kanan .label {
+    width: 50%;
+}
+
+.content-detail .table .label {
+    color: black;
+}
+
+.content-detail .table table {
     width: 100%;
 }
-.footer-content label{
+
+.footer-content label {
     margin-top: 20px;
     color: black;
 }
