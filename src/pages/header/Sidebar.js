@@ -7,7 +7,7 @@ import {SidebarData} from './SidebarData';
 import SubMenu from './SubMenu';
 import {IconContext} from 'react-icons/lib';
 import moment from 'moment';
-
+import { connect } from 'react-redux'
 
 const Nav = styled.div`
   background: #f20800;
@@ -67,10 +67,8 @@ const SidebarWrap = styled.div`
 
 const logout = (props) => {
     if (window.confirm("Yakin Mau Keluar ?")) {
-        console.log("thanks")
-        console.log(props)
-        props.history.push("/login")
-        alert("Berhasil Keluar !")
+        props.logoutAction()
+        props.history.push("/");
     }
 }
 
@@ -113,7 +111,7 @@ const Sidebar = (props) => {
                     {" " + date.toLocaleTimeString()}
 
                     <NavIconSh to='#'>
-                        <P>Admin</P>
+                        <P>{props.dataLogin.userData.username}</P>
                         <FaIcons.FaPowerOff onClick={() => {
                             logout(props)
                         }}/>
@@ -134,5 +132,14 @@ const Sidebar = (props) => {
         </>
     );
 };
+const mapStateToProps = state => ({
+    dataLogin: state.AReducer.userLogin
+  })
 
-export default Sidebar;
+const mapDispatchToProps = dispatch => {
+    return {
+        logoutAction : () => dispatch({type:"LOGOUT_SUCCESS"})
+    }
+}
+ 
+export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);

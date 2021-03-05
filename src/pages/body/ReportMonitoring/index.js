@@ -55,7 +55,7 @@ class ReportMonitoring extends Component {
         super(props);
         this.state = {
             disabled: true,
-            dataReport: false
+            dataReport: true
         }
     }
 
