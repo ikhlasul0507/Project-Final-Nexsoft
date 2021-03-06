@@ -44,6 +44,25 @@ class Produk extends Component {
                     // this.setState({errorFetcing:true})
                 });
         }
+        this.delete =()=>{
+            fetch(this.state.url + this.state.hapus, {
+                method: "delete",
+                headers: {
+                    "Content-Type": "application/json; ; charset=utf-8",
+                    "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                    "Access-Control-Allow-Origin": "*"
+                }
+            })
+                .then(response => response.json())
+                .then(json => {
+                   alert(json.successMessage)
+                   this.getAll();
+                })
+                .catch((e) => {
+                    alert("Failed fetching data!!", e)
+                    // this.setState({errorFetcing:true})
+                });
+        }
         this.cari = () => {
             alert("Cari")
         }
@@ -54,9 +73,7 @@ class Produk extends Component {
                 productDescription: "",
                 edit:""
             })
-            console.log(this.state.disabled)
         }
-
         this.submit = () => {
 
             const objek = {
@@ -94,8 +111,6 @@ class Produk extends Component {
                     alert("Failed sending data!!");
                 });
         }
-
-
         this.setValue = el => {
             console.log(el.target.value);
             this.setState({
@@ -131,7 +146,6 @@ class Produk extends Component {
         this.getAll();
     }
     render() {
-        console.log(this.state.errorFetcing);
         const { productName, productDescription } = this.state
         return (
             <>
@@ -190,13 +204,14 @@ class Produk extends Component {
 
                         <DivClassSingle className="navbar">
                             <H2>{(this.state.disabled) ? "Monitoring" : "Kelola"} Stock</H2>
-                            <Button onClick={this.save} className="tooltip"><FaIcons.FaPlus /></Button>
                             {this.state.edit === "" ? "" :
                                 <>
+                                    <Button><FaIcons.FaBan/></Button>
                                     <Button><FaIcons.FaPencilAlt /></Button>
-                                    <Button><FaIcons.FaTrash /></Button>
+                                    <Button onClick={() => { if (window.confirm('Are you sure wont to Delete ?')) { this.delete() } }}><FaIcons.FaTrash /></Button>
                                 </>
                             }
+                            <Button onClick={this.save} className="tooltip"><FaIcons.FaPlus /></Button>
                         </DivClassSingle>
                         <Hr className="hr" />
                         <DivClassSingle className="form-data">
