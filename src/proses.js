@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Login from "./pages/login"
 import Data from "./data"
+import Page404 from "./pages/404"
 import { connect } from "react-redux"
 import { BrowserRouter as Router, Switch, Route, useHistory } from 'react-router-dom';
 
@@ -60,10 +61,8 @@ class Proses extends Component {
 
         this.tampilPage = () => {
             console.log("adsadsadsa", this.props.dataLogin.recaptchaResponse)
-            if (!this.props.checkLogin && this.props.dataLogin.recaptchaResponse === "") {
+            if (!this.props.checkLogin) {
                 return (
-                    // <Router>
-                    // <Switch>
                     <Route path="/" exact component={(props) => <Login validate={this.validate} {...props} />}></Route>
                     // </Switch>
                     // </Router>
@@ -91,7 +90,7 @@ class Proses extends Component {
                 <Router>
                     <Switch>
                         {this.tampilPage()}
-                        <Route>{"haha"}</Route>
+                        <Page404/>
                     </Switch>
                 </Router>
             </>

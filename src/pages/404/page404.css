@@ -1,0 +1,25 @@
+img{
+    position: relative;
+    z-index: 1;
+    top: 0px;
+}
+.page-404 p{
+    position: absolute;
+    top: 20px;
+    left: 42%;
+    font-size: 30px;
+    padding: 1% 1% 1% 1%;
+    z-index: 2;
+    color: rgb(12, 11, 11);
+    text-align: center;
+    background-color: #fff;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.page-404 P:hover{
+    background-color: red;
+    color: white;
+}
+.page-404{
+    text-align: center;
+}

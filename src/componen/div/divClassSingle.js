@@ -10,6 +10,8 @@ class DivClassSingle extends Component {
         return (
             <div
                 className={this.props.className}
+                key={this.props.key}
+                onClick={this.props.onClick}
             >
                 {this.props.children}
             </div>
