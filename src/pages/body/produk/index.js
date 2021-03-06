@@ -16,7 +16,8 @@ class Produk extends Component {
             url: "http://localhost:8080/nd6/product/",
             errorFetcing: false,
             edit: "",
-            hapus: ""
+            hapus: "",
+            update: false
         }
 
         this.detail = (id) => {
@@ -44,7 +45,7 @@ class Produk extends Component {
                     // this.setState({errorFetcing:true})
                 });
         }
-        this.delete =()=>{
+        this.delete = () => {
             fetch(this.state.url + this.state.hapus, {
                 method: "delete",
                 headers: {
@@ -55,33 +56,48 @@ class Produk extends Component {
             })
                 .then(response => response.json())
                 .then(json => {
-                   alert(json.successMessage)
-                   this.getAll();
+                    alert(json.successMessage)
+                    this.clear();
+                    this.getAll();
                 })
                 .catch((e) => {
                     alert("Failed fetching data!!", e)
                     // this.setState({errorFetcing:true})
                 });
         }
+        this.clear = () => {
+            this.setState({
+                disabled: true,
+                productName: "",
+                productDescription: "",
+                edit: "",
+                hapus: "",
+                update: false
+            })
+        }
         this.cari = () => {
             alert("Cari")
+        }
+        this.submit = () => {
+            if (this.state.update)
+                this.editToApi();
+            else
+                this.saveToApi();
         }
         this.save = () => {
             this.setState({
                 disabled: false,
                 productName: "",
                 productDescription: "",
-                edit:""
+                edit: ""
             })
         }
-        this.submit = () => {
-
+        this.saveToApi = () => {
             const objek = {
                 productName: this.state.productName,
                 productDescription: this.state.productDescription,
                 productQty: 0
             }
-
             fetch(this.state.url, {
                 method: "post",
                 headers: {
@@ -111,8 +127,49 @@ class Produk extends Component {
                     alert("Failed sending data!!");
                 });
         }
+        this.edit = () => {
+            this.setState({
+                disabled: false,
+                update: true
+            })
+        }
+        this.editToApi =()=>{
+            const objek = {
+                productName: this.state.productName,
+                productDescription: this.state.productDescription,
+                productQty: 0
+            }
+            fetch(this.state.url+this.state.edit, {
+                method: "put",
+                headers: {
+                    "Content-Type": "application/json; ; charset=utf-8",
+                    "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                    "Access-Control-Allow-Origin": "*"
+                },
+                body: JSON.stringify(objek)
+            })
+                .then(response => response.json())
+                .then((json) => {
+                    console.log(json)
+                    if (json.errors) {
+                        alert(json.errors[0].defaultMessage)
+                    } else if (json.errorMessage) {
+                        alert(json.errorMessage)
+                    } else {
+                        alert("Product has been updated !")
+                        this.setState({
+                            disabled: true,
+                            productName: "",
+                            productDescription: "",
+                        })
+                        this.getAll();
+                    }
+                })
+                .catch(() => {
+                    alert("Failed sending data!!");
+                });
+        }
         this.setValue = el => {
-            console.log(el.target.value);
             this.setState({
                 [el.target.name]: el.target.value,
             })
@@ -140,8 +197,6 @@ class Produk extends Component {
                 });
         }
     }
-
-
     componentDidMount() {
         this.getAll();
     }
@@ -206,8 +261,8 @@ class Produk extends Component {
                             <H2>{(this.state.disabled) ? "Monitoring" : "Kelola"} Stock</H2>
                             {this.state.edit === "" ? "" :
                                 <>
-                                    <Button><FaIcons.FaBan/></Button>
-                                    <Button><FaIcons.FaPencilAlt /></Button>
+                                    <Button onClick={this.clear}><FaIcons.FaBan /></Button>
+                                    <Button onClick={this.edit}><FaIcons.FaPencilAlt /></Button>
                                     <Button onClick={() => { if (window.confirm('Are you sure wont to Delete ?')) { this.delete() } }}><FaIcons.FaTrash /></Button>
                                 </>
                             }
@@ -229,6 +284,8 @@ class Produk extends Component {
                         {(!this.state.disabled) ? <DivClassSingle className="form-data">
                             <Button className="submit" disabled={(this.state.disabled) ? "disabled" : ""}
                                 onClick={this.submit}>Submit</Button>
+                            <Button className="submit" disabled={(this.state.disabled) ? "disabled" : ""}
+                                onClick={this.clear}>Cancel</Button>
                         </DivClassSingle> : ""}
 
                     </DivClassSingle>
