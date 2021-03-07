@@ -11,10 +11,10 @@ import java.util.UUID;
 @Repository("UserRepository")
 public class UserRepositoryImpl implements UserRepository {
     @Autowired
-    private JdbcTemplate connect;
+    private JdbcTemplate jpa;
 
     public List<User> findAll() {
-        return connect.query("select * from tbl_user",
+        return jpa.query("select * from tbl_user",
                 (rs, rowNum) ->
                         new User(
                                 rs.getString("idUser"),
@@ -30,19 +30,19 @@ public class UserRepositoryImpl implements UserRepository {
         UUID uuid = UUID.randomUUID();
         String randomUUIDString = uuid.toString();
         String username = user.getUsername();
-        connect.update("INSERT INTO tbl_user (idUser,username,email,password) VALUES (?,?,?,?)",
+        jpa.update("INSERT INTO tbl_user (idUser,username,email,password) VALUES (?,?,?,?)",
                 randomUUIDString, username, user.getEmail(), user.getPassword());
     }
 
     // update new customer
     public void updateUser(User user) {
-        connect.update("UPDATE tbl_user SET username= ?,email=?,password=? Where idUser=?",
+        jpa.update("UPDATE tbl_user SET username= ?,email=?,password=? Where idUser=?",
                 user.getUsername(), user.getEmail(), user.getPassword(), user.getIdUser());
     }
 
     public User findById(String idUser) {
         String sql = "select * from tbl_user WHERE idUser='" + idUser + "'";
-        return connect.queryForObject(sql,
+        return jpa.queryForObject(sql,
                 (rs, rowNum) ->
                         new User(
                                 rs.getString("idUser"),
@@ -56,7 +56,7 @@ public class UserRepositoryImpl implements UserRepository {
     public User findByNameAll(String username) {
 
         String sql = "select * from tbl_user WHERE username='" + username + "'";
-        return connect.queryForObject(sql,
+        return jpa.queryForObject(sql,
                 (rs, rowNum) ->
                         new User(
                                 rs.getString("idUser"),
@@ -68,7 +68,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     public List<User> findByName(String username) {
-        return connect.query("Select * FROM tbl_user where username='"+username+"'",
+        return jpa.query("Select * FROM tbl_user where username='"+username+"'",
                 (rs, rowNum) ->
                         new User(
                                 rs.getString("idUser"),
@@ -80,6 +80,6 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     public void deleteUserById(String idUser) {
-        connect.execute(" DELETE FROM tbl_user WHERE idUser='" + idUser + "'");
+        jpa.execute(" DELETE FROM tbl_user WHERE idUser='" + idUser + "'");
     }
 }

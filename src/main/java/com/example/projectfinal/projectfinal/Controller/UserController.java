@@ -103,15 +103,6 @@ public class UserController {
             logger.error("Unable to update. user with id {} not found.", idUser);
             return new ResponseEntity<>(new CustomErrorType("Unable to upate. user with id " + idUser + " not found."),
                     HttpStatus.NOT_FOUND);
-        } else if (user.getUsername() == "") {
-            return new ResponseEntity<>(new CustomErrorType("user name not null"),
-                    HttpStatus.NOT_FOUND);
-        } else if (user.getEmail() == "") {
-            return new ResponseEntity<>(new CustomErrorType("user email not null"),
-                    HttpStatus.NOT_FOUND);
-        } else if (user.getPassword() == "") {
-            return new ResponseEntity<>(new CustomErrorType("user password not null"),
-                    HttpStatus.NOT_FOUND);
         } else {
             currentUser.setUsername(user.getUsername());
             currentUser.setEmail(user.getEmail());

@@ -1,6 +1,7 @@
 package com.example.projectfinal.projectfinal.Repository;
 import com.example.projectfinal.projectfinal.Model.Product;
 import com.example.projectfinal.projectfinal.Model.Stok;
+import com.example.projectfinal.projectfinal.Model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -12,17 +13,17 @@ import java.util.UUID;
 @Repository("ProductRepository")
 public class ProductRepositoryImpl  implements  ProductRepository{
     @Autowired
-    private JdbcTemplate connect;
+    private JdbcTemplate jpa;
     private Stok stok;
     public String getLastID() {
         int countUser;
         String lastId;
-        countUser = connect.queryForObject("SELECT COUNT(*) as count FROM tbl_product", Integer.class);
+        countUser = jpa.queryForObject("SELECT COUNT(*) as count FROM tbl_product", Integer.class);
 
         if (countUser == 0){
             lastId = "PROD0000";
         }else{
-            lastId = connect.queryForObject("SELECT productId FROM tbl_product LIMIT 1 OFFSET " + (countUser - 1), String.class);
+            lastId = jpa.queryForObject("SELECT productId FROM tbl_product LIMIT 1 OFFSET " + (countUser - 1), String.class);
         }
 
         return lastId;
@@ -31,11 +32,11 @@ public class ProductRepositoryImpl  implements  ProductRepository{
     public String getLastIDDOC() {
         int countUser;
         String lastIdDOC;
-        countUser = connect.queryForObject("SELECT COUNT(*) as count FROM tbl_header_stok", Integer.class);
+        countUser = jpa.queryForObject("SELECT COUNT(*) as count FROM tbl_header_stok", Integer.class);
         if (countUser == 0){
             lastIdDOC = "STOK0000";
         }else{
-            lastIdDOC = connect.queryForObject("SELECT idStok FROM tbl_header_stok LIMIT 1 OFFSET " + (countUser - 1), String.class);
+            lastIdDOC = jpa.queryForObject("SELECT idStok FROM tbl_header_stok LIMIT 1 OFFSET " + (countUser - 1), String.class);
         }
         return lastIdDOC;
     }
@@ -59,16 +60,16 @@ public class ProductRepositoryImpl  implements  ProductRepository{
         String idStok = new String("STOK" + numberDoc );
 
 
-        connect.update("INSERT INTO tbl_product (productId,productName, productDescription, productQty) VALUES (?,?,?,?)",
+        jpa.update("INSERT INTO tbl_product (productId,productName, productDescription, productQty) VALUES (?,?,?,?)",
                 idProduct,product.getProductName(),product.getProductDescription(),product.getProductQty() );
-        connect.update("INSERT INTO tbl_header_stok(idStok,tanggalDokumen, deskripsiDokumen) VALUES (?,?,?)",
+        jpa.update("INSERT INTO tbl_header_stok(idStok,tanggalDokumen, deskripsiDokumen) VALUES (?,?,?)",
                 idStok,new Date(),"");
-        connect.update("INSERT INTO tbl_detail_stok(idDetailStok, idStok, idProduct,tglExpiredProduct,hargaProduct,transTypeProduct,kuantitasProduct) VALUES (?,?,?,?,?,?,?)",
+        jpa.update("INSERT INTO tbl_detail_stok(idDetailStok, idStok, idProduct,tglExpiredProduct,hargaProduct,transTypeProduct,kuantitasProduct) VALUES (?,?,?,?,?,?,?)",
                 randomUUIDString,idStok,idProduct,null,null,null,null);
     }
 
     public List<Product> findByName(String productName){
-        return connect.query("Select * FROM tbl_product where productName like ?",
+        return jpa.query("Select * FROM tbl_product where productName like ?",
                 new Object[]{"%"+productName+"%"},
                 (rs, rowNum)->
                         new Product(
@@ -78,5 +79,49 @@ public class ProductRepositoryImpl  implements  ProductRepository{
                                 rs.getInt("ProductQty")
                         )
         );
+    }
+    public List<Product> findByNameProduct(String productName){
+        return jpa.query("Select * FROM tbl_product where productName like ?",
+                new Object[]{"%"+productName+"%"},
+                (rs, rowNum)->
+                        new Product(
+                                rs.getString("productId"),
+                                rs.getString("productName"),
+                                rs.getString("productDescription"),
+                                rs.getInt("ProductQty")
+                        )
+        );
+    }
+    public List<Product> findAll() {
+        List<Product> productList;
+        productList = jpa.query("Select * FROM tbl_product",
+                (rs, rowNum) ->
+                        new Product(
+                                rs.getString("productId"),
+                                rs.getString("productName"),
+                                rs.getString("productDescription"),
+                                rs.getInt("ProductQty")
+                        )
+        );
+        return productList;
+    }
+    public Product findById(String productId) {
+        String sql = "select * from tbl_product WHERE productId='" + productId + "'";
+        return jpa.queryForObject(sql,
+                (rs, rowNum) ->
+                        new Product(
+                                rs.getString("productId"),
+                                rs.getString("productName"),
+                                rs.getString("productDescription"),
+                                rs.getInt("ProductQty")
+                        )
+        );
+    }
+    public void deleteProductById(String productId) {
+        jpa.execute(" DELETE FROM tbl_product WHERE productId='" + productId + "'");
+    }
+    public void updateProduct(Product product) {
+        jpa.update("UPDATE tbl_product SET productName= ?,productDescription=? Where productId=?",
+                product.getProductName(), product.getProductDescription(), product.getProductId());
     }
 }
