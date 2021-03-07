@@ -141,7 +141,34 @@ class Produk extends Component {
                     })
                     .catch((e) => { alert("gagal")});
             } else if (this.state.productName !== "") {
-
+                fetch(this.state.url +"name/"+ this.state.productName, {
+                    method: "get",
+                    headers: {
+                        "Content-Type": "application/json; ; charset=utf-8",
+                        "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                        "Access-Control-Allow-Origin": "*"
+                    }
+                })
+                    .then(response => response.json())
+                    .then(json => {
+                        console.log(json)
+                        if (json.errorMessage) {
+                            swal({
+                                title: "Error !",
+                                text: json.errorMessage,
+                                icon: "error",
+                                button: "Ok",
+                            });
+                        } else {
+                            let Product = [];
+                            Product.push(json)
+                            this.setState({
+                                products: Product
+                            })
+                            this.clear();
+                        }
+                    })
+                    .catch((e) => { alert("gagal")});
             } else {
                 swal({
                     title: "Error !",
