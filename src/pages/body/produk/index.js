@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import "./produk.css"
 import * as FaIcons from 'react-icons/fa';
-import SweetAlert from 'sweetalert2-react';
+import swal from 'sweetalert';
 import DivClassSingle from "../../../componen/div/divClassSingle"
 import {
     Button,
@@ -33,8 +33,6 @@ class Produk extends Component {
             edit: "",
             hapus: "",
             update: false,
-            show: "",
-            title:""
         }
 
         this.detail = (id) => {
@@ -63,24 +61,45 @@ class Produk extends Component {
                 });
         }
         this.delete = () => {
-            fetch(this.state.url + this.state.hapus, {
-                method: "delete",
-                headers: {
-                    "Content-Type": "application/json; ; charset=utf-8",
-                    "Access-Control-Allow-Headers": "Authorization, Content-Type",
-                    "Access-Control-Allow-Origin": "*"
-                }
-            })
-                .then(response => response.json())
-                .then(json => {
-                    alert(json.successMessage)
-                    this.clear();
-                    this.getAll();
-                })
-                .catch((e) => {
-                    alert("Failed fetching data!!", e)
-                    // this.setState({errorFetcing:true})
-                });
+            // if (window.confirm('Are you sure wont to Delete ?')) {
+                swal({
+                    title: "Are you sure?",
+                    text: "wont to Delete ?",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                  })
+                  .then((willDelete) => {
+                    if (willDelete) {
+                        fetch(this.state.url + this.state.hapus, {
+                            method: "delete",
+                            headers: {
+                                "Content-Type": "application/json; ; charset=utf-8",
+                                "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                                "Access-Control-Allow-Origin": "*"
+                            }
+                        })
+                            .then(response => response.json())
+                            .then(json => {
+                                swal({
+                                    title: "Good job!",
+                                    text: json.successMessage,
+                                    icon: "error",
+                                    button: "Ok",
+                                  });
+                                this.clear();
+                                this.getAll();
+                            })
+                           
+                            .catch((e) => {
+                                alert("Failed fetching data!!", e)
+                                // this.setState({errorFetcing:true})
+                            });
+                    } else {
+                    //   swal("Your imaginary file is safe!");
+                    }
+                  });
+            
         }
         this.clear = () => {
             this.setState({
@@ -127,17 +146,27 @@ class Produk extends Component {
                 .then(response => response.json())
                 .then((json) => {
                     if (json.errors) {
-                        alert(json.errors[0].defaultMessage)
+                        swal({
+                            title: "Error !",
+                            text: json.errors[0].defaultMessage,
+                            icon: "error",
+                            button: "Ok",
+                          });
                     } else if (json.errorMessage) {
-                        alert(json.errorMessage)
+                        swal({
+                            title: "Error !",
+                            text: json.errorMessage,
+                            icon: "error",
+                            button: "Ok",
+                          });
                     } else {
-                        this.setState({
-                            disabled: true,
-                            productName: "",
-                            productDescription: "",
-                            show: true,
-                            title : json.successMessage
-                        })
+                        this.clear()
+                        swal({
+                            title: "Good job!",
+                            text: json.successMessage,
+                            icon: "success",
+                            button: "Ok",
+                          });
                         this.getAll();
                     }
                 })
@@ -169,16 +198,27 @@ class Produk extends Component {
                 .then(response => response.json())
                 .then((json) => {
                     if (json.errors) {
-                        alert(json.errors[0].defaultMessage)
+                        swal({
+                            title: "Error !",
+                            text: json.errors[0].defaultMessage,
+                            icon: "error",
+                            button: "Ok",
+                          });
                     } else if (json.errorMessage) {
-                        alert(json.errorMessage)
+                        swal({
+                            title: "Error !",
+                            text: json.errorMessage,
+                            icon: "error",
+                            button: "Ok",
+                          });
                     } else {
-                        alert("Product has been updated !")
-                        this.setState({
-                            disabled: true,
-                            productName: "",
-                            productDescription: "",
-                        })
+                        this.clear()
+                        swal({
+                            title: "Good job!",
+                            text: "Product has been updated !",
+                            icon: "success",
+                            button: "Ok",
+                          });
                         this.getAll();
                     }
                 })
@@ -314,7 +354,7 @@ class Produk extends Component {
                                         <FaIcons.FaPencilAlt />
                                     </Button>
                                     <Button
-                                        onClick={() => { if (window.confirm('Are you sure wont to Delete ?')) { this.delete() } }}>
+                                        onClick={() => { this.delete()}}>
                                         <FaIcons.FaTrash />
                                     </Button>
                                 </>
@@ -324,12 +364,6 @@ class Produk extends Component {
                                 className="tooltip">
                                 <FaIcons.FaPlus />
                             </Button>
-                            <SweetAlert
-                                show={this.state.show}
-                                title="Success"
-                                text={this.state.title}
-                                onConfirm={() => this.setState({ show: false })}
-                            />
                         </DivClassSingle>
                         <Hr className="hr" />
                         <DivClassSingle
