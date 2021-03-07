@@ -1,13 +1,14 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import * as FaIcons from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
-import {SidebarData} from './SidebarData';
+import { SidebarData } from './SidebarData';
 import SubMenu from './SubMenu';
-import {IconContext} from 'react-icons/lib';
+import { IconContext } from 'react-icons/lib';
 import moment from 'moment';
 import { connect } from 'react-redux'
+import swal from 'sweetalert';
 
 const Nav = styled.div`
   background: #f20800;
@@ -57,7 +58,7 @@ const SidebarNav = styled.nav`
   justify-content: center;
   position: fixed;
   top: 0;
-  left: ${({sidebar}) => (sidebar ? '0' : '-100%')};
+  left: ${({ sidebar }) => (sidebar ? '0' : '-100%')};
   transition: 350ms;
   z-index: 10;
 `;
@@ -66,10 +67,27 @@ const SidebarWrap = styled.div`
 `;
 
 const logout = (props) => {
-    if (window.confirm("Yakin Mau Keluar ?")) {
-        props.logoutAction()
-        props.history.push("/");
-    }
+    swal({
+        title: "Warning",
+        text: "Are you sure you want to quit?",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    })
+        .then((willDelete) => {
+            if (willDelete) {
+                props.logoutAction()
+                props.history.push("/");
+                swal({
+                    title: "Good job!",
+                    text: "Success for logout",
+                    icon: "success",
+                    button: "Ok",
+                  });
+            } else {
+                //   swal("Your imaginary file is safe!");
+            }
+        });
 }
 
 const getDateWithMoment = () => {
@@ -92,10 +110,10 @@ const Sidebar = (props) => {
     });
     return (
         <>
-            <IconContext.Provider value={{color: '#fff'}}>
+            <IconContext.Provider value={{ color: '#fff' }}>
                 <Nav>
                     <NavIcon to='#'>
-                        <FaIcons.FaBars onClick={showSidebar}/>
+                        <FaIcons.FaBars onClick={showSidebar} />
                     </NavIcon>
                     <h4>
                         {
@@ -114,17 +132,17 @@ const Sidebar = (props) => {
                         <P>{props.dataLogin.userData.username}</P>
                         <FaIcons.FaPowerOff onClick={() => {
                             logout(props)
-                        }}/>
+                        }} />
                     </NavIconSh>
                 </Nav>
 
                 <SidebarNav sidebar={sidebar}>
                     <SidebarWrap>
                         <NavIcon to='#'>
-                            <AiIcons.AiOutlineClose onClick={showSidebar}/>
+                            <AiIcons.AiOutlineClose onClick={showSidebar} />
                         </NavIcon>
                         {SidebarData.map((item, index) => {
-                            return <SubMenu item={item} key={index}/>;
+                            return <SubMenu item={item} key={index} />;
                         })}
                     </SidebarWrap>
                 </SidebarNav>
@@ -134,12 +152,12 @@ const Sidebar = (props) => {
 };
 const mapStateToProps = state => ({
     dataLogin: state.AReducer.userLogin
-  })
+})
 
 const mapDispatchToProps = dispatch => {
     return {
-        logoutAction : () => dispatch({type:"LOGOUT_SUCCESS"})
+        logoutAction: () => dispatch({ type: "LOGOUT_SUCCESS" })
     }
 }
- 
+
 export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);

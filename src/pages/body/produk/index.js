@@ -25,13 +25,12 @@ class Produk extends Component {
         super(props);
         this.state = {
             disabled: true,
+            productId: "",
             productName: "",
             productDescription: "",
             products: [],
             url: "http://localhost:8080/nd6/product/",
             errorFetcing: false,
-            edit: "",
-            hapus: "",
             update: false,
         }
 
@@ -47,10 +46,9 @@ class Produk extends Component {
                 .then(response => response.json())
                 .then(json => {
                     this.setState({
+                        productId: json.productId,
                         productName: json.productName,
                         productDescription: json.productDescription,
-                        edit: json.productId,
-                        hapus: json.productId,
                         errorFetcing: true,
                         disabled: true
                     });
@@ -62,16 +60,16 @@ class Produk extends Component {
         }
         this.delete = () => {
             // if (window.confirm('Are you sure wont to Delete ?')) {
-                swal({
-                    title: "Are you sure?",
-                    text: "wont to Delete ?",
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
-                  })
-                  .then((willDelete) => {
+            swal({
+                title: "Are you sure?",
+                text: "wont to Delete ?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
                     if (willDelete) {
-                        fetch(this.state.url + this.state.hapus, {
+                        fetch(this.state.url + this.state.productId, {
                             method: "delete",
                             headers: {
                                 "Content-Type": "application/json; ; charset=utf-8",
@@ -84,26 +82,27 @@ class Produk extends Component {
                                 swal({
                                     title: "Good job!",
                                     text: json.successMessage,
-                                    icon: "error",
+                                    icon: "success",
                                     button: "Ok",
-                                  });
+                                });
                                 this.clear();
                                 this.getAll();
                             })
-                           
+
                             .catch((e) => {
                                 alert("Failed fetching data!!", e)
                                 // this.setState({errorFetcing:true})
                             });
                     } else {
-                    //   swal("Your imaginary file is safe!");
+                        //   swal("Your imaginary file is safe!");
                     }
-                  });
-            
+                });
+
         }
         this.clear = () => {
             this.setState({
                 disabled: true,
+                productId: "",
                 productName: "",
                 productDescription: "",
                 edit: "",
@@ -112,7 +111,46 @@ class Produk extends Component {
             })
         }
         this.cari = () => {
-            alert("Cari")
+            if (this.state.productId !== "") {
+                fetch(this.state.url + this.state.productId, {
+                    method: "get",
+                    headers: {
+                        "Content-Type": "application/json; ; charset=utf-8",
+                        "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                        "Access-Control-Allow-Origin": "*"
+                    }
+                })
+                    .then(response => response.json())
+                    .then(json => {
+                        console.log(json)
+                        if (json.errorMessage) {
+                            swal({
+                                title: "Error !",
+                                text: json.errorMessage,
+                                icon: "error",
+                                button: "Ok",
+                            });
+                        } else {
+                            let Product = [];
+                            Product.push(json)
+                            this.setState({
+                                products: Product
+                            })
+                            this.clear();
+                        }
+                    })
+                    .catch((e) => { alert("gagal")});
+            } else if (this.state.productName !== "") {
+
+            } else {
+                swal({
+                    title: "Error !",
+                    text: "Please, enter product id or product name !",
+                    icon: "error",
+                    button: "Ok",
+                });
+                this.getAll();
+            }
         }
         this.submit = () => {
             if (this.state.update)
@@ -151,14 +189,14 @@ class Produk extends Component {
                             text: json.errors[0].defaultMessage,
                             icon: "error",
                             button: "Ok",
-                          });
+                        });
                     } else if (json.errorMessage) {
                         swal({
                             title: "Error !",
                             text: json.errorMessage,
                             icon: "error",
                             button: "Ok",
-                          });
+                        });
                     } else {
                         this.clear()
                         swal({
@@ -166,7 +204,7 @@ class Produk extends Component {
                             text: json.successMessage,
                             icon: "success",
                             button: "Ok",
-                          });
+                        });
                         this.getAll();
                     }
                 })
@@ -186,7 +224,7 @@ class Produk extends Component {
                 productDescription: this.state.productDescription,
                 productQty: 0
             }
-            fetch(this.state.url + this.state.edit, {
+            fetch(this.state.url + this.state.productId, {
                 method: "put",
                 headers: {
                     "Content-Type": "application/json; ; charset=utf-8",
@@ -203,14 +241,14 @@ class Produk extends Component {
                             text: json.errors[0].defaultMessage,
                             icon: "error",
                             button: "Ok",
-                          });
+                        });
                     } else if (json.errorMessage) {
                         swal({
                             title: "Error !",
                             text: json.errorMessage,
                             icon: "error",
                             button: "Ok",
-                          });
+                        });
                     } else {
                         this.clear()
                         swal({
@@ -218,7 +256,7 @@ class Produk extends Component {
                             text: "Product has been updated !",
                             icon: "success",
                             button: "Ok",
-                          });
+                        });
                         this.getAll();
                     }
                 })
@@ -258,7 +296,7 @@ class Produk extends Component {
         this.getAll();
     }
     render() {
-        const { productName, productDescription } = this.state
+        const { productId, productName, productDescription } = this.state
         return (
             <>
                 <DivClassSingle
@@ -269,12 +307,18 @@ class Produk extends Component {
                             className="cari">
                             <Input
                                 type="text"
-                                name=""
-                                placeholder="Product code" />
+                                className="input"
+                                name="productId"
+                                placeholder="Product Id..."
+                                value={productId}
+                                onChange={this.setValue} />
                             <Input
                                 type="text"
-                                name=""
-                                placeholder="Product name" />
+                                className="input"
+                                name="productName"
+                                placeholder="Product Name..."
+                                value={productName}
+                                onChange={this.setValue} />
                             <Button
                                 className="btn-cari"
                                 onClick={this.cari}>
@@ -342,8 +386,8 @@ class Produk extends Component {
                         className="data-right">
                         <DivClassSingle
                             className="navbar">
-                            <H2>{(this.state.disabled) ? "Monitoring " : "Kelola "} Stock {this.state.edit}</H2>
-                            {this.state.edit === "" ? "" :
+                            <H2>{(this.state.disabled) ? "Monitoring " : "Kelola "} Stock {this.state.productId}</H2>
+                            {this.state.productId === "" ? "" :
                                 <>
                                     <Button
                                         onClick={this.clear}>
@@ -354,7 +398,7 @@ class Produk extends Component {
                                         <FaIcons.FaPencilAlt />
                                     </Button>
                                     <Button
-                                        onClick={() => { this.delete()}}>
+                                        onClick={() => { this.delete() }}>
                                         <FaIcons.FaTrash />
                                     </Button>
                                 </>

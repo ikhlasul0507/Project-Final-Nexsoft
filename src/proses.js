@@ -4,7 +4,7 @@ import Data from "./data"
 import Page404 from "./pages/404"
 import { connect } from "react-redux"
 import { BrowserRouter as Router, Switch, Route, useHistory } from 'react-router-dom';
-
+import swal from 'sweetalert';
 class Proses extends Component {
     constructor(props) {
         super(props);
@@ -18,14 +18,30 @@ class Proses extends Component {
 
         this.validate = login => {
             const { username, password, recaptchaResponse } = login
-            if (username === "")
-                alert("Please, enter your username !")
-            else if (password === "")
-                alert("Please enter your password !")
-            else if (recaptchaResponse === "")
-                alert("Please, submit recaptcha !")
-            else
+            if (username === ""){
+                swal({
+                    title: "Error !",
+                    text: "Please, enter your username !",
+                    icon: "error",
+                    button: "Ok",
+                  });
+            }else if (password === ""){
+                swal({
+                    title: "Error !",
+                    text: "Please enter your password !",
+                    icon: "error",
+                    button: "Ok",
+                  });
+            }else if (recaptchaResponse === ""){
+                swal({
+                    title: "Error !",
+                    text: "Please, submit recaptcha !",
+                    icon: "error",
+                    button: "Ok",
+                  });
+            }else{
                 this.save(login)
+            }
         }
         this.doLogin = login => {
             const { username, password, recaptchaResponse } = login
@@ -41,14 +57,24 @@ class Proses extends Component {
                 .then(response => response.json())
                 .then(json => {
                     if (json.errorMessage) {
-                        alert(json.errorMessage);
+                        swal({
+                            title: "Error !",
+                            text: json.errorMessage,
+                            icon: "error",
+                            button: "Ok",
+                          });
                     } else {
                         this.setState({
                             user: json,
                             recaptchaResponse : recaptchaResponse
                         })
                         this.props.submitLogin({ userData: this.state.user, recaptchaResponse : recaptchaResponse })
-                        alert("Selamat Anda Berhasil Login !!")
+                        swal({
+                            title: "Good job!",
+                            text: "Login success !!",
+                            icon: "success",
+                            button: "Ok",
+                          });
                     }
                 })
                 .catch((e) => {
