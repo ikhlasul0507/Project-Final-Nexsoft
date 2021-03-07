@@ -14,6 +14,6 @@ import Hr from "./hr"
 import Select from "./select"
 import Option from "./option"
 import Textarea from "./textarea"
+import Center from "./center"
 
-
-export {Button, Option, H1, H2, H3, Input, Select, P, A, Li, Ul, Hr, Img, Textarea, Small, Label}
+export {Button, Option, H1, H2, H3, Input, Select, P, A, Li, Ul, Hr, Img, Textarea, Small, Label, Center}

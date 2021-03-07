@@ -1,9 +1,24 @@
 import React, { Component } from 'react';
 import "./produk.css"
 import * as FaIcons from 'react-icons/fa';
+import SweetAlert from 'sweetalert2-react';
 import DivClassSingle from "../../../componen/div/divClassSingle"
-import { Button, H3, H2, Input, Label, P, Small, A, Li, Ul, Hr, Textarea, Img } from "../../../componen"
-import Tooltip from '@material-ui/core/Tooltip';
+import {
+    Button,
+    H3,
+    H2,
+    Input,
+    Label,
+    P,
+    Small,
+    A,
+    Li,
+    Ul,
+    Hr,
+    Textarea,
+    Img,
+    Center
+} from "../../../componen"
 
 class Produk extends Component {
     constructor(props) {
@@ -17,7 +32,9 @@ class Produk extends Component {
             errorFetcing: false,
             edit: "",
             hapus: "",
-            update: false
+            update: false,
+            show: "",
+            title:""
         }
 
         this.detail = (id) => {
@@ -114,11 +131,12 @@ class Produk extends Component {
                     } else if (json.errorMessage) {
                         alert(json.errorMessage)
                     } else {
-                        alert(json.successMessage)
                         this.setState({
                             disabled: true,
                             productName: "",
                             productDescription: "",
+                            show: true,
+                            title : json.successMessage
                         })
                         this.getAll();
                     }
@@ -133,13 +151,13 @@ class Produk extends Component {
                 update: true
             })
         }
-        this.editToApi =()=>{
+        this.editToApi = () => {
             const objek = {
                 productName: this.state.productName,
                 productDescription: this.state.productDescription,
                 productQty: 0
             }
-            fetch(this.state.url+this.state.edit, {
+            fetch(this.state.url + this.state.edit, {
                 method: "put",
                 headers: {
                     "Content-Type": "application/json; ; charset=utf-8",
@@ -150,7 +168,6 @@ class Produk extends Component {
             })
                 .then(response => response.json())
                 .then((json) => {
-                    console.log(json)
                     if (json.errors) {
                         alert(json.errors[0].defaultMessage)
                     } else if (json.errorMessage) {
@@ -225,69 +242,134 @@ class Produk extends Component {
                             </Button>
                         </DivClassSingle>
                         <Hr />
-                        <DivClassSingle className="list">
+                        <DivClassSingle
+                            className="list">
                             {this.state.products.map(
                                 (Item, idx) =>
-                                    <DivClassSingle className="list-data" key={idx} onClick={() => this.detail(Item.productId)} >
-                                        <H3>{Item.productId}</H3>
-                                        <P>{Item.productName}</P>
-                                        <Small>Product Qty :{Item.productQty}</Small>
+                                    <DivClassSingle
+                                        className="list-data"
+                                        key={idx}
+                                        onClick={() => this.detail(Item.productId)} >
+                                        <H3>
+                                            {Item.productId}
+                                        </H3>
+                                        <P>
+                                            {Item.productName}
+                                        </P>
+                                        <Small>
+                                            Product Qty :{Item.productQty}
+                                        </Small>
                                     </DivClassSingle>
                             )
                             }
                             {
                                 (!this.state.errorFetcing) ?
-                                    <DivClassSingle className="list-data">
-                                        <center>
-                                            <H3>ERROR FETCHING DATA TO API</H3>
-                                            <Img src="https://i1.wp.com/dewankomputer.com/wp-content/uploads/2019/08/pesawat.gif?resize=84%2C208"></Img>
-                                        </center>
+                                    <DivClassSingle
+                                        className="list-data">
+                                        <Center>
+                                            <H3>
+                                                ERROR FETCHING DATA TO API
+                                                </H3>
+                                            <Img
+                                                src="https://i1.wp.com/dewankomputer.com/wp-content/uploads/2019/08/pesawat.gif?resize=84%2C208"></Img>
+                                        </Center>
                                     </DivClassSingle>
                                     : ""
                             }
                             <Ul className="pagination">
-                                <Li><A href="#">Previous</A></Li>
-                                <Li><A href="#">1</A></Li>
-                                <Li><A className="active" href="#">2</A></Li>
-                                <Li><A href="#">3</A></Li>
-                                <Li><A href="#">4</A></Li>
-                                <Li><A href="#">Next</A></Li>
+                                <Li>
+                                    <A href="#">Previous</A>
+                                </Li>
+                                <Li>
+                                    <A href="#">1</A>
+                                </Li>
+                                <Li>
+                                    <A className="active" href="#">2</A>
+                                </Li>
+                                <Li>
+                                    <A href="#">3</A>
+                                </Li>
+                                <Li>
+                                    <A href="#">4</A>
+                                </Li>
+                                <Li>
+                                    <A href="#">Next</A>
+                                </Li>
                             </Ul>
                         </DivClassSingle>
                     </DivClassSingle>
-                    <DivClassSingle className="data-right">
-
-                        <DivClassSingle className="navbar">
-                            <H2>{(this.state.disabled) ? "Monitoring" : "Kelola"} Stock</H2>
+                    <DivClassSingle
+                        className="data-right">
+                        <DivClassSingle
+                            className="navbar">
+                            <H2>{(this.state.disabled) ? "Monitoring " : "Kelola "} Stock {this.state.edit}</H2>
                             {this.state.edit === "" ? "" :
                                 <>
-                                    <Button onClick={this.clear}><FaIcons.FaBan /></Button>
-                                    <Button onClick={this.edit}><FaIcons.FaPencilAlt /></Button>
-                                    <Button onClick={() => { if (window.confirm('Are you sure wont to Delete ?')) { this.delete() } }}><FaIcons.FaTrash /></Button>
+                                    <Button
+                                        onClick={this.clear}>
+                                        <FaIcons.FaBan />
+                                    </Button>
+                                    <Button
+                                        onClick={this.edit}>
+                                        <FaIcons.FaPencilAlt />
+                                    </Button>
+                                    <Button
+                                        onClick={() => { if (window.confirm('Are you sure wont to Delete ?')) { this.delete() } }}>
+                                        <FaIcons.FaTrash />
+                                    </Button>
                                 </>
                             }
-                            <Button onClick={this.save} className="tooltip"><FaIcons.FaPlus /></Button>
+                            <Button
+                                onClick={this.save}
+                                className="tooltip">
+                                <FaIcons.FaPlus />
+                            </Button>
+                            <SweetAlert
+                                show={this.state.show}
+                                title="Success"
+                                text={this.state.title}
+                                onConfirm={() => this.setState({ show: false })}
+                            />
                         </DivClassSingle>
                         <Hr className="hr" />
-                        <DivClassSingle className="form-data">
+                        <DivClassSingle
+                            className="form-data">
                             <Label>Product Name</Label>
-                            <Input type="text" className="input" name="productName"
-                                disabled={(this.state.disabled) ? "disabled" : ""} placeholder="Product Name..." value={productName} onChange={this.setValue} />
-                        </DivClassSingle>
-                        <DivClassSingle className="form-data">
-                            <Label className="textarea">Product description</Label>
-                            <Textarea name="productDescription" className="textarea-input" onChange={this.setValue}
+                            <Input
+                                type="text"
+                                className="input"
+                                name="productName"
                                 disabled={(this.state.disabled) ? "disabled" : ""}
-                                placeholder="Product description..." value={productDescription}>
+                                placeholder="Product Name..."
+                                value={productName}
+                                onChange={this.setValue} />
+                        </DivClassSingle>
+                        <DivClassSingle
+                            className="form-data">
+                            <Label className="textarea">Product description</Label>
+                            <Textarea
+                                name="productDescription"
+                                className="textarea-input"
+                                onChange={this.setValue}
+                                disabled={(this.state.disabled) ? "disabled" : ""}
+                                placeholder="Product description..."
+                                value={productDescription}>
                             </Textarea>
                         </DivClassSingle>
                         {(!this.state.disabled) ? <DivClassSingle className="form-data">
-                            <Button className="submit" disabled={(this.state.disabled) ? "disabled" : ""}
-                                onClick={this.submit}>Submit</Button>
-                            <Button className="submit" disabled={(this.state.disabled) ? "disabled" : ""}
-                                onClick={this.clear}>Cancel</Button>
+                            <Button
+                                className="submit"
+                                disabled={(this.state.disabled) ? "disabled" : ""}
+                                onClick={this.submit}>
+                                Submit
+                            </Button>
+                            <Button
+                                className="submit"
+                                disabled={(this.state.disabled) ? "disabled" : ""}
+                                onClick={this.clear}>
+                                Cancel
+                            </Button>
                         </DivClassSingle> : ""}
-
                     </DivClassSingle>
                 </DivClassSingle>
                 <DivClassSingle className="footer">

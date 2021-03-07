@@ -9,7 +9,7 @@
 }
 
 .navbar h2 {
-    margin-right: 57.5%;
+    margin-right: 47%;
 }
 
 .navbar button {
@@ -146,6 +146,8 @@ hr {
     border-radius: 5px;
     padding-top: 10px;
     border: none;
+
+    
 }
 
 .data-right .form-data .input {
