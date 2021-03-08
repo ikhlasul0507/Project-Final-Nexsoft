@@ -8,7 +8,13 @@ class Select extends Component {
 
     render() {
         return (
-            <select className={this.props.className} name={this.props.name}>{this.props.children}</select>
+            <select 
+            className={this.props.className} 
+            name={this.props.name}
+            onChange={this.props.onChange}
+            >
+                {this.props.children}
+                </select>
         );
     }
 }

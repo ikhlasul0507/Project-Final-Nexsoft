@@ -128,7 +128,7 @@ const Sidebar = (props) => {
                     {getDateWithMoment()} |
                     {" " + date.toLocaleTimeString()}
 
-                    <NavIconSh to='#'>
+                    <NavIconSh to="#">
                         <P>{props.dataLogin.userData.username}</P>
                         <FaIcons.FaPowerOff onClick={() => {
                             logout(props)

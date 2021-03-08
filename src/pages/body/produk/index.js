@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import "./produk.css"
 import * as FaIcons from 'react-icons/fa';
 import swal from 'sweetalert';
+import Pagination from '@material-ui/lab/Pagination';
+import { makeStyles } from '@material-ui/core/styles';
 import DivClassSingle from "../../../componen/div/divClassSingle"
 import {
     Button,
@@ -11,14 +13,19 @@ import {
     Label,
     P,
     Small,
-    A,
-    Li,
-    Ul,
     Hr,
     Textarea,
     Img,
-    Center
+    Center,
 } from "../../../componen"
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        '& > * + *': {
+            marginTop: theme.spacing(2),
+        },
+    },
+}));
 
 class Produk extends Component {
     constructor(props) {
@@ -32,8 +39,18 @@ class Produk extends Component {
             url: "http://localhost:8080/nd6/product/",
             errorFetcing: false,
             update: false,
+            page: 1,
+            count: "",
+            orderby:"asc"
         }
 
+        this.handleChange = (event, value) => {
+            this.setState({
+                page: value
+            })
+            this.getCount();
+            this.getPaging(value, this.state.orderby);
+        };
         this.detail = (id) => {
             fetch(this.state.url + id, {
                 method: "get",
@@ -87,6 +104,7 @@ class Produk extends Component {
                                 });
                                 this.clear();
                                 this.getAll();
+                                this.getCount();
                             })
 
                             .catch((e) => {
@@ -139,9 +157,9 @@ class Produk extends Component {
                             this.clear();
                         }
                     })
-                    .catch((e) => { alert("gagal")});
+                    .catch((e) => { alert("gagal") });
             } else if (this.state.productName !== "") {
-                fetch(this.state.url +"name/"+ this.state.productName, {
+                fetch(this.state.url + "name/" + this.state.productName, {
                     method: "get",
                     headers: {
                         "Content-Type": "application/json; ; charset=utf-8",
@@ -168,7 +186,7 @@ class Produk extends Component {
                             this.clear();
                         }
                     })
-                    .catch((e) => { alert("gagal")});
+                    .catch((e) => { alert("gagal") });
             } else {
                 swal({
                     title: "Error !",
@@ -225,6 +243,9 @@ class Produk extends Component {
                             button: "Ok",
                         });
                     } else {
+                        this.setState({
+                            page: 1
+                        })
                         this.clear()
                         swal({
                             title: "Good job!",
@@ -232,7 +253,8 @@ class Produk extends Component {
                             icon: "success",
                             button: "Ok",
                         });
-                        this.getAll();
+                        this.getPaging();
+                        this.getCount();
                     }
                 })
                 .catch(() => {
@@ -278,6 +300,9 @@ class Produk extends Component {
                         });
                     } else {
                         this.clear()
+                        this.setState({
+                            page: 1
+                        })
                         swal({
                             title: "Good job!",
                             text: "Product has been updated !",
@@ -296,8 +321,46 @@ class Produk extends Component {
                 [el.target.name]: el.target.value,
             })
         }
-        this.getAll = () => {
-            fetch(this.state.url, {
+        this.onChangeSelect = el => {
+            const orderby = el.target.value
+            this.setState({
+                orderby : orderby
+            })
+            this.getPaging(this.state.page,orderby);
+        }
+        this.getCount = () => {
+            fetch(this.state.url + "count", {
+                method: "get",
+                headers: {
+                    "Content-Type": "application/json; ; charset=utf-8",
+                    "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                    "Access-Control-Allow-Origin": "*"
+                }
+            })
+                .then(response => response.json())
+                .then(json => {
+                    this.setState({
+                        count: Math.ceil((json) / 5),
+                        errorFetcing: true
+                    });
+                })
+                .catch((e) => {
+                    alert("Failed fetching data!!", e)
+                    // this.setState({errorFetcing:true})
+                });
+        }
+        this.getPaging = (value, orderby) => {
+            if(value){
+                // value = value
+            }else{
+            value =1;
+            }
+            if(orderby){
+
+            }else{
+                orderby="asc"
+            }
+            fetch(this.state.url + "paging/?page=" + value + "&limit=5&orderby="+   orderby+"", {
                 method: "get",
                 headers: {
                     "Content-Type": "application/json; ; charset=utf-8",
@@ -311,7 +374,6 @@ class Produk extends Component {
                         products: json,
                         errorFetcing: true
                     });
-
                 })
                 .catch((e) => {
                     alert("Failed fetching data!!", e)
@@ -320,10 +382,13 @@ class Produk extends Component {
         }
     }
     componentDidMount() {
-        this.getAll();
+        this.getPaging();
+        this.getCount();
+
     }
     render() {
-        const { productId, productName, productDescription } = this.state
+        const classes = () => this.props.useStyles();
+        const { productId, productName, productDescription, orderby } = this.state
         return (
             <>
                 <DivClassSingle
@@ -355,6 +420,9 @@ class Produk extends Component {
                         <Hr />
                         <DivClassSingle
                             className="list">
+                            {
+                                // console.log(this.state.products.reverse())
+                            }
                             {this.state.products.map(
                                 (Item, idx) =>
                                     <DivClassSingle
@@ -387,26 +455,30 @@ class Produk extends Component {
                                     </DivClassSingle>
                                     : ""
                             }
-                            <Ul className="pagination">
-                                <Li>
-                                    <A href="#">Previous</A>
-                                </Li>
-                                <Li>
-                                    <A href="#">1</A>
-                                </Li>
-                                <Li>
-                                    <A className="active" href="#">2</A>
-                                </Li>
-                                <Li>
-                                    <A href="#">3</A>
-                                </Li>
-                                <Li>
-                                    <A href="#">4</A>
-                                </Li>
-                                <Li>
-                                    <A href="#">Next</A>
-                                </Li>
-                            </Ul>
+                            <DivClassSingle className="pagin">
+                                <DivClassSingle className={classes.root}>
+                                    <DivClassSingle className="judul-pagin">
+                                    <P>Show: 
+                                        <select onChange={this.onChangeSelect} name="orderby" value={orderby}>
+                                            <option value="-">-Pilih-</option>
+                                            <option value="5">5</option>
+                                            <option value="10">10</option>
+                                            <option value="15">15</option>
+                                        </select>
+                                        entries
+                                    </P>
+                                    <P>Page: {this.state.page}</P>
+                                    <P>Order By: 
+                                        <select onChange={this.onChangeSelect} name="orderby" value={orderby}>
+                                            <option value="-">-Pilih-</option>
+                                            <option value="asc">ASC</option>
+                                            <option value="desc">DESC</option>
+                                        </select>
+                                    </P>
+                                    </DivClassSingle>
+                                    <Pagination count={this.state.count} page={this.state.page} onChange={this.handleChange} />
+                                </DivClassSingle>
+                            </DivClassSingle>
                         </DivClassSingle>
                     </DivClassSingle>
                     <DivClassSingle

@@ -11,6 +11,7 @@ class Img extends Component {
             <img
                 className={this.props.className}
                 src={this.props.src}
+                alt=""
             >
             </img>
         );

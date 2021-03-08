@@ -3,7 +3,7 @@ import Login from "./pages/login"
 import Data from "./data"
 import Page404 from "./pages/404"
 import { connect } from "react-redux"
-import { BrowserRouter as Router, Switch, Route, useHistory } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import swal from 'sweetalert';
 class Proses extends Component {
     constructor(props) {

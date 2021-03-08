@@ -179,7 +179,8 @@ hr {
     border: none;
 }
 
-ul.pagination {
+.pagin{
+    background-color: #ddd;
     display: inline-block;
     padding: 0;
     margin: 0;
@@ -187,34 +188,17 @@ ul.pagination {
     margin-bottom: 13px;
     position: fixed;
     bottom: 0;
-    width: 29%;
-    background-color: #050505;
+    width: 28.6%;
+    color: black;
+}
+.pagin .judul-pagin{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-right: 10px;
+    margin-left: 10px;
 }
 
-ul.pagination li {
-    display: inline;
-    background-color: black;
-}
-
-ul.pagination li a {
-    color: rgb(187, 187, 187);
-    float: left;
-    padding: 8px 19px;
-    text-decoration: none;
-    transition: background-color .3s;
-    border: 1px solid #ddd;
-    margin: 0 4px;
-}
-
-ul.pagination li a.active {
-    background-color: #a09d9d;
-    color: white;
-    border: 1px solid #4CAF50;
-}
-
-ul.pagination li a:hover:not(.active) {
-    background-color: rgb(180, 176, 176);
-}
 
 .footer {
     width: 100%;

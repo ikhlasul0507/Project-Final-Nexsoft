@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import "./report.css"
 import * as FaIcons from 'react-icons/fa';
 import DivClassSingle from "../../../componen/div/divClassSingle"
-import {Button, H2, H3, Input, Label, P, Small, A, Li, Ul, Img} from "../../../componen"
+import {Button, H2, H3, Input,Img} from "../../../componen"
 import {Table, Tbody, Td, Th, Thead, Tr} from "../../../componen/table"
 import {makeStyles} from '@material-ui/core/styles';
 import Pagination from '@material-ui/lab/Pagination';
@@ -98,7 +98,7 @@ class ReportMonitoring extends Component {
                         <DivClassSingle className="table">
                             <ComponentToPrint ref={el => (this.componentRef = el)}/>
                         </DivClassSingle>
-                        <DivClassSingle className={classes.root} className="pagination">
+                        <DivClassSingle class={classes.root} className="pagination">
                             <Pagination count={10} color="secondary" variant="outlined" shape="rounded"/>
                         </DivClassSingle>
                     </>

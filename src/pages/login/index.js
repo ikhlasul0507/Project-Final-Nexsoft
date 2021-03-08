@@ -4,7 +4,6 @@ import DivClassSingle from "../../componen/div/divClassSingle"
 import { Button, H1, Input, Label, P, Img } from "../../componen"
 import Nd6 from "../../assets/img/nd6.png"
 import ReCAPTCHA from 'react-google-recaptcha'
-import Tooltip from '@material-ui/core/Tooltip';
 
 class Login extends Component {
     constructor(props) {

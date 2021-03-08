@@ -1,6 +1,12 @@
 import React, { Component } from 'react'
 import "./addMonitoring.css"
-import { Button, H3, H2, Input, Label, P, Small, A, Li, Ul, Option, Select, Textarea } from "../../../componen"
+import { 
+    Button,  
+    Input, 
+    Label, 
+    P, 
+    Textarea 
+} from "../../../componen"
 import DivClassSingle from "../../../componen/div/divClassSingle"
 import * as FaIcons from 'react-icons/fa';
 

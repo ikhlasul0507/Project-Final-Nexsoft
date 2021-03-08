@@ -1,11 +1,23 @@
 import React, {Component} from 'react'
 import "./monitor.css"
 import * as FaIcons from 'react-icons/fa';
-import DivClassSingle from "../../../componen/div/divClassSingle"
-import {Button, H2, Input, Label, Option, Select, P, Small, A, Li, Ul,} from "../../../componen"
-import {Table, Tbody, Td, Th, Thead, Tr} from "../../../componen/table"
 import {makeStyles} from '@material-ui/core/styles';
 import Pagination from '@material-ui/lab/Pagination';
+import DivClassSingle from "../../../componen/div/divClassSingle"
+import {
+    Button, 
+    H2, 
+    Input, 
+    Option, 
+    Select, 
+    P} from "../../../componen"
+import {
+    Table, 
+    Tbody, 
+    Td, 
+    Th, 
+    Thead, 
+    Tr} from "../../../componen/table"
 
 
 const useStyles = makeStyles((theme) => ({
@@ -34,7 +46,8 @@ class MonitoringStok extends Component {
 
 
     render() {
-        const classes = () => this.props.useStyles();
+        const {useStyles}= this.props
+        const classes = () => useStyles;
         return (
             <DivClassSingle>
                 <DivClassSingle className="navbarM">
@@ -162,7 +175,7 @@ class MonitoringStok extends Component {
                         </Tbody>
                     </Table>
                 </DivClassSingle>
-                <DivClassSingle className={classes.root} className="pagination">
+                <DivClassSingle class={classes.root} className="pagination">
                     <Pagination count={10} color="secondary" variant="outlined" shape="rounded"/>
                 </DivClassSingle>
             </DivClassSingle>
