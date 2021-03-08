@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import "./addMonitoring.css"
-import { 
-    Button,  
-    Input, 
-    Label, 
-    P, 
-    Textarea 
+import {
+    Button,
+    Input,
+    Label,
+    P,
+    Textarea
 } from "../../../componen"
 import DivClassSingle from "../../../componen/div/divClassSingle"
 import * as FaIcons from 'react-icons/fa';
@@ -14,6 +14,9 @@ class AddMonitoring extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            stoks: [],
+            documentDate: "",
+            documentDescription: "",
             items: [
                 {
                     product: {
@@ -53,30 +56,24 @@ class AddMonitoring extends Component {
             this.setState({
                 items: newItems
             });
-            console.log(this.state.items)
         }
         this.addChild = () => {
-            console.log("98654321",this.state.items.transType)
-            if (this.state.items.transType === undefined) {
-                alert("Please completed the product !")
-            } else {
-                const newItems = this.state.items;
-                newItems.push({
-                    product: {
-                        idProduct: "",
-                        nameProduct: "",
-                        descriptionProduct: ""
-                    },
-                    expiredDate: "",
-                    price: "",
-                    transType: "",
-                    productQuantity: ""
-                });
+            const newItems = this.state.items;
+            newItems.push({
+                product: {
+                    idProduct: "",
+                    nameProduct: "",
+                    descriptionProduct: ""
+                },
+                expiredDate: "",
+                price: "",
+                transType: "",
+                productQuantity: ""
+            });
 
-                this.setState({
-                    items: newItems
-                });
-            }
+            this.setState({
+                items: newItems
+            });
         }
         this.removeChild = index => {
             this.state.items.splice(index, 1);
@@ -86,23 +83,52 @@ class AddMonitoring extends Component {
                 items: newItems
             });
         }
+        this.setValue = el => {
+            this.setState({
+                [el.target.name]: el.target.value,
+            })
+        }
+        this.save =()=>{
+            const objek = {
+                documentDate: this.state.documentDate,
+                documentDescription: this.state.documentDescription,
+                items:this.state.items
+            }
+            const stoks=[];
+            stoks.push(objek)
+            this.state.stoks.push(stoks);
+            console.log("stok" ,this.state.stoks)
+
+        }
     }
 
     render() {
+        const { documentDate, documentDescription } = this.state
         return (
             <>
                 <DivClassSingle className="add">
                     <DivClassSingle className="add-kiri">
                         <DivClassSingle className="form-data">
                             <Label>Document Date</Label>
-                            <Input type="date" name="" />
+                            <Input
+                                type="date"
+                                value={documentDate}
+                                onChange={this.setValue}
+                                name="documentDate"
+                            />
                         </DivClassSingle>
                         <DivClassSingle className="form-data">
                             <Label className="text-area-label">Description</Label>
-                            <Textarea className="text-area" placeholder="Description..."></Textarea>
+                            <Textarea
+                                className="text-area"
+                                placeholder="Description..."
+                                value={documentDescription}
+                                name="documentDescription"
+                                onChange={this.setValue}
+                            />
                         </DivClassSingle>
                         <DivClassSingle className="form-data">
-                            <Button className="submitA"><FaIcons.FaSave /> Save</Button>
+                            <Button className="submitA" onClick={this.save}><FaIcons.FaSave /> Save</Button>
                             <Button className="submitA" onClick={() => {
                                 if (window.confirm("Are you sure, want to back ?")) {
                                     this.props.history.push("/monitoring-produk")
@@ -111,9 +137,6 @@ class AddMonitoring extends Component {
                         </DivClassSingle>
                     </DivClassSingle>
                     <DivClassSingle className="add-kanan">
-                        {
-                            console.log(this.state.items)
-                        }
                         {
 
                             this.state.items.map((value, index) => {
@@ -155,7 +178,7 @@ class AddMonitoring extends Component {
                                                 onChange={event => this.onChangeInput("productQuantity", event.target.value, index)}
                                                 placeholder="Product quantity..." />
                                         </DivClassSingle>
-                                        {(index > 0) ?
+                                        {(this.state.items.length > 1) ?
                                             <>
                                                 <Button className="removeProduct" onClick={() => {
                                                     if (window.confirm("Are you sure, want to delete")) {

@@ -106,9 +106,10 @@ const Sidebar = (props) => {
         return function cleanup() {
             clearInterval(timer)
         }
-
     });
     return (
+        
+        
         <>
             <IconContext.Provider value={{ color: '#fff' }}>
                 <Nav>

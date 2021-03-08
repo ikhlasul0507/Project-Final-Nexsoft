@@ -54,9 +54,9 @@ class Produk extends Component {
         this.handleChange = (event, value) => {
             this.setState({
                 page: value
-            })
+            }) 
             this.getCount();
-            this.getPaging(value, this.state.orderby, this.state.show);
+            this.getPaging(value, this.state.orderby, this.state.show, this.state.minus);
         }
         this.detail = (id) => {
             fetch(this.state.url + id, {
@@ -409,7 +409,8 @@ class Produk extends Component {
 
     }
     render() {
-        const classes = () => this.props.useStyles();
+        const {useStyles}= this.props
+        const classes = () => useStyles;
         const { productId, productName, productDescription, orderby, show, checkedA } = this.state
         return (
             <>
