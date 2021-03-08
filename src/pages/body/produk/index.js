@@ -4,6 +4,8 @@ import * as FaIcons from 'react-icons/fa';
 import swal from 'sweetalert';
 import Pagination from '@material-ui/lab/Pagination';
 import { makeStyles } from '@material-ui/core/styles';
+import Switch from '@material-ui/core/Switch';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import DivClassSingle from "../../../componen/div/divClassSingle"
 import {
     Button,
@@ -17,6 +19,8 @@ import {
     Textarea,
     Img,
     Center,
+    Select,
+    Option
 } from "../../../componen"
 
 const useStyles = makeStyles((theme) => ({
@@ -41,7 +45,10 @@ class Produk extends Component {
             update: false,
             page: 1,
             count: "",
-            orderby:"asc"
+            orderby: "asc",
+            show: "5",
+            checkedA: true,
+            minus:0
         }
 
         this.handleChange = (event, value) => {
@@ -49,8 +56,8 @@ class Produk extends Component {
                 page: value
             })
             this.getCount();
-            this.getPaging(value, this.state.orderby);
-        };
+            this.getPaging(value, this.state.orderby, this.state.show);
+        }
         this.detail = (id) => {
             fetch(this.state.url + id, {
                 method: "get",
@@ -102,9 +109,9 @@ class Produk extends Component {
                                     icon: "success",
                                     button: "Ok",
                                 });
-                                this.clear();
-                                this.getAll();
+                                this.getPaging(this.state.page, this.state.orderby, this.state.show,this.state.checkedA);
                                 this.getCount();
+                                this.clear();
                             })
 
                             .catch((e) => {
@@ -194,7 +201,7 @@ class Produk extends Component {
                     icon: "error",
                     button: "Ok",
                 });
-                this.getAll();
+                this.getPaging();
             }
         }
         this.submit = () => {
@@ -253,7 +260,7 @@ class Produk extends Component {
                             icon: "success",
                             button: "Ok",
                         });
-                        this.getPaging();
+                        this.getPaging(this.state.page, this.state.orderby, this.state.show);
                         this.getCount();
                     }
                 })
@@ -299,7 +306,7 @@ class Produk extends Component {
                             button: "Ok",
                         });
                     } else {
-                        this.clear()
+
                         this.setState({
                             page: 1
                         })
@@ -309,7 +316,8 @@ class Produk extends Component {
                             icon: "success",
                             button: "Ok",
                         });
-                        this.getAll();
+                        this.getPaging(this.state.page, this.state.orderby, this.state.show);
+                        this.clear()
                     }
                 })
                 .catch(() => {
@@ -321,12 +329,32 @@ class Produk extends Component {
                 [el.target.name]: el.target.value,
             })
         }
+        this.handleChangeMinus = (event) => {
+            this.setState({
+                [event.target.name]: event.target.checked,
+            })
+            const minus = event.target.checked
+            if(minus)
+            this.getPaging(this.state.page, this.state.orderby, this.state.show,0);
+            else
+            this.getPaging(this.state.page, this.state.orderby, this.state.show,1);
+         this.getCount();
+        };
         this.onChangeSelect = el => {
             const orderby = el.target.value
             this.setState({
-                orderby : orderby
+                orderby: orderby
             })
-            this.getPaging(this.state.page,orderby);
+            this.getPaging(this.state.page, orderby, this.state.show);
+            this.getCount();
+        }
+        this.onChangeSelectShow = el => {
+            const show = el.target.value
+            this.setState({
+                show: show
+            })
+            this.getPaging(this.state.page, this.state.orderby,show);
+            this.getCount();
         }
         this.getCount = () => {
             fetch(this.state.url + "count", {
@@ -340,7 +368,7 @@ class Produk extends Component {
                 .then(response => response.json())
                 .then(json => {
                     this.setState({
-                        count: Math.ceil((json) / 5),
+                        count: Math.ceil((json) / this.state.show),
                         errorFetcing: true
                     });
                 })
@@ -349,18 +377,12 @@ class Produk extends Component {
                     // this.setState({errorFetcing:true})
                 });
         }
-        this.getPaging = (value, orderby) => {
-            if(value){
-                // value = value
-            }else{
-            value =1;
-            }
-            if(orderby){
-
-            }else{
-                orderby="asc"
-            }
-            fetch(this.state.url + "paging/?page=" + value + "&limit=5&orderby="+   orderby+"", {
+        this.getPaging = (value, orderby, show, minus) => {
+            if (value) { } else { value = 1; }
+            if (orderby) { } else { orderby = "asc" }
+            if (show) { } else { show = 5 }
+            if (minus) { } else { minus = 0 }
+            fetch(this.state.url + "paging/?page=" + value + "&limit=" + show + "&orderby=" + orderby + "&minus="+minus+"", {
                 method: "get",
                 headers: {
                     "Content-Type": "application/json; ; charset=utf-8",
@@ -388,7 +410,7 @@ class Produk extends Component {
     }
     render() {
         const classes = () => this.props.useStyles();
-        const { productId, productName, productDescription, orderby } = this.state
+        const { productId, productName, productDescription, orderby, show, checkedA } = this.state
         return (
             <>
                 <DivClassSingle
@@ -397,6 +419,9 @@ class Produk extends Component {
                         className="data-left">
                         <DivClassSingle
                             className="cari">
+                            <FormControlLabel
+                                control={<Switch checked={checkedA} onChange={this.handleChangeMinus} name="checkedA" />}
+                            />
                             <Input
                                 type="text"
                                 className="input"
@@ -458,23 +483,25 @@ class Produk extends Component {
                             <DivClassSingle className="pagin">
                                 <DivClassSingle className={classes.root}>
                                     <DivClassSingle className="judul-pagin">
-                                    <P>Show: 
-                                        <select onChange={this.onChangeSelect} name="orderby" value={orderby}>
-                                            <option value="-">-Pilih-</option>
-                                            <option value="5">5</option>
-                                            <option value="10">10</option>
-                                            <option value="15">15</option>
-                                        </select>
+                                        <P>Show:
+                                        <Select onChange={this.onChangeSelectShow} name="show" value={show}>
+                                                <Option value="-">-Pilih-</Option>
+                                                <Option value="5">5</Option>
+                                                <Option value="10">10</Option>
+                                                <Option value="15">15</Option>
+                                                <Option value="30">30</Option>
+                                                <Option value="50">50</Option>
+                                            </Select>
                                         entries
                                     </P>
-                                    <P>Page: {this.state.page}</P>
-                                    <P>Order By: 
-                                        <select onChange={this.onChangeSelect} name="orderby" value={orderby}>
-                                            <option value="-">-Pilih-</option>
-                                            <option value="asc">ASC</option>
-                                            <option value="desc">DESC</option>
-                                        </select>
-                                    </P>
+                                        <P>Page: {this.state.page}</P>
+                                        <P>Order By:
+                                        <Select onChange={this.onChangeSelect} name="orderby" value={orderby}>
+                                                <Option value="-">-Pilih-</Option>
+                                                <Option value="asc">ASC</Option>
+                                                <Option value="desc">DESC</Option>
+                                            </Select>
+                                        </P>
                                     </DivClassSingle>
                                     <Pagination count={this.state.count} page={this.state.page} onChange={this.handleChange} />
                                 </DivClassSingle>

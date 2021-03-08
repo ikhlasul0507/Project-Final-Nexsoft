@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 
 class Option extends Component {
     constructor(props) {
@@ -8,7 +8,11 @@ class Option extends Component {
 
     render() {
         return (
-            <option value={this.props.value}>{this.props.children}</option>
+            <option
+                value={this.props.value}
+            >
+                {this.props.children}
+            </option>
         );
     }
 }

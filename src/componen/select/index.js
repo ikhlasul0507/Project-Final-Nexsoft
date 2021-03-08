@@ -12,6 +12,7 @@ class Select extends Component {
             className={this.props.className} 
             name={this.props.name}
             onChange={this.props.onChange}
+            value={this.props.value}
             >
                 {this.props.children}
                 </select>
