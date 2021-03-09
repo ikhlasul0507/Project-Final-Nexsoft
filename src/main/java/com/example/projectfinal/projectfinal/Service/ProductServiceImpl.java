@@ -1,7 +1,6 @@
 package com.example.projectfinal.projectfinal.Service;
 
 import com.example.projectfinal.projectfinal.Model.Product;
-import com.example.projectfinal.projectfinal.Model.User;
 import com.example.projectfinal.projectfinal.Repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -43,6 +42,10 @@ public class ProductServiceImpl implements ProductService {
         List<Product> products = productRepository.findAll();
         return products;
     }
+    public int findAllCount() {
+        int products = productRepository.findAllCount();
+        return products;
+    }
     public void deleteProductById(String productId) {
         synchronized (this) {
             productRepository.deleteProductById(productId);
@@ -53,4 +56,8 @@ public class ProductServiceImpl implements ProductService {
             productRepository.updateProduct(product);
         }
     }
+    public List<Product> findWithPaging(int page, int limit, String orderby, int minus) {
+        return productRepository.findWithPaging(page, limit,orderby, minus);
+    }
+
 }

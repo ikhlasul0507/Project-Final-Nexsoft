@@ -28,7 +28,7 @@ public class ProductController {
             return new ResponseEntity<>(new CustomErrorType("Unable to create, product already " + product.getProductName()), HttpStatus.CONFLICT);
         } else {
             productService.saveProduct(product);
-            return new ResponseEntity<>(new CustomSuccessType("2"), HttpStatus.OK);
+            return new ResponseEntity<>(new CustomSuccessType("Save product successfully"), HttpStatus.OK);
         }
     }
     @GetMapping("/product")
@@ -40,6 +40,11 @@ public class ProductController {
             return new ResponseEntity<>(products, HttpStatus.OK);
         }
     }
+    @GetMapping("/product/count")
+    public ResponseEntity<List<Product>> listAllProductsCount() {
+        int products = productService.findAllCount();
+            return new ResponseEntity(products, HttpStatus.OK);
+        }
     @GetMapping("/product/{productId}")
     public ResponseEntity<?> getProduct(@PathVariable("productId") String productId) {
         logger.info("Fetching product with id Product {}", productId);
@@ -51,6 +56,7 @@ public class ProductController {
             return new ResponseEntity<>(product, HttpStatus.OK);
         }
     }
+
     @GetMapping("/product/name/{productName}")
     public ResponseEntity<?> getProductByName(@PathVariable("productName") String productName) {
         logger.info("Fetching product with productName {}", productName);
@@ -93,5 +99,13 @@ public class ProductController {
             productService.updateProduct(product1);
             return new ResponseEntity<>(product1, HttpStatus.OK);
         }
+    }
+    @GetMapping("/product/paging/")
+    public ResponseEntity<?> getProductPaging(@RequestParam int page, @RequestParam int limit,@RequestParam String orderby,@RequestParam int minus) {
+        List<Product> products = productService.findWithPaging(page, limit, orderby,minus);
+        if(products.isEmpty()) {
+            return new ResponseEntity<>(products, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(products, HttpStatus.OK);
     }
 }
