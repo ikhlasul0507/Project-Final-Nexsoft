@@ -5,82 +5,82 @@ import {
     Input,
     Label,
     P,
-    Textarea
+    Textarea,
+    Select,
+    Option
 } from "../../../componen"
 import DivClassSingle from "../../../componen/div/divClassSingle"
 import * as FaIcons from 'react-icons/fa';
+import swal from 'sweetalert';
+import moment from 'moment';
 
 class AddMonitoring extends Component {
     constructor(props) {
         super(props);
         this.state = {
             stoks: [],
-            documentDate: "",
-            documentDescription: "",
-            items: [
+            products: [],
+            tanggaDokumen: "",
+            deskripsiDokumen: "",
+            productList: [
                 {
-                    product: {
-                        idProduct: "",
-                        nameProduct: "",
-                        descriptionProduct: ""
-                    },
-                    expiredDate: "",
-                    price: "",
-                    transType: "",
-                    productQuantity: ""
+                    productId: "",
+                    tglExpiredProduct: "",
+                    harga: "",
+                    transTypeProduct: "",
+                    productQty: ""
 
                 }
-            ]
+            ],
+            url: "http://localhost:8080/nd6/stock/",
+            urlProducts : "http://localhost:8080/nd6/product/"
         }
-
-        this.onChangeSelectBarang = (idProduct, index) => {
-            this.state.items[index].product.idProduct = idProduct;
-            let newItems = this.state.items;
+        this.getDateWithMoment = () => {
             this.setState({
-                items: newItems
+                tanggaDokumen: moment().format('YYYY-mm-DD')
+            })
+        };
+        this.onChangeSelectBarang = (productId, index) => {
+            this.state.productList[index].productId = productId;
+            let newproductList = this.state.productList;
+            this.setState({
+                productList: newproductList
             });
         }
-
-        this.onChangeSelectTrans = (transType, index) => {
-            this.state.items[index].transType = transType;
-            let newItems = this.state.items;
+        this.onChangeSelectTrans = (transTypeProduct, index) => {
+            this.state.productList[index].transTypeProduct = transTypeProduct;
+            let newproductList = this.state.productList;
             this.setState({
-                items: newItems
+                productList: newproductList
             });
         }
-
-
         this.onChangeInput = (attribut, value, index) => {
-            this.state.items[index][attribut] = value;
-            const newItems = this.state.items;
+            this.state.productList[index][attribut] = value;
+            const newproductList = this.state.productList;
             this.setState({
-                items: newItems
+                productList: newproductList
             });
         }
         this.addChild = () => {
-            const newItems = this.state.items;
-            newItems.push({
-                product: {
-                    idProduct: "",
-                    nameProduct: "",
-                    descriptionProduct: ""
-                },
-                expiredDate: "",
-                price: "",
-                transType: "",
-                productQuantity: ""
+            const newproductList = this.state.productList;
+            newproductList.push({
+                productId: "",
+                tglExpiredProduct: "",
+                harga: "",
+                transTypeProduct: "",
+                productQty: ""
             });
 
             this.setState({
-                items: newItems
+                productList: newproductList
             });
         }
         this.removeChild = index => {
-            this.state.items.splice(index, 1);
-            const newItems = this.state.items;
+            this.state.productList.splice(index, 1);
+            const newproductList = this.state.productList;
 
             this.setState({
-                items: newItems
+                productList: newproductList
             });
         }
         this.setValue = el => {
@@ -88,22 +88,117 @@ class AddMonitoring extends Component {
                 [el.target.name]: el.target.value,
             })
         }
-        this.save =()=>{
+        this.save = () => {
             const objek = {
-                documentDate: this.state.documentDate,
-                documentDescription: this.state.documentDescription,
-                items:this.state.items
+                tanggaDokumen: this.state.tanggaDokumen,
+                deskripsiDokumen: this.state.deskripsiDokumen,
+                productList: this.state.productList
             }
-            const stoks=[];
+            const stoks = [];
             stoks.push(objek)
             this.state.stoks.push(stoks);
-            console.log("stok" ,this.state.stoks)
+            console.log("stok :", this.state.stoks)
+            console.log("document description :", this.state.deskripsiDokumen)
+            this.saveToApi();
+        }
+        this.saveToApi = () => {
+            const objek = {
+                tanggaDokumen: this.state.tanggaDokumen,
+                deskripsiDokumen: this.state.deskripsiDokumen,
+                productList: this.state.productList
+            }
+            fetch(this.state.url, {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json; ; charset=utf-8",
+                    "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                    "Access-Control-Allow-Origin": "*"
+                },
+                body: JSON.stringify(objek)
+            })
+                .then(response => response.json())
+                .then((json) => {
+                    if (json.errors) {
 
+                        swal({
+                            title: "Error !",
+                            text: json.errors[0].defaultMessage,
+                            icon: "error",
+                            button: "Ok",
+                        });
+                    } else if (json.errorMessage) {
+
+                        swal({
+                            title: "Error !",
+                            text: json.errorMessage,
+                            icon: "error",
+                            button: "Ok",
+                        });
+                    } else if (json.message) {
+                        console.log(json.message)
+                        swal({
+                            title: "Error !",
+                            text: json.message,
+                            icon: "error",
+                            button: "Ok",
+                        });
+                    } else {
+                        // this.setState({
+                        //     page: 1
+                        // })
+                        this.clear()
+                        swal({
+                            title: "Good job!",
+                            text: json.successMessage,
+                            icon: "success",
+                            button: "Ok",
+                        });
+                        // this.getPaging(this.state.page, this.state.orderby, this.state.show);
+                        // this.getCount();
+                    }
+                })
+                .catch((e) => {
+                    console.log(e)
+                    alert("Failed sending data!!");
+                });
+        }
+        this.getApiProducts = () => {
+            fetch(this.state.urlProducts, {
+                method: "get",
+                headers: {
+                    "Content-Type": "application/json; ; charset=utf-8",
+                    "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                    "Access-Control-Allow-Origin": "*"
+                },
+            })
+                .then(response => response.json())
+                .then((json) => {
+                    this.setState({
+                        products: json
+                    })
+                    console.log(this.state.products);
+                })
+                .catch((e) => {
+                    console.log(e)
+                    alert("Failed sending data!!");
+                });
+        }
+        this.clear = () => {
+            this.setState({
+                tanggaDokumen: "",
+                deskripsiDokumen: "",
+                productList: ""
+            })
         }
     }
 
+    componentDidMount() {
+        this.getDateWithMoment();
+        this.getApiProducts();
+
+    }
     render() {
-        const { documentDate, documentDescription } = this.state
+        const { tanggaDokumen, deskripsiDokumen } = this.state
         return (
             <>
                 <DivClassSingle className="add">
@@ -112,9 +207,9 @@ class AddMonitoring extends Component {
                             <Label>Document Date</Label>
                             <Input
                                 type="date"
-                                value={documentDate}
+                                value={tanggaDokumen}
                                 onChange={this.setValue}
-                                name="documentDate"
+                                name="tanggaDokumen"
                             />
                         </DivClassSingle>
                         <DivClassSingle className="form-data">
@@ -122,8 +217,8 @@ class AddMonitoring extends Component {
                             <Textarea
                                 className="text-area"
                                 placeholder="Description..."
-                                value={documentDescription}
-                                name="documentDescription"
+                                value={deskripsiDokumen}
+                                name="deskripsiDokumen"
                                 onChange={this.setValue}
                             />
                         </DivClassSingle>
@@ -138,47 +233,51 @@ class AddMonitoring extends Component {
                     </DivClassSingle>
                     <DivClassSingle className="add-kanan">
                         {
-
-                            this.state.items.map((value, index) => {
+                            this.state.productList.map((value, index) => {
                                 return (
                                     <DivClassSingle className="add-product" key={index}>
                                         <DivClassSingle className="form-data">
                                             <Label>Select a product</Label>
-                                            <select className="selectA" value={value.product.idProduct}
+                                            <Select className="selectA" value={value.productId}
                                                 onChange={event => this.onChangeSelectBarang(event.target.value, index)}>
-                                                <option>--Pilih--</option>
-                                                <option value="A">A</option>
-                                                <option value="B">B</option>
-                                            </select>
+                                                <Option>--Pilih--</Option>
+                                                <Option value="PROD0003">PROD0003</Option>
+                                                <Option value="B">B</Option>
+                                            </Select>
                                         </DivClassSingle>
                                         <DivClassSingle className="form-data">
                                             <Label>Expired date</Label>
-                                            <Input type="date" value={value.expiredDate}
-                                                onChange={event => this.onChangeInput("expiredDate", event.target.value, index)}
-                                                name="" />
+                                            <Input type="date" value={value.tglExpiredProduct}
+                                                onChange={event => this.onChangeInput("tglExpiredProduct", event.target.value, index)}
+                                                name=""
+                                            />
                                         </DivClassSingle>
                                         <DivClassSingle className="form-data">
-                                            <Label>Price (Rp)</Label>
-                                            <Input type="number" value={value.price} name="" placeholder="Price (Rp)..."
-                                                onChange={event => this.onChangeInput("price", event.target.value, index)} />
+                                            <Label>Harga (Rp)</Label>
+                                            <Input
+                                                type="number"
+                                                value={value.harga}
+                                                name="" placeholder="Harga (Rp)..."
+                                                onChange={event => this.onChangeInput("harga", event.target.value, index)}
+                                            />
                                         </DivClassSingle>
                                         <DivClassSingle className="form-data">
                                             <Label>Trans Type</Label>
-                                            <select className="selectA" value={value.transType}
+                                            <Select className="selectA" value={value.transTypeProduct}
                                                 onChange={event => this.onChangeSelectTrans(event.target.value, index)}>
-                                                <option>--Pilih--</option>
-                                                <option value="Bertambah">Bertambah</option>
-                                                <option value="Berkurang">Berkurang</option>
-                                            </select>
+                                                <Option>--Pilih--</Option>
+                                                <Option value="1">Bertambah</Option>
+                                                <Option value="0">Berkurang</Option>
+                                            </Select>
                                         </DivClassSingle>
                                         <DivClassSingle className="form-data">
                                             <Label>Product Quantity</Label>
-                                            <Input type="number" value={value.productQuantity} className="inputL"
+                                            <Input type="number" value={value.productQty} className="inputL"
                                                 name=""
-                                                onChange={event => this.onChangeInput("productQuantity", event.target.value, index)}
+                                                onChange={event => this.onChangeInput("productQty", event.target.value, index)}
                                                 placeholder="Product quantity..." />
                                         </DivClassSingle>
-                                        {(this.state.items.length > 1) ?
+                                        {(this.state.productList.length > 1) ?
                                             <>
                                                 <Button className="removeProduct" onClick={() => {
                                                     if (window.confirm("Are you sure, want to delete")) {

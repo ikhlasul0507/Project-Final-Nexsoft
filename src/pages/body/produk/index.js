@@ -109,7 +109,7 @@ class Produk extends Component {
                                     icon: "success",
                                     button: "Ok",
                                 });
-                                this.getPaging(this.state.page, this.state.orderby, this.state.show,this.state.checkedA);
+                                this.getPaging(this.state.page, this.state.orderby, this.state.show);
                                 this.getCount();
                                 this.clear();
                             })
