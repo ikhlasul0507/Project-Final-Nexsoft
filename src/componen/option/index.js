@@ -10,6 +10,7 @@ class Option extends Component {
         return (
             <option
                 value={this.props.value}
+                key={this.props.value}
             >
                 {this.props.children}
             </option>

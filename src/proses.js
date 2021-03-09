@@ -3,8 +3,9 @@ import Login from "./pages/login"
 import Data from "./data"
 import Page404 from "./pages/404"
 import { connect } from "react-redux"
-import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import swal from 'sweetalert';
+import Swal from 'sweetalert2'
 class Proses extends Component {
     constructor(props) {
         super(props);
@@ -18,28 +19,28 @@ class Proses extends Component {
 
         this.validate = login => {
             const { username, password, recaptchaResponse } = login
-            if (username === ""){
+            if (username === "") {
                 swal({
                     title: "Error !",
                     text: "Please, enter your username !",
                     icon: "error",
                     button: "Ok",
-                  });
-            }else if (password === ""){
+                });
+            } else if (password === "") {
                 swal({
                     title: "Error !",
                     text: "Please enter your password !",
                     icon: "error",
                     button: "Ok",
-                  });
-            }else if (recaptchaResponse === ""){
+                });
+            } else if (recaptchaResponse === "") {
                 swal({
                     title: "Error !",
                     text: "Please, submit recaptcha !",
                     icon: "error",
                     button: "Ok",
-                  });
-            }else{
+                });
+            } else {
                 this.save(login)
             }
         }
@@ -62,19 +63,22 @@ class Proses extends Component {
                             text: json.errorMessage,
                             icon: "error",
                             button: "Ok",
-                          });
+                        });
                     } else {
                         this.setState({
                             user: json,
-                            recaptchaResponse : recaptchaResponse
+                            recaptchaResponse: recaptchaResponse
                         })
-                        this.props.submitLogin({ userData: this.state.user, recaptchaResponse : recaptchaResponse })
-                        swal({
+                        this.props.submitLogin({ userData: this.state.user, recaptchaResponse: recaptchaResponse })
+                        Swal.fire({
                             title: "Good job!",
                             text: "Login success !!",
                             icon: "success",
                             button: "Ok",
-                          });
+                            imageUrl: "http://www.nexsoft.co.id/images/nd6antelope.png",
+                            imageWidth: 400,
+                            imageHeight: 200,
+                        });
                     }
                 })
                 .catch((e) => {
@@ -116,7 +120,7 @@ class Proses extends Component {
                 <Router>
                     <Switch>
                         {this.tampilPage()}
-                        <Page404/>
+                        <Page404 />
                     </Switch>
                 </Router>
             </>
@@ -131,7 +135,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => {
     return {
-        submitLogin: (data, recaptchaResponse) => dispatch({ type: "LOGIN_SUCCESS", userData: data ,recaptchaResponse :recaptchaResponse}),
+        submitLogin: (data, recaptchaResponse) => dispatch({ type: "LOGIN_SUCCESS", userData: data, recaptchaResponse: recaptchaResponse }),
         keluar: () => dispatch({ type: "LOGOUT_SUCCESS" })
     }
 }

@@ -29,16 +29,17 @@ class AddMonitoring extends Component {
                     harga: "",
                     transTypeProduct: "",
                     productQty: ""
-
                 }
             ],
             url: "http://localhost:8080/nd6/stock/",
-            urlProducts : "http://localhost:8080/nd6/product/"
+            urlProducts: "http://localhost:8080/nd6/product/"
         }
         this.getDateWithMoment = () => {
             this.setState({
-                tanggaDokumen: moment().format('YYYY-mm-DD')
+                tanggaDokumen: moment().format('YYYY-MM-DD')
+                // tanggaDokumen: moment().format('DD/mm/YYYY')
             })
+            console.log(this.state.tanggalDokumen)
         };
         this.onChangeSelectBarang = (productId, index) => {
             this.state.productList[index].productId = productId;
@@ -76,13 +77,44 @@ class AddMonitoring extends Component {
             });
         }
         this.removeChild = index => {
-            this.state.productList.splice(index, 1);
-            const newproductList = this.state.productList;
+            swal({
+                title: "Are you sure?",
+                text: "wont to Delete ?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
 
-            this.setState({
-                productList: newproductList
-            });
+                        this.state.productList.splice(index, 1);
+                        const newproductList = this.state.productList;
+
+                        this.setState({
+                            productList: newproductList
+                        });
+                    } else {
+                        //   swal("Your imaginary file is safe!");
+                    }
+                });
         }
+        this.back = () => {
+            swal({
+                title: "Are you sure?",
+                text: "wont to back to list ?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        this.props.history.push("/monitoring-produk")
+                    } else {
+                        //   swal("Your imaginary file is safe!");
+                    }
+                });
+        }
+
         this.setValue = el => {
             this.setState({
                 [el.target.name]: el.target.value,
@@ -147,6 +179,7 @@ class AddMonitoring extends Component {
                         //     page: 1
                         // })
                         this.clear()
+                        this.getApiProducts();
                         swal({
                             title: "Good job!",
                             text: json.successMessage,
@@ -176,7 +209,6 @@ class AddMonitoring extends Component {
                     this.setState({
                         products: json
                     })
-                    console.log(this.state.products);
                 })
                 .catch((e) => {
                     console.log(e)
@@ -185,9 +217,16 @@ class AddMonitoring extends Component {
         }
         this.clear = () => {
             this.setState({
-                tanggaDokumen: "",
                 deskripsiDokumen: "",
-                productList: ""
+                productList: [
+                    {
+                        productId: "",
+                        tglExpiredProduct: "",
+                        harga: "",
+                        transTypeProduct: "",
+                        productQty: ""
+                    }
+                ]
             })
         }
     }
@@ -223,12 +262,18 @@ class AddMonitoring extends Component {
                             />
                         </DivClassSingle>
                         <DivClassSingle className="form-data">
-                            <Button className="submitA" onClick={this.save}><FaIcons.FaSave /> Save</Button>
-                            <Button className="submitA" onClick={() => {
-                                if (window.confirm("Are you sure, want to back ?")) {
-                                    this.props.history.push("/monitoring-produk")
-                                }
-                            }}><FaIcons.FaBackward /> Back</Button>
+                            <Button
+                                className="submitA"
+                                onClick={this.save}
+                            >
+                                <FaIcons.FaSave /> Save
+                                    </Button>
+                            <Button
+                                className="submitA"
+                                onClick={this.back}
+                            >
+                                <FaIcons.FaBackward /> Back
+                                    </Button>
                         </DivClassSingle>
                     </DivClassSingle>
                     <DivClassSingle className="add-kanan">
@@ -238,16 +283,26 @@ class AddMonitoring extends Component {
                                     <DivClassSingle className="add-product" key={index}>
                                         <DivClassSingle className="form-data">
                                             <Label>Select a product</Label>
-                                            <Select className="selectA" value={value.productId}
-                                                onChange={event => this.onChangeSelectBarang(event.target.value, index)}>
+                                            <Select
+                                                className="selectA"
+                                                value={value.productId}
+                                                onChange={event => this.onChangeSelectBarang(event.target.value, index)}
+                                            >
                                                 <Option>--Pilih--</Option>
-                                                <Option value="PROD0003">PROD0003</Option>
+                                                {
+                                                    this.state.products.map(
+                                                        (value, idx) =>
+                                                            <option key={idx} value={value.productId}>{value.productName}</option>
+                                                    )
+                                                }
                                                 <Option value="B">B</Option>
                                             </Select>
                                         </DivClassSingle>
                                         <DivClassSingle className="form-data">
                                             <Label>Expired date</Label>
-                                            <Input type="date" value={value.tglExpiredProduct}
+                                            <Input
+                                                type="date"
+                                                value={value.tglExpiredProduct}
                                                 onChange={event => this.onChangeInput("tglExpiredProduct", event.target.value, index)}
                                                 name=""
                                             />
@@ -263,8 +318,11 @@ class AddMonitoring extends Component {
                                         </DivClassSingle>
                                         <DivClassSingle className="form-data">
                                             <Label>Trans Type</Label>
-                                            <Select className="selectA" value={value.transTypeProduct}
-                                                onChange={event => this.onChangeSelectTrans(event.target.value, index)}>
+                                            <Select
+                                                className="selectA"
+                                                value={value.transTypeProduct}
+                                                onChange={event => this.onChangeSelectTrans(event.target.value, index)}
+                                            >
                                                 <Option>--Pilih--</Option>
                                                 <Option value="1">Bertambah</Option>
                                                 <Option value="0">Berkurang</Option>
@@ -272,18 +330,22 @@ class AddMonitoring extends Component {
                                         </DivClassSingle>
                                         <DivClassSingle className="form-data">
                                             <Label>Product Quantity</Label>
-                                            <Input type="number" value={value.productQty} className="inputL"
+                                            <Input
+                                                type="number"
+                                                value={value.productQty}
+                                                className="inputL"
                                                 name=""
                                                 onChange={event => this.onChangeInput("productQty", event.target.value, index)}
                                                 placeholder="Product quantity..." />
                                         </DivClassSingle>
                                         {(this.state.productList.length > 1) ?
                                             <>
-                                                <Button className="removeProduct" onClick={() => {
-                                                    if (window.confirm("Are you sure, want to delete")) {
-                                                        this.removeChild(index)
-                                                    }
-                                                }}><FaIcons.FaMinus /></Button>
+                                                <Button
+                                                    className="removeProduct"
+                                                    onClick={() => { this.removeChild(index) }}
+                                                >
+                                                    <FaIcons.FaMinus />
+                                                </Button>
                                                 <P>Remove</P>
                                             </>
                                             : ""
@@ -293,7 +355,12 @@ class AddMonitoring extends Component {
                                 )
                             })
                         }
-                        <Button className="submitProduct" onClick={this.addChild}><FaIcons.FaPlus /></Button>
+                        <Button
+                            className="submitProduct"
+                            onClick={this.addChild}
+                        >
+                            <FaIcons.FaPlus />
+                        </Button>
                         <P>Add Product</P>
                     </DivClassSingle>
                 </DivClassSingle>
