@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import "./produk.css"
 import * as FaIcons from 'react-icons/fa';
 import swal from 'sweetalert';
+import Swal from 'sweetalert2'
 import Pagination from '@material-ui/lab/Pagination';
 import { makeStyles } from '@material-ui/core/styles';
 import Switch from '@material-ui/core/Switch';
@@ -41,22 +42,25 @@ class Produk extends Component {
             productDescription: "",
             products: [],
             url: "http://localhost:8080/nd6/product/",
+            urlLast: "http://localhost:8080/nd6/productLast/",
             errorFetcing: false,
             update: false,
+            add: true,
             page: 1,
             count: "",
             orderby: "asc",
             show: "5",
             checkedA: true,
-            minus:0
+            minus: 0,
+            name :""
         }
 
         this.handleChange = (event, value) => {
             this.setState({
                 page: value
-            }) 
+            })
             this.getCount();
-            this.getPaging(value, this.state.orderby, this.state.show, this.state.minus);
+            this.getPaging(value, this.state.orderby, this.state.show, this.state.minus,this.state.name);
         }
         this.detail = (id) => {
             fetch(this.state.url + id, {
@@ -74,7 +78,8 @@ class Produk extends Component {
                         productName: json.productName,
                         productDescription: json.productDescription,
                         errorFetcing: true,
-                        disabled: true
+                        disabled: true,
+                        page: this.state.page
                     });
                 })
                 .catch((e) => {
@@ -103,15 +108,26 @@ class Produk extends Component {
                         })
                             .then(response => response.json())
                             .then(json => {
-                                swal({
-                                    title: "Good job!",
-                                    text: json.successMessage,
-                                    icon: "success",
-                                    button: "Ok",
-                                });
-                                this.getPaging(this.state.page, this.state.orderby, this.state.show);
-                                this.getCount();
-                                this.clear();
+                                if (json.error) {
+                                    swal({
+                                        title: "Error !",
+                                        text: "The product cannot be deleted because it is foreign key to the detail table",
+                                        icon: "error",
+                                        button: "Ok",
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        title: "Good job!",
+                                        text: json.successMessage,
+                                        icon: "success",
+                                        timer: 1000,
+                                        showConfirmButton: false,
+                                        timerProgressBar: true
+                                    });
+                                    this.getPaging(this.state.page, this.state.orderby, this.state.show);
+                                    this.getCount();
+                                    this.clear();
+                                }
                             })
 
                             .catch((e) => {
@@ -132,10 +148,21 @@ class Produk extends Component {
                 productDescription: "",
                 edit: "",
                 hapus: "",
-                update: false
+                update: false,
+                add: true
+            })
+        }
+        this.clearProses = () => {
+            this.setState({
+                disabled: true,
+                edit: "",
+                hapus: "",
+                update: false,
+                add: true
             })
         }
         this.cari = () => {
+            console.log(this.state.productName)
             if (this.state.productId !== "") {
                 fetch(this.state.url + this.state.productId, {
                     method: "get",
@@ -166,34 +193,7 @@ class Produk extends Component {
                     })
                     .catch((e) => { alert("gagal") });
             } else if (this.state.productName !== "") {
-                fetch(this.state.url + "name/" + this.state.productName, {
-                    method: "get",
-                    headers: {
-                        "Content-Type": "application/json; ; charset=utf-8",
-                        "Access-Control-Allow-Headers": "Authorization, Content-Type",
-                        "Access-Control-Allow-Origin": "*"
-                    }
-                })
-                    .then(response => response.json())
-                    .then(json => {
-                        console.log(json)
-                        if (json.errorMessage) {
-                            swal({
-                                title: "Error !",
-                                text: json.errorMessage,
-                                icon: "error",
-                                button: "Ok",
-                            });
-                        } else {
-                            let Product = [];
-                            Product.push(json)
-                            this.setState({
-                                products: Product
-                            })
-                            this.clear();
-                        }
-                    })
-                    .catch((e) => { alert("gagal") });
+                this.getPaging(this.state.page, this.state.orderby, this.state.show,1,this.state.productName);
             } else {
                 swal({
                     title: "Error !",
@@ -215,7 +215,9 @@ class Produk extends Component {
                 disabled: false,
                 productName: "",
                 productDescription: "",
-                edit: ""
+                edit: "",
+                add: false,
+                productId: ""
             })
         }
         this.saveToApi = () => {
@@ -251,17 +253,21 @@ class Produk extends Component {
                         });
                     } else {
                         this.setState({
-                            page: 1
+                            page: this.state.count
                         })
-                        this.clear()
-                        swal({
+                        
+                        Swal.fire({
                             title: "Good job!",
                             text: json.successMessage,
                             icon: "success",
-                            button: "Ok",
+                            timer: 2000,
+                            showConfirmButton: false,
+                            timerProgressBar: true
                         });
-                        this.getPaging(this.state.page, this.state.orderby, this.state.show);
+                        // this.clearProses()
+                        this.getPaging(this.state.count, this.state.orderby, this.state.show,this.state.productName);
                         this.getCount();
+                        this.getApiProductsLast();
                     }
                 })
                 .catch(() => {
@@ -271,7 +277,8 @@ class Produk extends Component {
         this.edit = () => {
             this.setState({
                 disabled: false,
-                update: true
+                update: true,
+                add: false
             })
         }
         this.editToApi = () => {
@@ -308,16 +315,18 @@ class Produk extends Component {
                     } else {
 
                         this.setState({
-                            page: 1
+                            page: this.state.page
                         })
-                        swal({
+                        Swal.fire({
                             title: "Good job!",
                             text: "Product has been updated !",
                             icon: "success",
-                            button: "Ok",
+                            timer: 2000,
+                            showConfirmButton: false,
+                            timerProgressBar: true
                         });
                         this.getPaging(this.state.page, this.state.orderby, this.state.show);
-                        this.clear()
+                        this.clearProses()
                     }
                 })
                 .catch(() => {
@@ -334,11 +343,11 @@ class Produk extends Component {
                 [event.target.name]: event.target.checked,
             })
             const minus = event.target.checked
-            if(minus)
-            this.getPaging(this.state.page, this.state.orderby, this.state.show,0);
+            if (minus)
+                this.getPaging(this.state.page, this.state.orderby, this.state.show, 0);
             else
-            this.getPaging(this.state.page, this.state.orderby, this.state.show,1);
-         this.getCount();
+                this.getPaging(this.state.page, this.state.orderby, this.state.show, 1);
+            this.getCount();
         };
         this.onChangeSelect = el => {
             const orderby = el.target.value
@@ -353,7 +362,7 @@ class Produk extends Component {
             this.setState({
                 show: show
             })
-            this.getPaging(this.state.page, this.state.orderby,show);
+            this.getPaging(1, this.state.orderby, show);
             this.getCount();
         }
         this.getCount = () => {
@@ -377,12 +386,13 @@ class Produk extends Component {
                     // this.setState({errorFetcing:true})
                 });
         }
-        this.getPaging = (value, orderby, show, minus) => {
+        this.getPaging = (value, orderby, show, minus, name) => {
             if (value) { } else { value = 1; }
             if (orderby) { } else { orderby = "asc" }
             if (show) { } else { show = 5 }
             if (minus) { } else { minus = 0 }
-            fetch(this.state.url + "paging/?page=" + value + "&limit=" + show + "&orderby=" + orderby + "&minus="+minus+"", {
+            if (name) { } else { name = "" }
+            fetch(this.state.url + "paging/?page=" + value + "&limit=" + show + "&orderby=" + orderby + "&minus=" + minus + "&name="+name, {
                 method: "get",
                 headers: {
                     "Content-Type": "application/json; ; charset=utf-8",
@@ -402,14 +412,38 @@ class Produk extends Component {
                     // this.setState({errorFetcing:true})
                 });
         }
+        this.getApiProductsLast = () => {
+            fetch(this.state.urlLast, {
+                method: "get",
+                headers: {
+                    "Content-Type": "application/json; ; charset=utf-8",
+                    "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                    "Access-Control-Allow-Origin": "*"
+                },
+            })
+                .then(response => response.json())
+                .then((json) => {
+                    this.setState({
+                        productId: json.productId,
+                        productName: json.productName,
+                        productDescription: json.productDescription,
+                        errorFetcing: true,
+                        disabled: true,
+                        page: this.state.page
+                    })
+                })
+                .catch((e) => {
+                    console.log(e)
+                    alert("Failed sending data!!");
+                });
+        }
     }
     componentDidMount() {
         this.getPaging();
         this.getCount();
-
     }
     render() {
-        const {useStyles}= this.props
+        const { useStyles } = this.props
         const classes = () => useStyles;
         const { productId, productName, productDescription, orderby, show, checkedA } = this.state
         return (
@@ -421,7 +455,7 @@ class Produk extends Component {
                         <DivClassSingle
                             className="cari">
                             <FormControlLabel
-                                control={<Switch checked={checkedA} onChange={this.handleChangeMinus} name="checkedA" />}
+                                control={<Switch checked={checkedA} className="toogle" onChange={this.handleChangeMinus} name="checkedA" />}
                             />
                             <Input
                                 type="text"
@@ -445,10 +479,7 @@ class Produk extends Component {
                         </DivClassSingle>
                         <Hr />
                         <DivClassSingle
-                            className="list">
-                            {
-                                // console.log(this.state.products.reverse())
-                            }
+                            className={(this.state.show <= 5) ? "list" : "scroll"}>
                             {this.state.products.map(
                                 (Item, idx) =>
                                     <DivClassSingle
@@ -498,7 +529,7 @@ class Produk extends Component {
                                         <P>Page: {this.state.page}</P>
                                         <P>Order By:
                                         <Select onChange={this.onChangeSelect} name="orderby" value={orderby}>
-                                                <Option value="-">-Pilih-</Option>
+                                                <option value="-" selected disabled>-Pilih-</option>
                                                 <Option value="asc">ASC</Option>
                                                 <Option value="desc">DESC</Option>
                                             </Select>
@@ -530,11 +561,14 @@ class Produk extends Component {
                                     </Button>
                                 </>
                             }
-                            <Button
-                                onClick={this.save}
-                                className="tooltip">
-                                <FaIcons.FaPlus />
-                            </Button>
+                            {(this.state.add) ?
+                                <Button
+                                    onClick={this.save}
+                                    className="tooltip">
+                                    <FaIcons.FaPlus />
+                                </Button>
+                                : ""}
+
                         </DivClassSingle>
                         <Hr className="hr" />
                         <DivClassSingle

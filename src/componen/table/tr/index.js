@@ -8,7 +8,10 @@ class Tr extends Component {
 
     render() {
         return (
-            <tr onClick={this.props.onClick}>
+            <tr 
+            onClick={this.props.onClick}
+            key=""
+            >
                 {this.props.children}
             </tr>
         );

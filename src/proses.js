@@ -74,10 +74,12 @@ class Proses extends Component {
                             title: "Good job!",
                             text: "Login success !!",
                             icon: "success",
-                            button: "Ok",
                             imageUrl: "http://www.nexsoft.co.id/images/nd6antelope.png",
                             imageWidth: 400,
                             imageHeight: 200,
+                            timer:2000,
+                            showConfirmButton:false,
+                            timerProgressBar:true
                         });
                     }
                 })

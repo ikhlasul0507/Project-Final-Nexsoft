@@ -32,22 +32,59 @@ class MonitoringStok extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            stoks: [],
+            url :"http://localhost:8080/nd6/stock/",
             detail: false,
-            id: 1234567
+            id: ""
         }
 
-        this.detail = () => {
+        this.detail = idStok => {
             this.setState({
-                detail: true
+                detail: true,
+                id: idStok
             })
-            alert("Detail")
+            alert("Detail ID : "+ idStok)
+        }
+        this.getApiStock = () => {
+            fetch(this.state.url, {
+                method: "get",
+                headers: {
+                    "Content-Type": "application/json; ; charset=utf-8",
+                    "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                    "Access-Control-Allow-Origin": "*"
+                },
+            })
+                .then(response => response.json())
+                .then((json) => {
+                    this.setState({
+                        stoks: json
+                    })
+                    console.log("Stocks :",this.state.stoks);
+                })
+                .catch((e) => {
+                    console.log(e)
+                    alert("Failed sending data!!");
+                });
+
         }
     }
 
+    componentDidMount(){
+        this.getApiStock();
+    }
 
     render() {
         const {useStyles}= this.props
         const classes = () => useStyles;
+        const result = this.state.stoks.map(
+            (value,idx)=>
+            <Tr onClick={()=>{this.detail(value.idStok)}} key={idx}>
+            <Td>{value.idStok}</Td>
+            <Td>{value.tanggaDokumen}</Td>
+            <Td>{value.deskripsiDokumen}</Td>
+            <Td>{value.totalStock}</Td>
+        </Tr>
+        )
         return (
             <DivClassSingle>
                 <DivClassSingle className="navbarM">
@@ -95,83 +132,7 @@ class MonitoringStok extends Component {
                             <Th>Total Nominal Stok Dokumen</Th>
                         </Thead>
                         <Tbody>
-                            <Tr onClick={this.detail}>
-                                <Td>PROR1231</Td>
-                                <Td>2020/01/22</Td>
-                                <Td>Lorem Ipsum adalah contoh teks atau dummy dalam industri percetakan dan penataan
-                                    huruf atau typesetting.</Td>
-                                <Td>50 Pcs</Td>
-                            </Tr>
-                            <Tr onClick={this.detail}>
-                                <Td>PROR1231</Td>
-                                <Td>2020/01/22</Td>
-                                <Td>Lorem Ipsum adalah contoh teks atau dummy dalam industri percetakan dan penataan
-                                    huruf atau typesetting.</Td>
-                                <Td>50 Pcs</Td>
-                            </Tr>
-                            <Tr onClick={this.detail}>
-                                <Td>PROR1231</Td>
-                                <Td>2020/01/22</Td>
-                                <Td>Lorem Ipsum adalah contoh teks atau dummy dalam industri percetakan dan penataan
-                                    huruf atau typesetting.</Td>
-                                <Td>50 Pcs</Td>
-                            </Tr>
-                            <Tr onClick={this.detail}>
-                                <Td>PROR1231</Td>
-                                <Td>2020/01/22</Td>
-                                <Td>Lorem Ipsum adalah contoh teks atau dummy dalam industri percetakan dan penataan
-                                    huruf atau typesetting.</Td>
-                                <Td>50 Pcs</Td>
-                            </Tr>
-                            <Tr onClick={this.detail}>
-                                <Td>PROR1231</Td>
-                                <Td>2020/01/22</Td>
-                                <Td>Lorem Ipsum adalah contoh teks atau dummy dalam industri percetakan dan penataan
-                                    huruf atau typesetting.</Td>
-                                <Td>50 Pcs</Td>
-                            </Tr>
-                            <Tr onClick={this.detail}>
-                                <Td>PROR1231</Td>
-                                <Td>2020/01/22</Td>
-                                <Td>Lorem Ipsum adalah contoh teks atau dummy dalam industri percetakan dan penataan
-                                    huruf atau typesetting.</Td>
-                                <Td>50 Pcs</Td>
-                            </Tr>
-                            <Tr onClick={this.detail}>
-                                <Td>PROR1231</Td>
-                                <Td>2020/01/22</Td>
-                                <Td>Lorem Ipsum adalah contoh teks atau dummy dalam industri percetakan dan penataan
-                                    huruf atau typesetting.</Td>
-                                <Td>50 Pcs</Td>
-                            </Tr>
-                            <Tr onClick={this.detail}>
-                                <Td>PROR1231</Td>
-                                <Td>2020/01/22</Td>
-                                <Td>Lorem Ipsum adalah contoh teks atau dummy dalam industri percetakan dan penataan
-                                    huruf atau typesetting.</Td>
-                                <Td>50 Pcs</Td>
-                            </Tr>
-                            <Tr onClick={this.detail}>
-                                <Td>PROR1231</Td>
-                                <Td>2020/01/22</Td>
-                                <Td>Lorem Ipsum adalah contoh teks atau dummy dalam industri percetakan dan penataan
-                                    huruf atau typesetting.</Td>
-                                <Td>50 Pcs</Td>
-                            </Tr>
-                            <Tr onClick={this.detail}>
-                                <Td>PROR1231</Td>
-                                <Td>2020/01/22</Td>
-                                <Td>Lorem Ipsum adalah contoh teks atau dummy dalam industri percetakan dan penataan
-                                    huruf atau typesetting.</Td>
-                                <Td>50 Pcs</Td>
-                            </Tr>
-                            <Tr onClick={this.detail}>
-                                <Td>PROR1231</Td>
-                                <Td>2020/01/22</Td>
-                                <Td>Lorem Ipsum adalah contoh teks atau dummy dalam industri percetakan dan penataan
-                                    huruf atau typesetting.</Td>
-                                <Td>50 Pcs</Td>
-                            </Tr>
+                            {result}
                         </Tbody>
                     </Table>
                 </DivClassSingle>

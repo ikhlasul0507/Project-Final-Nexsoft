@@ -12,6 +12,7 @@ import {
 import DivClassSingle from "../../../componen/div/divClassSingle"
 import * as FaIcons from 'react-icons/fa';
 import swal from 'sweetalert';
+import Swal from 'sweetalert2'
 import moment from 'moment';
 
 class AddMonitoring extends Component {
@@ -130,8 +131,9 @@ class AddMonitoring extends Component {
             stoks.push(objek)
             this.state.stoks.push(stoks);
             console.log("stok :", this.state.stoks)
-            console.log("document description :", this.state.deskripsiDokumen)
+            console.log("document description :", this.state.productList.productId)
             this.saveToApi();
+
         }
         this.saveToApi = () => {
             const objek = {
@@ -167,10 +169,10 @@ class AddMonitoring extends Component {
                             button: "Ok",
                         });
                     } else if (json.message) {
-                        console.log(json.message)
+                        console.log(json)
                         swal({
                             title: "Error !",
-                            text: json.message,
+                            text: "Enter the product !",
                             icon: "error",
                             button: "Ok",
                         });
@@ -180,11 +182,13 @@ class AddMonitoring extends Component {
                         // })
                         this.clear()
                         this.getApiProducts();
-                        swal({
+                        Swal.fire({
                             title: "Good job!",
                             text: json.successMessage,
                             icon: "success",
-                            button: "Ok",
+                            timer:2000,
+                            showConfirmButton:false,
+                            timerProgressBar:true
                         });
                         // this.getPaging(this.state.page, this.state.orderby, this.state.show);
                         // this.getCount();
@@ -324,8 +328,8 @@ class AddMonitoring extends Component {
                                                 onChange={event => this.onChangeSelectTrans(event.target.value, index)}
                                             >
                                                 <Option>--Pilih--</Option>
-                                                <Option value="1">Bertambah</Option>
-                                                <Option value="0">Berkurang</Option>
+                                                <Option value="0">Bertambah</Option>
+                                                <Option value="1">Berkurang</Option>
                                             </Select>
                                         </DivClassSingle>
                                         <DivClassSingle className="form-data">

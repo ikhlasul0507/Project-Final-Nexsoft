@@ -122,7 +122,7 @@ const Sidebar = (props) => {
                                 props.match.url === "/add-monitoring" ? "Add Monitoring" :
                                     props.match.url === "/report-monitoring" ? "Report Monitoring" :
                                         props.match.path === "/detail-monitoring/:id" ? "Detail Monitoring" :
-                                            props.match.url === "/monitoring-produk" && "Monitoring Produk"
+                                            props.match.url === "/monitoring-produk" && "Monitoring Stock"
                         }
                     </h4>
                     {/* {date.toLocaleDateString()} */}

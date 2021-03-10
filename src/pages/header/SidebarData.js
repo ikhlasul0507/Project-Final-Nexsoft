@@ -14,7 +14,7 @@ export const SidebarData = [
         icon: <IoIcons.IoIosPaper/>,
     },
     {
-        title: 'Monitoring Produk',
+        title: 'Monitoring Stock',
         path: '/monitoring-produk',
         icon: <IoIcons.IoMdCalendar/>
     }
