@@ -14,13 +14,15 @@ import * as FaIcons from 'react-icons/fa';
 import swal from 'sweetalert';
 import Swal from 'sweetalert2'
 import moment from 'moment';
-
+import { connect } from 'react-redux'
+import ReactTooltip from 'react-tooltip';
 class AddMonitoring extends Component {
     constructor(props) {
         super(props);
         this.state = {
             stoks: [],
             products: [],
+            transTypeProduct: "",
             tanggaDokumen: "",
             deskripsiDokumen: "",
             productList: [
@@ -40,28 +42,33 @@ class AddMonitoring extends Component {
                 tanggaDokumen: moment().format('YYYY-MM-DD')
                 // tanggaDokumen: moment().format('DD/mm/YYYY')
             })
-            console.log(this.state.tanggalDokumen)
         };
         this.onChangeSelectBarang = (productId, index) => {
             this.state.productList[index].productId = productId;
             let newproductList = this.state.productList;
             this.setState({
-                productList: newproductList
+                productList: newproductList,
+
             });
         }
-        this.onChangeSelectTrans = (transTypeProduct, index) => {
-            this.state.productList[index].transTypeProduct = transTypeProduct;
+        this.onChangeSelectTrans = (transTypeProduct) => {
+            this.state.productList[0].transTypeProduct = transTypeProduct;
             let newproductList = this.state.productList;
             this.setState({
-                productList: newproductList
+                transTypeProduct: transTypeProduct,
+                productList: newproductList,
+                transTypeProduct: transTypeProduct
             });
+            console.log(transTypeProduct);
+            console.log(this.state.productList)
         }
         this.onChangeInput = (attribut, value, index) => {
             this.state.productList[index][attribut] = value;
             const newproductList = this.state.productList;
             this.setState({
-                productList: newproductList
+                productList: newproductList,
             });
+            console.log(this.state.productList)
         }
         this.addChild = () => {
             const newproductList = this.state.productList;
@@ -69,7 +76,7 @@ class AddMonitoring extends Component {
                 productId: "",
                 tglExpiredProduct: "",
                 harga: "",
-                transTypeProduct: "",
+                transTypeProduct: this.state.transTypeProduct,
                 productQty: ""
             });
 
@@ -186,9 +193,9 @@ class AddMonitoring extends Component {
                             title: "Good job!",
                             text: json.successMessage,
                             icon: "success",
-                            timer:2000,
-                            showConfirmButton:false,
-                            timerProgressBar:true
+                            timer: 2000,
+                            showConfirmButton: false,
+                            timerProgressBar: true
                         });
                         // this.getPaging(this.state.page, this.state.orderby, this.state.show);
                         // this.getCount();
@@ -221,7 +228,9 @@ class AddMonitoring extends Component {
         }
         this.clear = () => {
             this.setState({
+                stoks: [],
                 deskripsiDokumen: "",
+                transTypeProduct: "",
                 productList: [
                     {
                         productId: "",
@@ -232,20 +241,33 @@ class AddMonitoring extends Component {
                     }
                 ]
             })
+            console.log(this.state.productList)
         }
     }
 
     componentDidMount() {
         this.getDateWithMoment();
         this.getApiProducts();
-
     }
     render() {
-        const { tanggaDokumen, deskripsiDokumen } = this.state
+        console.log("form AKTI", this.props.checkLogin);
+        const { tanggaDokumen, deskripsiDokumen, transTypeProduct } = this.state
         return (
             <>
                 <DivClassSingle className="add">
                     <DivClassSingle className="add-kiri">
+                        <DivClassSingle className="form-data">
+                            <Label>Trans Type</Label>
+                            <Select
+                                className="selectA"
+                                value={transTypeProduct}
+                                onChange={event => this.onChangeSelectTrans(event.target.value)}
+                            >
+                                <option selected>--Pilih--</option>
+                                <Option value="0">Bertambah</Option>
+                                <Option value="1">Berkurang</Option>
+                            </Select>
+                        </DivClassSingle>
                         <DivClassSingle className="form-data">
                             <Label>Document Date</Label>
                             <Input
@@ -265,19 +287,26 @@ class AddMonitoring extends Component {
                                 onChange={this.setValue}
                             />
                         </DivClassSingle>
+
                         <DivClassSingle className="form-data">
-                            <Button
-                                className="submitA"
-                                onClick={this.save}
-                            >
-                                <FaIcons.FaSave /> Save
+                            <div data-tip="Save Document">
+                                <Button
+                                    data-tip="hello world"
+                                    className="submitA"
+                                    onClick={this.save}
+                                >
+                                    <FaIcons.FaSave />Save
                                     </Button>
-                            <Button
-                                className="submitA"
-                                onClick={this.back}
-                            >
-                                <FaIcons.FaBackward /> Back
+                            </div>
+                            <ReactTooltip />
+                            <div data-tip="Back to list">
+                                <Button
+                                    className="submitA"
+                                    onClick={this.back}
+                                >
+                                    <FaIcons.FaArrowLeft /> Back
                                     </Button>
+                            </div>
                         </DivClassSingle>
                     </DivClassSingle>
                     <DivClassSingle className="add-kanan">
@@ -320,8 +349,14 @@ class AddMonitoring extends Component {
                                                 onChange={event => this.onChangeInput("harga", event.target.value, index)}
                                             />
                                         </DivClassSingle>
-                                        <DivClassSingle className="form-data">
-                                            <Label>Trans Type</Label>
+                                        {/* <DivClassSingle className="form-data"> */}
+                                        <Input
+                                            type="hidden"
+                                            value={this.state.transTypeProduct}
+                                            name="" placeholder="Harga (Rp)..."
+                                            onChange={event => this.onChangeInput("transTypeProduct", this.state.transTypeProduct, index)}
+                                        />
+                                        {/* <Label>Trans Type</Label>
                                             <Select
                                                 className="selectA"
                                                 value={value.transTypeProduct}
@@ -330,8 +365,8 @@ class AddMonitoring extends Component {
                                                 <Option>--Pilih--</Option>
                                                 <Option value="0">Bertambah</Option>
                                                 <Option value="1">Berkurang</Option>
-                                            </Select>
-                                        </DivClassSingle>
+                                            </Select> */}
+                                        {/* </DivClassSingle> */}
                                         <DivClassSingle className="form-data">
                                             <Label>Product Quantity</Label>
                                             <Input
@@ -343,7 +378,7 @@ class AddMonitoring extends Component {
                                                 placeholder="Product quantity..." />
                                         </DivClassSingle>
                                         {(this.state.productList.length > 1) ?
-                                            <>
+                                            <div data-tip="Remove Product" className="removeProduct1" >
                                                 <Button
                                                     className="removeProduct"
                                                     onClick={() => { this.removeChild(index) }}
@@ -351,7 +386,8 @@ class AddMonitoring extends Component {
                                                     <FaIcons.FaMinus />
                                                 </Button>
                                                 <P>Remove</P>
-                                            </>
+                                                </div>
+                                            
                                             : ""
                                         }
                                     </DivClassSingle>
@@ -359,13 +395,14 @@ class AddMonitoring extends Component {
                                 )
                             })
                         }
+                        <div data-tip="Add Product">
                         <Button
                             className="submitProduct"
                             onClick={this.addChild}
                         >
                             <FaIcons.FaPlus />
                         </Button>
-                        <P>Add Product</P>
+                        </div>
                     </DivClassSingle>
                 </DivClassSingle>
             </>
@@ -373,4 +410,15 @@ class AddMonitoring extends Component {
     }
 }
 
-export default AddMonitoring;
+const mapStateToProps = state => ({
+    checkLogin: state.AReducer.recaptchaResponse,
+    dataLogin: state.AReducer.userLogin
+})
+
+const mapDispatchToProps = dispatch => {
+    return {
+        isFormActive: () => dispatch({ type: "FORM_ACTIVE" })
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddMonitoring);

@@ -5,6 +5,7 @@ import swal from 'sweetalert';
 import Swal from 'sweetalert2'
 import Pagination from '@material-ui/lab/Pagination';
 import { makeStyles } from '@material-ui/core/styles';
+import ReactTooltip from 'react-tooltip';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import DivClassSingle from "../../../componen/div/divClassSingle"
@@ -52,7 +53,7 @@ class Produk extends Component {
             show: "5",
             checkedA: true,
             minus: 0,
-            name :""
+            name: ""
         }
 
         this.handleChange = (event, value) => {
@@ -60,7 +61,7 @@ class Produk extends Component {
                 page: value
             })
             this.getCount();
-            this.getPaging(value, this.state.orderby, this.state.show, this.state.minus,this.state.name);
+            this.getPaging(value, this.state.orderby, this.state.show, this.state.minus, this.state.name);
         }
         this.detail = (id) => {
             fetch(this.state.url + id, {
@@ -193,7 +194,7 @@ class Produk extends Component {
                     })
                     .catch((e) => { alert("gagal") });
             } else if (this.state.productName !== "") {
-                this.getPaging(this.state.page, this.state.orderby, this.state.show,1,this.state.productName);
+                this.getPaging(this.state.page, this.state.orderby, this.state.show, 1, this.state.productName);
             } else {
                 swal({
                     title: "Error !",
@@ -255,7 +256,7 @@ class Produk extends Component {
                         this.setState({
                             page: this.state.count
                         })
-                        
+
                         Swal.fire({
                             title: "Good job!",
                             text: json.successMessage,
@@ -265,7 +266,7 @@ class Produk extends Component {
                             timerProgressBar: true
                         });
                         // this.clearProses()
-                        this.getPaging(this.state.count, this.state.orderby, this.state.show,this.state.productName);
+                        this.getPaging(this.state.count, this.state.orderby, this.state.show, this.state.productName);
                         this.getCount();
                         this.getApiProductsLast();
                     }
@@ -392,7 +393,7 @@ class Produk extends Component {
             if (show) { } else { show = 5 }
             if (minus) { } else { minus = 0 }
             if (name) { } else { name = "" }
-            fetch(this.state.url + "paging/?page=" + value + "&limit=" + show + "&orderby=" + orderby + "&minus=" + minus + "&name="+name, {
+            fetch(this.state.url + "paging/?page=" + value + "&limit=" + show + "&orderby=" + orderby + "&minus=" + minus + "&name=" + name, {
                 method: "get",
                 headers: {
                     "Content-Type": "application/json; ; charset=utf-8",
@@ -454,9 +455,11 @@ class Produk extends Component {
                         className="data-left">
                         <DivClassSingle
                             className="cari">
-                            <FormControlLabel
-                                control={<Switch checked={checkedA} className="toogle" onChange={this.handleChangeMinus} name="checkedA" />}
-                            />
+                            <div data-tip="Show Product Qty < 10">
+                                <FormControlLabel
+                                    control={<Switch checked={checkedA} className="toogle" onChange={this.handleChangeMinus} name="checkedA" />}
+                                />
+                            </div>
                             <Input
                                 type="text"
                                 className="input"
@@ -471,11 +474,15 @@ class Produk extends Component {
                                 placeholder="Product Name..."
                                 value={productName}
                                 onChange={this.setValue} />
-                            <Button
-                                className="btn-cari"
-                                onClick={this.cari}>
-                                <FaIcons.FaSearch />
-                            </Button>
+                            <div data-tip="Search">
+                                <Button
+                                    className="btn-cari"
+                                    onClick={this.cari}>
+                                    <FaIcons.FaSearch />
+                                </Button>
+
+                            </div>
+                            <ReactTooltip />
                         </DivClassSingle>
                         <Hr />
                         <DivClassSingle
@@ -546,27 +553,36 @@ class Produk extends Component {
                             className="navbar">
                             <H2>{(this.state.disabled) ? "Monitoring " : "Kelola "} Stock {this.state.productId}</H2>
                             {this.state.productId === "" ? "" :
-                                <>
+                                <> <div data-tip="Clear Product">
                                     <Button
                                         onClick={this.clear}>
                                         <FaIcons.FaBan />
                                     </Button>
-                                    <Button
-                                        onClick={this.edit}>
-                                        <FaIcons.FaPencilAlt />
-                                    </Button>
-                                    <Button
-                                        onClick={() => { this.delete() }}>
-                                        <FaIcons.FaTrash />
-                                    </Button>
+                                </div>
+                                    <div data-tip="Edit Product">
+                                        <Button
+                                            onClick={this.edit}>
+                                            <FaIcons.FaPencilAlt />
+                                        </Button>
+                                    </div>
+                                    <div data-tip="Delete Product">
+                                        <Button
+                                            onClick={() => { this.delete() }}>
+                                            <FaIcons.FaTrash />
+                                        </Button>
+                                    </div>
+                                    <ReactTooltip />
                                 </>
                             }
                             {(this.state.add) ?
-                                <Button
-                                    onClick={this.save}
-                                    className="tooltip">
-                                    <FaIcons.FaPlus />
-                                </Button>
+                                <div data-tip="Add Product">
+                                    <Button
+                                        onClick={this.save}>
+                                        <FaIcons.FaPlus />
+                                    </Button>
+                                    <ReactTooltip />
+                                </div>
+
                                 : ""}
 
                         </DivClassSingle>

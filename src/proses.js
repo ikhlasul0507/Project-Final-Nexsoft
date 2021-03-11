@@ -19,17 +19,10 @@ class Proses extends Component {
 
         this.validate = login => {
             const { username, password, recaptchaResponse } = login
-            if (username === "") {
+            if (username === "" &&  password === "") {
                 swal({
                     title: "Error !",
-                    text: "Please, enter your username !",
-                    icon: "error",
-                    button: "Ok",
-                });
-            } else if (password === "") {
-                swal({
-                    title: "Error !",
-                    text: "Please enter your password !",
+                    text: "Please, enter your username and password !",
                     icon: "error",
                     button: "Ok",
                 });

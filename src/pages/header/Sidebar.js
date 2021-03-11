@@ -9,6 +9,7 @@ import { IconContext } from 'react-icons/lib';
 import moment from 'moment';
 import { connect } from 'react-redux'
 import swal from 'sweetalert';
+import ReactTooltip from 'react-tooltip';
 
 const Nav = styled.div`
   background: #f20800;
@@ -31,6 +32,7 @@ const NavIcon = styled(Link)`
 
 const NavIconSh = styled(Link)`
   margin-right: 1rem;
+  margin-top: 5px;
   font-size: 2rem;
   height: 40px;
   display: flex;
@@ -131,9 +133,12 @@ const Sidebar = (props) => {
 
                     <NavIconSh to="#">
                         <P>{props.dataLogin.userData.username}</P>
+                        <div data-tip="Logout">
                         <FaIcons.FaPowerOff onClick={() => {
                             logout(props)
                         }} />
+                        </div>
+                        <ReactTooltip />
                     </NavIconSh>
                 </Nav>
 
