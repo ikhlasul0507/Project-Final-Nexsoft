@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
 import styled from 'styled-components';
-
+import { connect } from 'react-redux'
 const SidebarLink = styled(Link)`
   display: flex;
   color: #e1e9fc;
@@ -40,7 +40,7 @@ const DropdownLink = styled(Link)`
   }
 `;
 
-const SubMenu = ({item}) => {
+const SubMenu = ({item}, props) => {
     const [subnav, setSubnav] = useState(false);
 
     const showSubnav = () => setSubnav(!subnav);
@@ -63,15 +63,29 @@ const SubMenu = ({item}) => {
             {subnav &&
             item.subNav.map((item, index) => {
                 return (
-                    <DropdownLink to={item.path} key={index}>
+                  // (props.dataForm) ? 
+                  //           alert("Yakin !")
+                  //       :   
+                    <DropdownLink to={item.path}  key={index}>
                         {item.icon}
                         <SidebarLabel>{item.title}</SidebarLabel>
                     </DropdownLink>
+                  
                 );
             })}
         </>
     );
 };
+const mapStateToProps = state => ({
+    dataLogin: state.AReducer.userLogin,
+    dataForm: state.AReducer.isFormActive
+})
 
-export default SubMenu;
+const mapDispatchToProps = dispatch => {
+    return {
+        logoutAction: () => dispatch({ type: "LOGOUT_SUCCESS" })
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SubMenu);
   

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import "./detail.css"
 import * as FaIcons from 'react-icons/fa';
+import ReactTooltip from 'react-tooltip';
 import moment from 'moment';
 import DivClassSingle from "../../../componen/div/divClassSingle"
 import {
@@ -26,14 +27,13 @@ class DetailMonitoring extends Component {
         super(props);
         this.state = {
             stokDetail: {},
-            productList :[],
-            printDate :"",
+            productList: [],
+            printDate: "",
             url: "http://localhost:8080/nd6/stock/"
         }
         this.getDateWithMoment = () => {
             this.setState({
                 printDate: moment().format('YYYY-MM-DD hh:mm:ss a')
-                // tanggaDokumen: moment().format('DD/mm/YYYY')
             })
         };
         this.getApiStockDetail = () => {
@@ -51,7 +51,7 @@ class DetailMonitoring extends Component {
                         stokDetail: Object.assign({}, json[0])
                     })
                 })
-                .then((json)=>{
+                .then((json) => {
                     this.setState({
                         productList: this.state.stokDetail.productList
                     })
@@ -70,7 +70,7 @@ class DetailMonitoring extends Component {
         this.getDateWithMoment();
     }
     render() {
-        const { stokDetail, productList} = this.state;
+        const { stokDetail, productList } = this.state;
         const result = productList.map(
             (item, idx) =>
                 <Tr key={idx}>
@@ -86,9 +86,17 @@ class DetailMonitoring extends Component {
             <>
                 <DivClassSingle className="navbarD">
                     <H2></H2>
-                    <Button className="btn-detail" onClick={() => {
-                        this.props.history.push("/monitoring-produk")
-                    }}><FaIcons.FaArrowLeft /></Button>
+                    <div data-tip="Back to list">
+                        <Button
+                            className="btn-detail"
+                            onClick={() => {
+                                this.props.history.push("/monitoring-produk")
+                            }}
+                        >
+                            <FaIcons.FaArrowLeft />
+                        </Button>
+                    </div>
+                    <ReactTooltip />
                 </DivClassSingle>
                 <DivClassSingle className="content-detail">
                     <DivClassSingle className="faktur-header">
@@ -104,30 +112,42 @@ class DetailMonitoring extends Component {
                                 <B><Label className="label">Transaction Header</Label></B>
                                 <DivClassSingle className="field-label">
                                     <Label className="label">Document Number</Label>
-                                    <Label>: {this.props.match.params.id}</Label><br />
+                                    <Label>:
+                                        {this.props.match.params.id}
+                                    </Label><br />
                                 </DivClassSingle>
                                 <DivClassSingle className="field-label">
                                     <Label className="label">Date</Label>
-                                    <Label>: {stokDetail.tanggaDokumen}</Label><br />
+                                    <Label>:
+                                        {stokDetail.tanggaDokumen}
+                                    </Label><br />
                                 </DivClassSingle>
                                 <b><Label className="label">Transaction Total</Label></b>
                                 <DivClassSingle className="field-label">
                                     <Label className="label">Totals Item</Label>
-                                    <Label>: <b>{stokDetail.totalStock}</b></Label><br />
+                                    <Label>: <b>
+                                        {stokDetail.totalStock}
+                                    </b></Label><br />
                                 </DivClassSingle>
                                 <DivClassSingle className="field-label">
                                     <Label className="label">Total Cases</Label>
-                                    <Label>: <b>{stokDetail.countStock}</b></Label><br />
+                                    <Label>: <b>
+                                        {stokDetail.countStock}
+                                    </b></Label><br />
                                 </DivClassSingle>
                                 <DivClassSingle className="field-label">
                                     <Label className="label">Net Amount</Label>
-                                    <Label>: <b>Rp.{stokDetail.netAmount},-</b></Label><br />
+                                    <Label>: <b>
+                                        Rp.{stokDetail.netAmount},-
+                                        </b></Label><br />
                                 </DivClassSingle>
                             </DivClassSingle>
                             <DivClassSingle className="faktur-content-header-kanan">
                                 <Label className="label">Description :</Label>
                                 <DivClassSingle className="field-label">
-                                    <Label>{stokDetail.deskripsiDokumen}.</Label><br />
+                                    <Label>
+                                        {stokDetail.deskripsiDokumen}.
+                                        </Label><br />
                                 </DivClassSingle>
 
                             </DivClassSingle>

@@ -4,6 +4,8 @@ import * as FaIcons from 'react-icons/fa';
 import { makeStyles } from '@material-ui/core/styles';
 import Pagination from '@material-ui/lab/Pagination';
 import Switch from '@material-ui/core/Switch';
+import swal from 'sweetalert';
+import Swal from 'sweetalert2'
 import ReactTooltip from 'react-tooltip';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import DivClassSingle from "../../../componen/div/divClassSingle"
@@ -83,6 +85,58 @@ class MonitoringStok extends Component {
                 });
 
         }
+        // this.delete = () => {
+        //     // if (window.confirm('Are you sure wont to Delete ?')) {
+        //     swal({
+        //         title: "Are you sure?",
+        //         text: "wont to Delete ?",
+        //         icon: "warning",
+        //         buttons: true,
+        //         dangerMode: true,
+        //     })
+        //         .then((willDelete) => {
+        //             if (willDelete) {
+        //                 fetch(this.state.url + this.state.idStok, {
+        //                     method: "delete",
+        //                     headers: {
+        //                         "Content-Type": "application/json; ; charset=utf-8",
+        //                         "Access-Control-Allow-Headers": "Authorization, Content-Type",
+        //                         "Access-Control-Allow-Origin": "*"
+        //                     }
+        //                 })
+        //                     .then(response => response.json())
+        //                     .then(json => {
+        //                         if (json.error) {
+        //                             swal({
+        //                                 title: "Error !",
+        //                                 text: "The product cannot be deleted because it is foreign key to the detail table",
+        //                                 icon: "error",
+        //                                 button: "Ok",
+        //                             });
+        //                         } else {
+        //                             Swal.fire({
+        //                                 title: "Good job!",
+        //                                 text: json.successMessage,
+        //                                 icon: "success",
+        //                                 timer: 1000,
+        //                                 showConfirmButton: false,
+        //                                 timerProgressBar: true
+        //                             // });
+        //                             // this.getPaging(this.state.page, this.state.orderby, this.state.show);
+        //                             // this.getCount();
+        //                             // this.clear();
+        //                         }
+        //                     })
+        //                     .catch((e) => {
+        //                         alert("Failed fetching data!!", e)
+        //                         // this.setState({errorFetcing:true})
+        //                     });
+        //             } else {
+        //                 //   swal("Your imaginary file is safe!");
+        //             }
+        //         });
+
+        // }
     }
 
     componentDidMount() {
@@ -92,7 +146,7 @@ class MonitoringStok extends Component {
     render() {
         const { useStyles } = this.props
         const classes = () => useStyles;
-        const {checkedA} = this.state
+        const { checkedA } = this.state
         const result = this.state.stoks.map(
             (value, idx) =>
                 <Tr onClick={() => { this.detail(value.idStok) }} key={idx}>
@@ -103,12 +157,16 @@ class MonitoringStok extends Component {
                 </Tr>
         )
         return (
+
             <DivClassSingle>
                 <DivClassSingle className="navbarM">
                     <DivClassSingle className="cari">
                         <Input type="text" name="" placeholder="Product code" />
                         <Input type="text" name="" placeholder="Product name" />
-                        <Button className="btn-cari" onClick={this.cari}><FaIcons.FaSearch /></Button>
+                        <div data-tip="Search">
+                            <Button className="btn-cari" onClick={this.cari}><FaIcons.FaSearch /></Button>
+                        </div>
+                        <ReactTooltip />
                         <FormControlLabel
                             control={<Switch checked={checkedA} className="toogle" onChange={this.handleChangeMinus} name="checkedA" />}
                         />
@@ -119,29 +177,67 @@ class MonitoringStok extends Component {
                     <DivClassSingle className="proses">
                         {(this.state.detail) ?
                             <>
-                                <Button onClick={() => { this.clear() }}><FaIcons.FaBan /></Button>
-                                <Button onClick={() => {
-                                    this.props.history.push(`/detail-monitoring/${this.state.id}`)
-                                }}><FaIcons.FaEye /></Button>
-                                <Button onClick={() => {
-                                    this.props.history.push(`/add-monitoring/${this.state.id}`)
-                                }}><FaIcons.FaPencilAlt /></Button>
-                                <Button><FaIcons.FaTrash /></Button>
+                                <ReactTooltip />
+                                <div data-tip="Clear">
+                                    <Button
+                                        onClick={() => { this.clear() }}
+                                    >
+                                        <FaIcons.FaBan />
+                                    </Button>
+                                </div>
+                                <div data-tip="Detail Stock">
+                                    <Button
+                                        onClick={() => {
+                                            this.props.history.push(`/detail-monitoring/${this.state.id}`)
+                                        }}
+                                    >
+                                        <FaIcons.FaEye />
+                                    </Button>
+                                </div>
+                                <div data-tip="Edit Stock">
+                                    <Button
+                                        onClick={() => {
+                                            this.props.history.push(`/add-monitoring/${this.state.id}`)
+                                        }}
+                                    >
+                                        <FaIcons.FaPencilAlt />
+                                    </Button>
+                                </div>
+                                <div data-tip="Delete Stock">
+                                    <Button  onClick={() => { this.delete() }}>
+                                        <FaIcons.FaTrash />
+                                    </Button>
+                                </div>
                             </>
                             : ""
                         }
-                        <Button className="btn-kiri" onClick={() => {
-                            this.props.history.push("/add-monitoring")
-                        }}><FaIcons.FaPlus /></Button>
-                        <Button onClick={() => {
-                            this.props.history.push("/report-monitoring")
-                        }}><FaIcons.FaBook /></Button>
+                         <div data-tip="Add Stock">
+                        <Button
+                            className="btn-kiri"
+                            onClick={() => {
+                                this.props.history.push("/add-monitoring")
+                            }}
+                        >
+                            <FaIcons.FaPlus />
+                        </Button>
+                        </div>
+                        <div data-tip="Report Stock">
+                        <Button
+                            onClick={() => {
+                                this.props.history.push("/report-monitoring")
+                            }}
+                        >
+                            <FaIcons.FaBook />
+                        </Button>
+                        </div>
                         <P className="pM">Show</P>
+                        <div data-tip="Show Stock">
                         <Select>
                             <Option value="5">5</Option>
                             <Option value="10">10</Option>
                             <Option value="15">15</Option>
                         </Select>
+                        </div>
                     </DivClassSingle>
                 </DivClassSingle>
                 <DivClassSingle className="table">
@@ -158,9 +254,9 @@ class MonitoringStok extends Component {
                     </Table>
                 </DivClassSingle>
                 <DivClassSingle className="pagination">
-                <DivClassSingle class={classes.root} className="data-pagination" >
-                    <Pagination count={10} color="secondary" variant="outlined" shape="rounded" />
-                </DivClassSingle>
+                    <DivClassSingle class={classes.root} className="data-pagination" >
+                        <Pagination count={10} color="secondary" variant="outlined" shape="rounded" />
+                    </DivClassSingle>
                 </DivClassSingle>
             </DivClassSingle>
         );

@@ -44,12 +44,22 @@ class AddMonitoring extends Component {
             })
         };
         this.onChangeSelectBarang = (productId, index) => {
-            this.state.productList[index].productId = productId;
-            let newproductList = this.state.productList;
-            this.setState({
-                productList: newproductList,
+            if (this.state.productList[0].transTypeProduct === "") {
+                swal({
+                    title: "Error !",
+                    text: "Please select transtype !",
+                    icon: "error",
+                    button: "Ok",
+                });
+            } else {
+                this.state.productList[index].productId = productId;
+                let newproductList = this.state.productList;
+                this.setState({
+                    productList: newproductList,
 
-            });
+                });
+            }
+            console.log("pridct id", this.state.productList.productId)
         }
         this.onChangeSelectTrans = (transTypeProduct) => {
             this.state.productList[0].transTypeProduct = transTypeProduct;
@@ -63,12 +73,20 @@ class AddMonitoring extends Component {
             console.log(this.state.productList)
         }
         this.onChangeInput = (attribut, value, index) => {
-            this.state.productList[index][attribut] = value;
-            const newproductList = this.state.productList;
-            this.setState({
-                productList: newproductList,
-            });
-            console.log(this.state.productList)
+            if (this.state.productList[0].productId === "") {
+                swal({
+                    title: "Error !",
+                    text: "Please select product !",
+                    icon: "error",
+                    button: "Ok",
+                });
+            } else {
+                this.state.productList[index][attribut] = value;
+                const newproductList = this.state.productList;
+                this.setState({
+                    productList: newproductList,
+                });
+            }
         }
         this.addChild = () => {
             const newproductList = this.state.productList;
@@ -124,9 +142,18 @@ class AddMonitoring extends Component {
         }
 
         this.setValue = el => {
-            this.setState({
-                [el.target.name]: el.target.value,
-            })
+            if (this.state.productList[0].transTypeProduct === "") {
+                swal({
+                    title: "Error !",
+                    text: "Please select transtype !",
+                    icon: "error",
+                    button: "Ok",
+                });
+            } else {
+                this.setState({
+                    [el.target.name]: el.target.value,
+                })
+            }
         }
         this.save = () => {
             const objek = {
@@ -187,7 +214,7 @@ class AddMonitoring extends Component {
                         // this.setState({
                         //     page: 1
                         // })
-                        this.clear()
+                        // this.clear()
                         this.getApiProducts();
                         Swal.fire({
                             title: "Good job!",
@@ -250,8 +277,15 @@ class AddMonitoring extends Component {
         this.getApiProducts();
     }
     render() {
-        console.log("form AKTI", this.props.checkLogin);
-        const { tanggaDokumen, deskripsiDokumen, transTypeProduct } = this.state
+        console.log("form AKTI", this.props.dataForm);
+        console.log("pridct id", this.state.productList.productId)
+        const { tanggaDokumen, deskripsiDokumen, transTypeProduct, productList } = this.state
+        var msgTotal = productList.reduce(function (prev, cur) {
+            return Number(prev) + Number(cur.productQty);
+        }, 0);
+        var msgTotalPrice = productList.reduce(function (prev, cur) {
+            return Number(prev) + Number(cur.harga);
+        }, 0);
         return (
             <>
                 <DivClassSingle className="add">
@@ -287,7 +321,30 @@ class AddMonitoring extends Component {
                                 onChange={this.setValue}
                             />
                         </DivClassSingle>
-
+                        <DivClassSingle className="form-data">
+                            <Label>Total items</Label>
+                            <Input
+                                type="text"
+                                value={productList.length}
+                                disabled
+                            />
+                        </DivClassSingle>
+                        <DivClassSingle className="form-data">
+                            <Label>Totals Qty</Label>
+                            <Input
+                                type="text"
+                                value={msgTotal}
+                                disabled
+                            />
+                        </DivClassSingle>
+                        <DivClassSingle className="form-data">
+                            <Label>Totals Price</Label>
+                            <Input
+                                type="text"
+                                value={msgTotalPrice}
+                                disabled
+                            />
+                        </DivClassSingle>
                         <DivClassSingle className="form-data">
                             <div data-tip="Save Document">
                                 <Button
@@ -308,6 +365,7 @@ class AddMonitoring extends Component {
                                     </Button>
                             </div>
                         </DivClassSingle>
+
                     </DivClassSingle>
                     <DivClassSingle className="add-kanan">
                         {
@@ -386,8 +444,8 @@ class AddMonitoring extends Component {
                                                     <FaIcons.FaMinus />
                                                 </Button>
                                                 <P>Remove</P>
-                                                </div>
-                                            
+                                            </div>
+
                                             : ""
                                         }
                                     </DivClassSingle>
@@ -396,12 +454,12 @@ class AddMonitoring extends Component {
                             })
                         }
                         <div data-tip="Add Product">
-                        <Button
-                            className="submitProduct"
-                            onClick={this.addChild}
-                        >
-                            <FaIcons.FaPlus />
-                        </Button>
+                            <Button
+                                className="submitProduct"
+                                onClick={this.addChild}
+                            >
+                                <FaIcons.FaPlus />
+                            </Button>
                         </div>
                     </DivClassSingle>
                 </DivClassSingle>
@@ -412,7 +470,7 @@ class AddMonitoring extends Component {
 
 const mapStateToProps = state => ({
     checkLogin: state.AReducer.recaptchaResponse,
-    dataLogin: state.AReducer.userLogin
+    dataForm: state.AReducer.isFormActive
 })
 
 const mapDispatchToProps = dispatch => {

@@ -12,6 +12,7 @@ class DivClassSingle extends Component {
                 className={this.props.className}
                 key={this.props.key}
                 onClick={this.props.onClick}
+                data-tip={this.props.dataTip}
             >
                 {this.props.children}
             </div>

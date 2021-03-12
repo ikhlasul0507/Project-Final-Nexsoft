@@ -147,9 +147,16 @@ const Sidebar = (props) => {
                         <NavIcon to='#'>
                             <AiIcons.AiOutlineClose onClick={showSidebar} />
                         </NavIcon>
+                        {/* {(props.dataForm) ? 
+                            alert("Yakin !")
+                        : 
+                        <> */}
                         {SidebarData.map((item, index) => {
                             return <SubMenu item={item} key={index} />;
                         })}
+                        {/* </>
+                        } */}
+                        
                     </SidebarWrap>
                 </SidebarNav>
             </IconContext.Provider>
@@ -157,7 +164,8 @@ const Sidebar = (props) => {
     );
 };
 const mapStateToProps = state => ({
-    dataLogin: state.AReducer.userLogin
+    dataLogin: state.AReducer.userLogin,
+    dataForm: state.AReducer.isFormActive
 })
 
 const mapDispatchToProps = dispatch => {

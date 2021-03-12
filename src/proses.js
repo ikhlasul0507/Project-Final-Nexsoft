@@ -89,8 +89,6 @@ class Proses extends Component {
             if (!this.props.checkLogin) {
                 return (
                     <Route path="/" exact component={(props) => <Login validate={this.validate} {...props} />}></Route>
-                    // </Switch>
-                    // </Router>
                 );
             } else
                 return (
