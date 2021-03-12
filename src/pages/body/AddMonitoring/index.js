@@ -211,10 +211,7 @@ class AddMonitoring extends Component {
                             button: "Ok",
                         });
                     } else {
-                        // this.setState({
-                        //     page: 1
-                        // })
-                        // this.clear()
+                        this.clear()
                         this.getApiProducts();
                         Swal.fire({
                             title: "Good job!",

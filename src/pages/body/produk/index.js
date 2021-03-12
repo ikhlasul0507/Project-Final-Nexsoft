@@ -24,6 +24,7 @@ import {
     Select,
     Option
 } from "../../../componen"
+import { Search } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -195,14 +196,18 @@ class Produk extends Component {
                     .catch((e) => { alert("gagal") });
             } else if (this.state.productName !== "") {
                 this.getPaging(this.state.page, this.state.orderby, this.state.show, 1, this.state.productName);
-            } else {
+                this.getCountSearch(this.state.productName);
+                // this.getCount();
+                // this.getPaging();
+            }else {
                 swal({
                     title: "Error !",
-                    text: "Please, enter product id or product name !",
+                    text: "Please input product dan product name !",
                     icon: "error",
                     button: "Ok",
                 });
-                this.getPaging();
+                this.getPaging(this.state.page, this.state.orderby, this.state.show, 1, this.state.productName);
+                this.getCount();
             }
         }
         this.submit = () => {
@@ -387,6 +392,27 @@ class Produk extends Component {
                     // this.setState({errorFetcing:true})
                 });
         }
+        this.getCountSearch = (productName) => {
+            fetch(this.state.url + "countSearch/"+productName, {
+                method: "get",
+                headers: {
+                    "Content-Type": "application/json; ; charset=utf-8",
+                    "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                    "Access-Control-Allow-Origin": "*"
+                }
+            })
+                .then(response => response.json())
+                .then(json => {
+                    this.setState({
+                        count: Math.ceil((json) / this.state.show),
+                        errorFetcing: true
+                    });
+                })
+                .catch((e) => {
+                    alert("Failed fetching data!!", e)
+                    // this.setState({errorFetcing:true})
+                });
+        }
         this.getPaging = (value, orderby, show, minus, name) => {
             if (value) { } else { value = 1; }
             if (orderby) { } else { orderby = "asc" }
@@ -504,6 +530,20 @@ class Produk extends Component {
                                         </Small>
                                     </DivClassSingle>
                             )
+                            }
+                            {
+                                (this.state.products.length <=0 ) ?
+                                    <DivClassSingle
+                                        className="list-data">
+                                        <Center>
+                                            <H3>
+                                                DATA NOT FOUND
+                                                </H3>
+                                            <Img
+                                                src="https://i1.wp.com/dewankomputer.com/wp-content/uploads/2019/08/pesawat.gif?resize=84%2C208"></Img>
+                                        </Center>
+                                    </DivClassSingle>
+                                    : ""
                             }
                             {
                                 (!this.state.errorFetcing) ?

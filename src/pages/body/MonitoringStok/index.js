@@ -85,58 +85,57 @@ class MonitoringStok extends Component {
                 });
 
         }
-        // this.delete = () => {
-        //     // if (window.confirm('Are you sure wont to Delete ?')) {
-        //     swal({
-        //         title: "Are you sure?",
-        //         text: "wont to Delete ?",
-        //         icon: "warning",
-        //         buttons: true,
-        //         dangerMode: true,
-        //     })
-        //         .then((willDelete) => {
-        //             if (willDelete) {
-        //                 fetch(this.state.url + this.state.idStok, {
-        //                     method: "delete",
-        //                     headers: {
-        //                         "Content-Type": "application/json; ; charset=utf-8",
-        //                         "Access-Control-Allow-Headers": "Authorization, Content-Type",
-        //                         "Access-Control-Allow-Origin": "*"
-        //                     }
-        //                 })
-        //                     .then(response => response.json())
-        //                     .then(json => {
-        //                         if (json.error) {
-        //                             swal({
-        //                                 title: "Error !",
-        //                                 text: "The product cannot be deleted because it is foreign key to the detail table",
-        //                                 icon: "error",
-        //                                 button: "Ok",
-        //                             });
-        //                         } else {
-        //                             Swal.fire({
-        //                                 title: "Good job!",
-        //                                 text: json.successMessage,
-        //                                 icon: "success",
-        //                                 timer: 1000,
-        //                                 showConfirmButton: false,
-        //                                 timerProgressBar: true
-        //                             // });
-        //                             // this.getPaging(this.state.page, this.state.orderby, this.state.show);
-        //                             // this.getCount();
-        //                             // this.clear();
-        //                         }
-        //                     })
-        //                     .catch((e) => {
-        //                         alert("Failed fetching data!!", e)
-        //                         // this.setState({errorFetcing:true})
-        //                     });
-        //             } else {
-        //                 //   swal("Your imaginary file is safe!");
-        //             }
-        //         });
+        this.delete = (idStok) => {
+            // if (window.confirm('Are you sure wont to Delete ?')) {
+                console.log("id stok :", idStok)
+            swal({
+                title: "Are you sure?",
+                text: "wont to Delete ?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        fetch(this.state.url + idStok, {
+                            method: "delete",
+                            headers: {
+                                "Content-Type": "application/json; ; charset=utf-8",
+                                "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                                "Access-Control-Allow-Origin": "*"
+                            }
+                        })
+                            .then(response => response.json())
+                            .then(json => {
+                                if (json.error) {
+                                    swal({
+                                        title: "Error !",
+                                        text: "The product cannot be deleted because it is foreign key to the detail table",
+                                        icon: "error",
+                                        button: "Ok",
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        title: "Good job!",
+                                        text: json.successMessage,
+                                        icon: "success",
+                                        timer: 1000,
+                                        showConfirmButton: false,
+                                        timerProgressBar: true
+                                    })
+                                    this.getApiStock()
+                            }
+                            })
+                            .catch((e) => {
+                                alert("Failed fetching data!!", e)
+                                // this.setState({errorFetcing:true})
+                            });
+                    } else {
+                        //   swal("Your imaginary file is safe!");
+                    }
+                });
 
-        // }
+        }
     }
 
     componentDidMount() {
@@ -204,7 +203,7 @@ class MonitoringStok extends Component {
                                     </Button>
                                 </div>
                                 <div data-tip="Delete Stock">
-                                    <Button  onClick={() => { this.delete() }}>
+                                    <Button  onClick={() => { this.delete(this.state.id) }}>
                                         <FaIcons.FaTrash />
                                     </Button>
                                 </div>
