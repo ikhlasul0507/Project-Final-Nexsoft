@@ -33,7 +33,7 @@ const NavIcon = styled(Link)`
 const NavIconSh = styled(Link)`
   margin-right: 1rem;
   margin-top: 5px;
-  font-size: 2rem;
+  font-size: 1rem;
   height: 40px;
   display: flex;
   justify-content: flex-end;
@@ -45,7 +45,7 @@ const NavIconSh = styled(Link)`
 
 const P = styled(Link)`
   margin-right: 1rem;
-  font-size: 1rem;
+  font-size: 0.8rem;
   color:white;
   cursor: auto;
   text-decoration:none;

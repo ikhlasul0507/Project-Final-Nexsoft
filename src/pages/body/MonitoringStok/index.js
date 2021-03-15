@@ -51,18 +51,14 @@ class MonitoringStok extends Component {
             show: "7",
             checkedA: true,
             minus: 0,
-            name: ""
-        }
-        this.handleChangeMinus = (event) => {
-            this.setState({
-                [event.target.name]: event.target.checked,
-            })
+            name: "",
+            kondisi:""
         }
         this.handleChange = (event, value) => {
             this.setState({
                 page: value
             })
-            // this.getCount();
+            this.getCount(this.state.kondisi);
             this.getPaging(value, this.state.orderby, this.state.show, this.state.minus, this.state.name);
         }
         this.detail = idStok => {
@@ -83,8 +79,31 @@ class MonitoringStok extends Component {
                 show: show
             })
             this.getPaging(1, this.state.orderby, show, this.state.minus, this.state.name);
-            this.getCount();
+            this.getCount(this.state.kondisi);
         }
+        this.handleChangeMinus = (event) => {
+            this.setState({
+                [event.target.name]: event.target.checked,
+            })
+            const minus = event.target.checked
+            console.log(minus)
+            if (minus) {
+                this.setState({
+                    minus: 0,
+                    kondisi :0
+                })
+                this.getPaging(1, this.state.orderby, this.state.show, 0, this.state.name);
+                this.getCount(0);
+            } else {
+                this.setState({
+                    minus: 1,
+                    kondisi:1
+                })
+                this.getPaging(1, this.state.orderby, this.state.show, 1, this.state.name);
+                this.getCount(1);
+            }
+        };
+
         this.delete = (idStok) => {
             // if (window.confirm('Are you sure wont to Delete ?')) {
             console.log("id stok :", idStok)
@@ -158,8 +177,9 @@ class MonitoringStok extends Component {
                 });
 
         }
-        this.getCount = () => {
-            fetch(this.state.url + "count", {
+        this.getCount = (kondisi) => {
+            if(kondisi){}else{kondisi=0}
+            fetch(this.state.url +"count/"+ kondisi, {
                 method: "get",
                 headers: {
                     "Content-Type": "application/json; ; charset=utf-8",
@@ -170,7 +190,7 @@ class MonitoringStok extends Component {
                 .then(response => response.json())
                 .then(json => {
                     this.setState({
-                        count: Math.ceil((json) / this.state.show),
+                        count: Math.ceil((json) / this.state.show-1),
                         errorFetcing: true
                     });
                     console.log(json)
@@ -200,6 +220,7 @@ class MonitoringStok extends Component {
                         stoks: json,
                         errorFetcing: true
                     });
+                    console.log(json)
                 })
                 .catch((e) => {
                     alert("Failed fetching data!!", e)
