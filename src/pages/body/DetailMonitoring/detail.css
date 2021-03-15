@@ -23,6 +23,7 @@
     border: none;
 }
 
+
 .navbarD .btn-detail {
     justify-content: flex-end;
     margin-right: 35px;
@@ -33,7 +34,7 @@
 .content-detail {
     margin: auto;
     width: 60%;
-    height: 500px;
+    height: 530px;
     background-color: white;
     overflow-y: scroll;
     overflow-x: hidden;

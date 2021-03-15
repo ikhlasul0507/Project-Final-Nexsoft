@@ -87,13 +87,20 @@
     width: 96.5%;
     margin-left: 1.3%;
     margin-top: 10px;
+    height: 530px;
     border: 2px solid white;
     color: black;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    scrollbar-face-color: #CE7E00;
+    scrollbar-shadow-color: #FFFFFF;
+    scrollbar-highlight-color: #6F4709;
 }
 
 .table .table-dataM {
     width: 100%;
     border: 1px solid black;
+    
 }
 
 .table .table-dataM thead {
@@ -101,11 +108,15 @@
     color: rgb(250, 250, 250);
     text-align: left;
 }
+.table .table-dataM thead Th{
+    height: 46px;
+}
 
 .table .table-dataM tbody tr {
     background-color: rgb(233, 233, 233);
     color: black;
     cursor: pointer;
+    
 }
 
 .table .table-dataM tbody tr:hover {
@@ -119,11 +130,11 @@
     display: inline-block;
     padding: 0;
     margin: 0;
-    margin-left: 20px;
+    margin-left: 1.3%;
     margin-bottom: 13px;
     position: fixed;
     bottom: 0;
-    width: 97%;
+    width: 96.78%;
     justify-content: flex-end;
     color: black;
 }
