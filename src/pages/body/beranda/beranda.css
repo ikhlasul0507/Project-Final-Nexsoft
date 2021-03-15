@@ -1,0 +1,19 @@
+.container{
+    width: 60%;
+    margin: auto;
+    height: 400px;
+    background-color: aliceblue;
+    margin-top: 8%;
+    display: flex;
+    flex-direction: row;
+}
+.container .data-kanan{
+    width: 50%;
+    border: 1px solid black;
+    height: 100%;
+}
+.container .data-kiri{
+    width: 50%;
+    border: 1px solid black;
+    height: 100%;
+}
