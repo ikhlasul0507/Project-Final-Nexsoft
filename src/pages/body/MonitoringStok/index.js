@@ -26,6 +26,7 @@ import {
     Thead,
     Tr
 } from "../../../componen/table"
+import { yellow } from '@material-ui/core/colors';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -41,6 +42,7 @@ class MonitoringStok extends Component {
         super(props);
         this.state = {
             stoks: [],
+            stok: {},
             url: "http://localhost:8080/nd6/stock/",
             detail: false,
             errorFetcing: false,
@@ -52,7 +54,7 @@ class MonitoringStok extends Component {
             checkedA: true,
             minus: 0,
             name: "",
-            kondisi:""
+            kondisi: ""
         }
         this.handleChange = (event, value) => {
             this.setState({
@@ -70,7 +72,8 @@ class MonitoringStok extends Component {
         this.clear = () => {
             this.setState({
                 detail: false,
-                id: ""
+                id: "",
+                stok:{}
             })
         }
         this.onChangeSelectShow = el => {
@@ -90,73 +93,24 @@ class MonitoringStok extends Component {
             if (minus) {
                 this.setState({
                     minus: 0,
-                    kondisi :0
+                    kondisi: 0
                 })
-                this.getPaging(1, this.state.orderby, this.state.show, 0, this.state.name);
+                this.getPaging(this.state.page, this.state.orderby, this.state.show, 0, this.state.name);
                 this.getCount(0);
             } else {
                 this.setState({
                     minus: 1,
-                    kondisi:1
+                    kondisi: 1
                 })
-                this.getPaging(1, this.state.orderby, this.state.show, 1, this.state.name);
+                this.getPaging(this.state.page, this.state.orderby, this.state.show, 1, this.state.name);
                 this.getCount(1);
             }
         };
-
         this.delete = (idStok) => {
-            // if (window.confirm('Are you sure wont to Delete ?')) {
-            console.log("id stok :", idStok)
-            swal({
-                title: "Are you sure?",
-                text: "wont to Delete ?",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        fetch(this.state.url + idStok, {
-                            method: "delete",
-                            headers: {
-                                "Content-Type": "application/json; ; charset=utf-8",
-                                "Access-Control-Allow-Headers": "Authorization, Content-Type",
-                                "Access-Control-Allow-Origin": "*"
-                            }
-                        })
-                            .then(response => response.json())
-                            .then(json => {
-                                if (json.error) {
-                                    swal({
-                                        title: "Error !",
-                                        text: "The product cannot be deleted because it is foreign key to the detail table",
-                                        icon: "error",
-                                        button: "Ok",
-                                    });
-                                } else {
-                                    Swal.fire({
-                                        title: "Good job!",
-                                        text: json.successMessage,
-                                        icon: "success",
-                                        timer: 1000,
-                                        showConfirmButton: false,
-                                        timerProgressBar: true
-                                    })
-                                    this.getApiStock()
-                                }
-                            })
-                            .catch((e) => {
-                                alert("Failed fetching data!!", e)
-                                // this.setState({errorFetcing:true})
-                            });
-                    } else {
-                        //   swal("Your imaginary file is safe!");
-                    }
-                });
-
+            this.getApiStockDetail(idStok);
         }
-        this.getApiStock = () => {
-            fetch(this.state.url, {
+        this.getApiStockDetail = (idStok) => {
+            fetch(this.state.url + idStok, {
                 method: "get",
                 headers: {
                     "Content-Type": "application/json; ; charset=utf-8",
@@ -167,9 +121,12 @@ class MonitoringStok extends Component {
                 .then(response => response.json())
                 .then((json) => {
                     this.setState({
-                        stoks: json
+                        stok: Object.assign({}, json[0])
                     })
-                    console.log("Stocks :", this.state.stoks);
+                    console.log(this.state.stok)
+                })
+                .then((json) => {
+                    this.deleteToApi();
                 })
                 .catch((e) => {
                     console.log(e)
@@ -177,9 +134,66 @@ class MonitoringStok extends Component {
                 });
 
         }
+        this.deleteToApi = () => {
+            fetch(this.state.url + this.props.match.params.id, {
+                method: "delete",
+                headers: {
+                    "Content-Type": "application/json; ; charset=utf-8",
+                    "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                    "Access-Control-Allow-Origin": "*"
+                },
+                body: JSON.stringify(this.state.stok)
+            })
+                .then(response => response.json())
+                .then((json) => {
+                    console.log("json", json);
+                    if (json.errors) {
+
+                        swal({
+                            title: "Error !",
+                            text: json.errors[0].defaultMessage,
+                            icon: "error",
+                            button: "Ok",
+                        });
+                    } else if (json.errorMessage) {
+
+                        swal({
+                            title: "Errors !",
+                            text: json.errorMessage,
+                            icon: "error",
+                            button: "Ok",
+                        });
+                    } else if (json.message) {
+                        console.log(json)
+                        swal({
+                            title: "Error !",
+                            text: "Enter the product !",
+                            icon: "error",
+                            button: "Ok",
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "Good job!",
+                            text: json.successMessage,
+                            icon: "success",
+                            timer: 2000,
+                            showConfirmButton: false,
+                            timerProgressBar: true
+                        });
+                        this.getPaging(this.state.page, this.state.orderby, this.state.show, this.state.minus, this.state.name);
+                        this.getCount(this.state.kondisi);
+                        this.clear();
+                    }
+                })
+                .catch((e) => {
+                    console.log(e)
+                    alert("Failed sending data!!");
+                });
+        }
         this.getCount = (kondisi) => {
-            if(kondisi){}else{kondisi=0}
-            fetch(this.state.url +"count/"+ kondisi, {
+            if (kondisi) { } else { kondisi = 0 }
+            console.log("kondisi :", kondisi)
+            fetch(this.state.url + "count/" + kondisi, {
                 method: "get",
                 headers: {
                     "Content-Type": "application/json; ; charset=utf-8",
@@ -190,7 +204,7 @@ class MonitoringStok extends Component {
                 .then(response => response.json())
                 .then(json => {
                     this.setState({
-                        count: Math.ceil((json) / this.state.show-1),
+                        count: Math.ceil((json) / this.state.show - 1),
                         errorFetcing: true
                     });
                     console.log(json)
@@ -244,10 +258,11 @@ class MonitoringStok extends Component {
                     <Td>{value.idStok}</Td>
                     <Td>{value.tanggaDokumen}</Td>
                     <Td>{value.deskripsiDokumen}</Td>
-                    <Td>
-                        <b>Total Qty Stock: {value.totalStock}</b><br />
-                        <b>Count Stock : {value.countStock}</b><br />
-                        <b>Net Amount : {value.netAmount}</b>
+                    <Td className={{ backgroundColor: yellow }}>
+                        Jenis Dokumen : {(value.productList[0].transTypeProduct) === 1 ? "Penjualan" : "Pembelian"}<br />
+                        <b >Total Qty Stock: {value.totalStock}</b><br />
+                        <b >Count Stock : {value.countStock}</b><br />
+                        <b >Net Amount : {value.netAmount}</b>
                     </Td>
                 </Tr>
         )
@@ -339,12 +354,12 @@ class MonitoringStok extends Component {
                     </DivClassSingle>
                 </DivClassSingle>
                 <DivClassSingle className="table">
-                    <Table className="table-dataM" border="1px" cellPadding="10px" cellSpacing="0">
+                    <Table className="table-dataM" border="1px" cellPadding="4px" cellSpacing="0">
                         <Thead>
-                            <Th>Document Number</Th>
-                            <Th>Document Date</Th>
-                            <Th>Document Description</Th>
-                            <Th>Total Qty Product Stok Dokumen</Th>
+                            <Th className="Th-head">Document Number</Th>
+                            <Th className="Th-head">Document Date</Th>
+                            <Th className="Th-head">Document Description</Th>
+                            <Th className="Th-head">Total Qty Product Stok Dokumen</Th>
                         </Thead>
                         <Tbody>
                             {result}
@@ -352,6 +367,7 @@ class MonitoringStok extends Component {
                     </Table>
                 </DivClassSingle>
                 <DivClassSingle className="pagination">
+                    <P>Page: {this.state.page}</P>
                     <DivClassSingle class={classes.root} className="data-pagination" >
                         <Pagination count={this.state.count} page={this.state.page} onChange={this.handleChange} />
                     </DivClassSingle>

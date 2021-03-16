@@ -1,7 +1,7 @@
 .navbarD {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: flex-end;
 }
 
 .navbarD h2 {
@@ -108,7 +108,7 @@
     color: black;
 }
 
-.content-detail .table table {
+.content-detail .table-detail table {
     width: 100%;
 }
 

@@ -548,21 +548,6 @@ class Produk extends Component {
                                 )
 
                             }
-
-                            {/* {
-                                (this.state.products.length <= 0) ?
-                                    <DivClassSingle
-                                        className="list-data">
-                                        <Center>
-                                            <H3>
-                                                DATA NOT FOUND
-                                                </H3>
-                                            <Img
-                                                src="https://i1.wp.com/dewankomputer.com/wp-content/uploads/2019/08/pesawat.gif?resize=84%2C208"></Img>
-                                        </Center>
-                                    </DivClassSingle>
-                                    : ""
-                            } */}
                             {
                                 (!this.state.errorFetcing) ?
                                     <DivClassSingle

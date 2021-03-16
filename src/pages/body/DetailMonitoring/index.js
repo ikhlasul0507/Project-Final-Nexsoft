@@ -91,7 +91,17 @@ class DetailMonitoring extends Component {
             <>
                 <DivClassSingle className="navbarD">
                     <H2></H2>
-                    <div data-tip="Back to list">
+                    <div data-tip="Print">
+                        <Button
+                            className="btn-detail"
+                            onClick={() => {
+                                window.print()
+                            }}
+                        >
+                            <FaIcons.FaPrint />
+                        </Button>
+                        </div>
+                        <div data-tip="Back To List">
                         <Button
                             className="btn-detail"
                             onClick={() => {
@@ -158,7 +168,7 @@ class DetailMonitoring extends Component {
                             </DivClassSingle>
                         </DivClassSingle>
                         <Hr />
-                        <DivClassSingle className="table">
+                        <DivClassSingle className="table-detail">
                             <B><Label className="label">Transaction Detail</Label></B>
                             <Table border="1px" cellPadding="3px" cellSpacing="0">
                                 <Thead>
