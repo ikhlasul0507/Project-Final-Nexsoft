@@ -24,7 +24,6 @@ import {
     Select,
     Option
 } from "../../../componen"
-import { Search } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -594,7 +593,7 @@ class Produk extends Component {
                         className="data-right">
                         <DivClassSingle
                             className="navbar">
-                            <H2>{(this.state.disabled) ? "Monitoring " : "Kelola "} Stock {this.state.productId}</H2>
+                            <H2>{(this.state.disabled) ? "Monitoring " : "Kelola "} Stock</H2>
                             {this.state.productId === "" ? "" :
                                 <> <div data-tip="Clear Product">
                                     <Button
@@ -668,6 +667,7 @@ class Produk extends Component {
                                 Cancel
                             </Button>
                         </DivClassSingle> : ""}
+
                     </DivClassSingle>
                 </DivClassSingle>
                 <DivClassSingle className="footer">

@@ -43,7 +43,10 @@ class MonitoringStok extends Component {
         this.state = {
             stoks: [],
             stok: {},
+            productId: "",
+            ProductName: "",
             url: "http://localhost:8080/nd6/stock/",
+            urlSearch: "http://localhost:8080/nd6/product/",
             detail: false,
             errorFetcing: false,
             id: "",
@@ -56,12 +59,37 @@ class MonitoringStok extends Component {
             name: "",
             kondisi: ""
         }
+        this.setValue = el => {
+            this.setState({
+                [el.target.name]: el.target.value,
+            })
+        }
         this.handleChange = (event, value) => {
             this.setState({
                 page: value
             })
             this.getCount(this.state.kondisi);
-            this.getPaging(value, this.state.orderby, this.state.show, this.state.minus, this.state.name);
+            this.getPaging(value, this.state.orderby, this.state.show, this.state.minus, this.state.name,this.state.productId);
+        }
+        this.cari = () => {
+            console.log(this.state.productId)
+            if (this.state.productId !== "") {
+                this.getPaging(1, this.state.orderby, this.state.show, this.state.minus, this.state.productName,this.state.productId);
+                this.getCountSearchId(this.state.productId);
+            } else if (this.state.productName !== "") {
+                this.getPaging(1, this.state.orderby, this.state.show, this.state.minus, this.state.productName,this.state.productId);
+                this.getCountSearch(this.state.productName);
+            } else {
+                swal({
+                    title: "Error !",
+                    text: "Please input product dan product name !",
+                    icon: "error",
+                    button: "Ok",
+                });
+                this.getPaging(this.state.page, this.state.orderby, this.state.show, 1, this.state.productName,this.state.productId);
+                this.getCount();
+            }
+            this.clear();
         }
         this.detail = idStok => {
             this.setState({
@@ -73,7 +101,9 @@ class MonitoringStok extends Component {
             this.setState({
                 detail: false,
                 id: "",
-                stok:{}
+                stok: {},
+                productName:"",
+                productId:""
             })
         }
         this.onChangeSelectShow = el => {
@@ -81,7 +111,7 @@ class MonitoringStok extends Component {
             this.setState({
                 show: show
             })
-            this.getPaging(1, this.state.orderby, show, this.state.minus, this.state.name);
+            this.getPaging(1, this.state.orderby, show, this.state.minus, this.state.name,this.state.productId);
             this.getCount(this.state.kondisi);
         }
         this.handleChangeMinus = (event) => {
@@ -95,14 +125,14 @@ class MonitoringStok extends Component {
                     minus: 0,
                     kondisi: 0
                 })
-                this.getPaging(this.state.page, this.state.orderby, this.state.show, 0, this.state.name);
+                this.getPaging(this.state.page, this.state.orderby, this.state.show, 0, this.state.name,this.state.productId);
                 this.getCount(0);
             } else {
                 this.setState({
                     minus: 1,
                     kondisi: 1
                 })
-                this.getPaging(this.state.page, this.state.orderby, this.state.show, 1, this.state.name);
+                this.getPaging(this.state.page, this.state.orderby, this.state.show, 1, this.state.name,this.state.productId);
                 this.getCount(1);
             }
         };
@@ -133,6 +163,48 @@ class MonitoringStok extends Component {
                     alert("Failed sending data!!");
                 });
 
+        }
+        this.getCountSearch = (productName) => {
+            fetch(this.state.urlSearch + "countSearch/" + productName, {
+                method: "get",
+                headers: {
+                    "Content-Type": "application/json; ; charset=utf-8",
+                    "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                    "Access-Control-Allow-Origin": "*"
+                }
+            })
+                .then(response => response.json())
+                .then(json => {
+                    this.setState({
+                        count: Math.ceil((json) / this.state.show),
+                        errorFetcing: true
+                    });
+                })
+                .catch((e) => {
+                    alert("Failed fetching data!!", e)
+                    // this.setState({errorFetcing:true})
+                });
+        }
+        this.getCountSearchId = (productId) => {
+            fetch(this.state.url + "countSearch/" + productId, {
+                method: "get",
+                headers: {
+                    "Content-Type": "application/json; ; charset=utf-8",
+                    "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                    "Access-Control-Allow-Origin": "*"
+                }
+            })
+                .then(response => response.json())
+                .then(json => {
+                    this.setState({
+                        count: Math.ceil((json) / this.state.show),
+                        errorFetcing: true
+                    });
+                })
+                .catch((e) => {
+                    alert("Failed fetching data!!", e)
+                    // this.setState({errorFetcing:true})
+                });
         }
         this.deleteToApi = () => {
             fetch(this.state.url + this.props.match.params.id, {
@@ -180,7 +252,7 @@ class MonitoringStok extends Component {
                             showConfirmButton: false,
                             timerProgressBar: true
                         });
-                        this.getPaging(this.state.page, this.state.orderby, this.state.show, this.state.minus, this.state.name);
+                        this.getPaging(this.state.page, this.state.orderby, this.state.show, this.state.minus, this.state.name,this.state.productId);
                         this.getCount(this.state.kondisi);
                         this.clear();
                     }
@@ -214,13 +286,15 @@ class MonitoringStok extends Component {
                     // this.setState({errorFetcing:true})
                 });
         }
-        this.getPaging = (value, orderby, show, minus, name) => {
+        this.getPaging = (value, orderby, show, minus, name, id) => {
             if (value) { } else { value = 1; }
             if (orderby) { } else { orderby = "asc" }
             if (show) { } else { show = 7 }
             if (minus) { } else { minus = 0 }
             if (name) { } else { name = "" }
-            fetch(this.state.url + "paging/?page=" + value + "&limit=" + show + "&orderby=" + orderby + "&minus=" + minus + "&name=" + name, {
+            if (id) { } else { id = "" }
+            console.log("MInus ", minus)
+            fetch(this.state.url + "paging/?page=" + value + "&limit=" + show + "&orderby=" + orderby + "&minus=" + minus + "&name=" + name+"&id=" + id, {
                 method: "get",
                 headers: {
                     "Content-Type": "application/json; ; charset=utf-8",
@@ -234,7 +308,7 @@ class MonitoringStok extends Component {
                         stoks: json,
                         errorFetcing: true
                     });
-                    console.log(json)
+                    console.log("json ",json)
                 })
                 .catch((e) => {
                     alert("Failed fetching data!!", e)
@@ -251,7 +325,7 @@ class MonitoringStok extends Component {
     render() {
         const { useStyles } = this.props
         const classes = () => useStyles;
-        const { checkedA, show } = this.state
+        const { checkedA, show, productId, productName } = this.state
         const result = this.state.stoks.map(
             (value, idx) =>
                 <Tr onClick={() => { this.detail(value.idStok) }} key={idx}>
@@ -271,10 +345,26 @@ class MonitoringStok extends Component {
             <DivClassSingle>
                 <DivClassSingle className="navbarM">
                     <DivClassSingle className="cari">
-                        <Input type="text" name="" placeholder="Product code" />
-                        <Input type="text" name="" placeholder="Product name" />
+                        <Input
+                            type="text"
+                            className="input"
+                            name="productId"
+                            placeholder="Product Id..."
+                            value={productId}
+                            onChange={this.setValue} />
+                        <Input
+                            type="text"
+                            className="input"
+                            name="productName"
+                            placeholder="Product Name..."
+                            value={productName}
+                            onChange={this.setValue} />
                         <div data-tip="Search">
-                            <Button className="btn-cari" onClick={this.cari}><FaIcons.FaSearch /></Button>
+                            <Button
+                                className="btn-cari"
+                                onClick={this.cari}>
+                                <FaIcons.FaSearch />
+                            </Button>
                         </div>
                         <ReactTooltip />
                         <FormControlLabel
@@ -363,6 +453,12 @@ class MonitoringStok extends Component {
                         </Thead>
                         <Tbody>
                             {result}
+                            {(this.state.stoks.length <= 0) ? 
+                            <Tr>
+                                <Td colspan="4" className="td-notFound">Data Not Found ! </Td>
+                            </Tr> 
+                            :
+                            ""}
                         </Tbody>
                     </Table>
                 </DivClassSingle>

@@ -8,7 +8,10 @@ class Td extends Component {
 
     render() {
         return (
-            <td>
+            <td 
+            colSpan={this.props.colspan}
+            className={this.props.className}
+            >
                 {this.props.children}
             </td>
         );

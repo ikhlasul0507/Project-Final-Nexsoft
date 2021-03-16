@@ -21,7 +21,6 @@ import {
     Thead,
     Tr
 } from "../../../componen/table"
-
 class DetailMonitoring extends Component {
     constructor(props) {
         super(props);

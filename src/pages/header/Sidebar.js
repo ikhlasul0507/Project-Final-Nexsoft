@@ -23,7 +23,7 @@ const Nav = styled.div`
 
 const NavIcon = styled(Link)`
   margin-left: 1rem;
-  font-size: 2rem;
+  font-size: 1rem;
   height: 40px;
   display: flex;
   justify-content: flex-start;
@@ -118,7 +118,7 @@ const Sidebar = (props) => {
                     <NavIcon to='#'>
                         <FaIcons.FaBars onClick={showSidebar} />
                     </NavIcon>
-                    <h4>
+                    <h5>
                         {
                             props.match.url === "/master-produk" ? "Master Product" :
                                 props.match.url === "/add-monitoring" ? "Add Monitoring" :
@@ -126,11 +126,12 @@ const Sidebar = (props) => {
                                         props.match.path === "/detail-monitoring/:id" ? "Detail Monitoring" :
                                             props.match.url === "/monitoring-produk" && "Monitoring Stock"
                         }
-                    </h4>
+                    </h5>
+                    <h5>
                     {/* {date.toLocaleDateString()} */}
                     {getDateWithMoment()} |
                     {" " + date.toLocaleTimeString()}
-
+                    </h5>
                     <NavIconSh to="#">
                         <P>{props.dataLogin.userData.username}</P>
                         <div data-tip="Logout">
