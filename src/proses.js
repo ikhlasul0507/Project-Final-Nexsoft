@@ -77,14 +77,19 @@ class Proses extends Component {
                     }
                 })
                 .catch((e) => {
-                    alert("Failed fetching api... ");
+                    swal({
+                        title: "Error !",
+                        text: "Error Connect to API",
+                        icon: "error",
+                        button: "Ok",
+                    });
                 });
         }
         this.save = login => {
             this.doLogin(login);
         }
         this.tampilPage = () => {
-            console.log("adsadsadsa", this.props.dataLogin.recaptchaResponse)
+            console.log("Captcha : ", this.props.dataLogin.recaptchaResponse)
             if (!this.props.checkLogin) {
                 return (
                     <Route path="/" exact component={(props) => <Login validate={this.validate} {...props} />}></Route>

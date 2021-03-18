@@ -28,8 +28,8 @@ class AddMonitoring extends Component {
             productList: [
                 {
                     productId: "",
-                    tglExpiredProduct: "",
-                    harga: "",
+                    tglExpiredProduct: null,
+                    harga:null,
                     transTypeProduct: "",
                     productQty: ""
                 }
@@ -62,15 +62,16 @@ class AddMonitoring extends Component {
             console.log("pridct id", this.state.productList.productId)
         }
         this.onChangeSelectTrans = (transTypeProduct) => {
-            this.state.productList[0].transTypeProduct = transTypeProduct;
-            let newproductList = this.state.productList;
-            this.setState({
-                transTypeProduct: transTypeProduct,
-                productList: newproductList,
-                transTypeProduct: transTypeProduct
-            });
-            console.log(transTypeProduct);
-            console.log(this.state.productList)
+                 this.state.productList[0].transTypeProduct = transTypeProduct;
+                let newproductList = this.state.productList;
+                this.setState({
+                    transTypeProduct: transTypeProduct,
+                    productList: newproductList,
+                    transTypeProduct: transTypeProduct,
+                    deskripsiDokumen: "Document " + (transTypeProduct == 0 ? "Bertambah" : "Berkurang")
+                });
+                console.log("state tarnas", transTypeProduct);
+            
         }
         this.onChangeInput = (attribut, value, index) => {
             if (this.state.productList[0].productId === "") {
@@ -276,7 +277,7 @@ class AddMonitoring extends Component {
     render() {
         console.log("form AKTI", this.props.dataForm);
         console.log("pridct id", this.state.productList.productId)
-        console.log("params",this.props.match.params.id)
+        console.log("params", this.props.match.params.id)
         const { tanggaDokumen, deskripsiDokumen, transTypeProduct, productList } = this.state
         var msgTotal = productList.reduce(function (prev, cur) {
             return Number(prev) + Number(cur.productQty);
@@ -381,30 +382,33 @@ class AddMonitoring extends Component {
                                                 {
                                                     this.state.products.map(
                                                         (value, idx) =>
-                                                            <option key={idx} value={value.productId}>{value.productName}</option>
+                                                            <option key={idx} value={value.productId}>{value.productId}-{value.productName.substring(30, 0)}</option>
                                                     )
                                                 }
                                             </Select>
                                         </DivClassSingle>
-                                        <DivClassSingle className="form-data">
-                                            <Label>Expired date</Label>
-                                            <Input
-                                                type="date"
-                                                value={value.tglExpiredProduct}
-                                                onChange={event => this.onChangeInput("tglExpiredProduct", event.target.value, index)}
-                                                name=""
-                                            />
-                                        </DivClassSingle>
-                                        <DivClassSingle className="form-data">
-                                            <Label>Harga (Rp)</Label>
-                                            <Input
-                                                type="number"
-                                                value={value.harga}
-                                                name="" placeholder="Harga (Rp)..."
-                                                onChange={event => this.onChangeInput("harga", event.target.value, index)}
-                                            />
-                                        </DivClassSingle>
-                                        {/* <DivClassSingle className="form-data"> */}
+                                        {(this.state.transTypeProduct) == 0 ?
+                                            <>
+                                                <DivClassSingle className="form-data">
+                                                    <Label>Expired date</Label>
+                                                    <Input
+                                                        type="date"
+                                                        value={value.tglExpiredProduct}
+                                                        onChange={event => this.onChangeInput("tglExpiredProduct", event.target.value, index)}
+                                                        name=""
+                                                    />
+                                                </DivClassSingle>
+                                                <DivClassSingle className="form-data">
+                                                    <Label>Harga (Rp)</Label>
+                                                    <Input
+                                                        type="number"
+                                                        value={value.harga}
+                                                        name="" placeholder="Harga (Rp)..."
+                                                        onChange={event => this.onChangeInput("harga", event.target.value, index)}
+                                                    />
+                                                </DivClassSingle>
+                                            </>
+                                            : ""}
                                         <Input
                                             type="hidden"
                                             value={this.state.transTypeProduct}

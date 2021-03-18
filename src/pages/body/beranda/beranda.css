@@ -9,11 +9,66 @@
 }
 .container .data-kanan{
     width: 50%;
-    border: 1px solid black;
+    border: 1px solid rgb(255, 255, 255);
     height: 100%;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-weight:755px;
+    font-size:24px;
+    background:black;
+    color:#fff;
+    text-shadow:
+      0 0 3px #FFFFA0,
+      0 0 5px #FFFF4D,
+      0 0 9px #FFFF41,
+      0 0 20px #FFFF2A,
+      0 0 25px #FFFF2B,
+      0 0 30px #FEFE00,
+      0 0 40px #F7F700;
+}
+.container .data-kanan .img{
+    width: 70%;
+    height: 40%;
+}
+.container center{
+    color: black;
 }
 .container .data-kiri{
     width: 50%;
-    border: 1px solid black;
+    border: 1px solid rgb(255, 255, 255);
     height: 100%;
+    text-align: center;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-weight:755px;
+    font-size:14px;
+    background:black;
+    color:#fff;
+    text-shadow:
+      0 0 3px #FFFFA0,
+      0 0 5px #FFFF4D,
+      0 0 9px #FFFF41,
+      0 0 20px #FFFF2A,
+      0 0 25px #FFFF2B,
+      0 0 30px #FEFE00,
+      0 0 40px #F7F700;
+}
+.container .data-kiri table{
+   width: 100%;
+}
+.container .data-kiri button{
+    width: 100%;
+    height: 9.6%;
+    background-color: black;
+    font-size: 20px;
+    cursor: pointer;
+    color: white;
+}
+.container .data-kiri button:hover{
+    text-shadow:
+    0 0 3px #FFFFA0,
+    0 0 5px #FFFF4D,
+    0 0 9px #FFFF41,
+    0 0 20px #FFFF2A,
+    0 0 25px #FFFF2B,
+    0 0 30px #FEFE00,
+    0 0 40px #F7F700;
 }

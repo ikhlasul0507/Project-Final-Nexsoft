@@ -63,21 +63,25 @@ class MonitoringStok extends Component {
             this.setState({
                 [el.target.name]: el.target.value,
             })
+            if(el.target.value === ""){
+                this.getPaging();
+                this.getCount();
+            }
         }
         this.handleChange = (event, value) => {
             this.setState({
                 page: value
             })
             this.getCount(this.state.kondisi);
-            this.getPaging(value, this.state.orderby, this.state.show, this.state.minus, this.state.name,this.state.productId);
+            this.getPaging(value, this.state.orderby, this.state.show, this.state.minus, this.state.name, this.state.productId,"","");
         }
         this.cari = () => {
             console.log(this.state.productId)
             if (this.state.productId !== "") {
-                this.getPaging(1, this.state.orderby, this.state.show, this.state.minus, this.state.productName,this.state.productId);
+                this.getPaging(1, this.state.orderby, this.state.show, this.state.minus, this.state.productName, this.state.productId,"","");
                 this.getCountSearchId(this.state.productId);
             } else if (this.state.productName !== "") {
-                this.getPaging(1, this.state.orderby, this.state.show, this.state.minus, this.state.productName,this.state.productId);
+                this.getPaging(1, this.state.orderby, this.state.show, this.state.minus, this.state.productName, this.state.productId,"","");
                 this.getCountSearch(this.state.productName);
             } else {
                 swal({
@@ -86,10 +90,9 @@ class MonitoringStok extends Component {
                     icon: "error",
                     button: "Ok",
                 });
-                this.getPaging(this.state.page, this.state.orderby, this.state.show, 1, this.state.productName,this.state.productId);
+                this.getPaging(this.state.page, this.state.orderby, this.state.show, 1, this.state.productName, this.state.productId,"","");
                 this.getCount();
             }
-            this.clear();
         }
         this.detail = idStok => {
             this.setState({
@@ -102,8 +105,8 @@ class MonitoringStok extends Component {
                 detail: false,
                 id: "",
                 stok: {},
-                productName:"",
-                productId:""
+                productName: "",
+                productId: ""
             })
         }
         this.onChangeSelectShow = el => {
@@ -111,7 +114,7 @@ class MonitoringStok extends Component {
             this.setState({
                 show: show
             })
-            this.getPaging(1, this.state.orderby, show, this.state.minus, this.state.name,this.state.productId);
+            this.getPaging(1, this.state.orderby, show, this.state.minus, this.state.name, this.state.productId,"","");
             this.getCount(this.state.kondisi);
         }
         this.handleChangeMinus = (event) => {
@@ -125,19 +128,35 @@ class MonitoringStok extends Component {
                     minus: 0,
                     kondisi: 0
                 })
-                this.getPaging(this.state.page, this.state.orderby, this.state.show, 0, this.state.name,this.state.productId);
+                this.getPaging(this.state.page, this.state.orderby, this.state.show, 0, this.state.name, this.state.productId,"","");
                 this.getCount(0);
             } else {
                 this.setState({
                     minus: 1,
                     kondisi: 1
                 })
-                this.getPaging(this.state.page, this.state.orderby, this.state.show, 1, this.state.name,this.state.productId);
+                this.getPaging(this.state.page, this.state.orderby, this.state.show, 1, this.state.name, this.state.productId,"","");
                 this.getCount(1);
             }
         };
         this.delete = (idStok) => {
-            this.getApiStockDetail(idStok);
+            // if (window.confirm('Are you sure wont to Delete ?')) {
+            swal({
+                title: "Are you sure?",
+                text: "wont to Delete ?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+
+                        this.getApiStockDetail(idStok);
+                        console.log("id", idStok)
+                    } else {
+                        //   swal("Your imaginary file is safe!");
+                    }
+                });
         }
         this.getApiStockDetail = (idStok) => {
             fetch(this.state.url + idStok, {
@@ -206,8 +225,11 @@ class MonitoringStok extends Component {
                     // this.setState({errorFetcing:true})
                 });
         }
-        this.deleteToApi = () => {
-            fetch(this.state.url + this.props.match.params.id, {
+        this.deleteToApi = (idStok) => {
+            console.log("id :", this.state.id);
+            console.log("id  matc:", idStok);
+
+            fetch(this.state.url + this.state.id, {
                 method: "delete",
                 headers: {
                     "Content-Type": "application/json; ; charset=utf-8",
@@ -252,7 +274,7 @@ class MonitoringStok extends Component {
                             showConfirmButton: false,
                             timerProgressBar: true
                         });
-                        this.getPaging(this.state.page, this.state.orderby, this.state.show, this.state.minus, this.state.name,this.state.productId);
+                        this.getPaging(this.state.page, this.state.orderby, this.state.show, this.state.minus, this.state.name, this.state.productId,"","");
                         this.getCount(this.state.kondisi);
                         this.clear();
                     }
@@ -261,6 +283,8 @@ class MonitoringStok extends Component {
                     console.log(e)
                     alert("Failed sending data!!");
                 });
+
+
         }
         this.getCount = (kondisi) => {
             if (kondisi) { } else { kondisi = 0 }
@@ -276,7 +300,7 @@ class MonitoringStok extends Component {
                 .then(response => response.json())
                 .then(json => {
                     this.setState({
-                        count: Math.ceil((json) / this.state.show - 1),
+                        count: Math.ceil((json) / this.state.show ),
                         errorFetcing: true
                     });
                     console.log(json)
@@ -286,15 +310,17 @@ class MonitoringStok extends Component {
                     // this.setState({errorFetcing:true})
                 });
         }
-        this.getPaging = (value, orderby, show, minus, name, id) => {
+        this.getPaging = (value, orderby, show, minus, name, id,startDate,endDate) => {
             if (value) { } else { value = 1; }
             if (orderby) { } else { orderby = "asc" }
             if (show) { } else { show = 7 }
             if (minus) { } else { minus = 0 }
             if (name) { } else { name = "" }
             if (id) { } else { id = "" }
+            if (startDate) { } else { startDate = "" }
+            if (endDate) { } else { endDate = "" }
             console.log("MInus ", minus)
-            fetch(this.state.url + "paging/?page=" + value + "&limit=" + show + "&orderby=" + orderby + "&minus=" + minus + "&name=" + name+"&id=" + id, {
+            fetch(this.state.url + "paging/?page=" + value + "&limit=" + show + "&orderby=" + orderby + "&minus=" + minus + "&name=" + name + "&id=" + id+"&startDate=" + startDate+ "&endDate=" + endDate, {
                 method: "get",
                 headers: {
                     "Content-Type": "application/json; ; charset=utf-8",
@@ -308,7 +334,7 @@ class MonitoringStok extends Component {
                         stoks: json,
                         errorFetcing: true
                     });
-                    console.log("json ",json)
+                    console.log("json ", json)
                 })
                 .catch((e) => {
                     alert("Failed fetching data!!", e)
@@ -453,12 +479,12 @@ class MonitoringStok extends Component {
                         </Thead>
                         <Tbody>
                             {result}
-                            {(this.state.stoks.length <= 0) ? 
-                            <Tr>
-                                <Td colspan="4" className="td-notFound">Data Not Found ! </Td>
-                            </Tr> 
-                            :
-                            ""}
+                            {(this.state.stoks.length <= 0) ?
+                                <Tr>
+                                    <Td colspan="4" className="td-notFound">Data Not Found ! </Td>
+                                </Tr>
+                                :
+                                ""}
                         </Tbody>
                     </Table>
                 </DivClassSingle>

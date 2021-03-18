@@ -41,6 +41,7 @@ class Produk extends Component {
             productId: "",
             productName: "",
             productDescription: "",
+            productQty: "",
             products: [],
             url: "http://localhost:8080/nd6/product/",
             urlLast: "http://localhost:8080/nd6/productLast/",
@@ -63,7 +64,7 @@ class Produk extends Component {
             this.getCount();
             this.getPaging(value, this.state.orderby, this.state.show, this.state.minus, this.state.name);
         }
-        this.detail = (id) => {
+        this.detail = (id, qty) => {
             fetch(this.state.url + id, {
                 method: "get",
                 headers: {
@@ -78,18 +79,24 @@ class Produk extends Component {
                         productId: json.productId,
                         productName: json.productName,
                         productDescription: json.productDescription,
+                        productQty: json.productQty,
                         errorFetcing: true,
                         disabled: true,
                         page: this.state.page
                     });
                 })
                 .catch((e) => {
-                    alert("Failed fetching data!!", e)
-                    // this.setState({errorFetcing:true})
+                    swal({
+                        title: "Error !",
+                        text: "Error Connect to API",
+                        icon: "error",
+                        button: "Ok",
+                    });
                 });
         }
         this.delete = () => {
             // if (window.confirm('Are you sure wont to Delete ?')) {
+
             swal({
                 title: "Are you sure?",
                 text: "wont to Delete ?",
@@ -99,42 +106,55 @@ class Produk extends Component {
             })
                 .then((willDelete) => {
                     if (willDelete) {
-                        fetch(this.state.url + this.state.productId, {
-                            method: "delete",
-                            headers: {
-                                "Content-Type": "application/json; ; charset=utf-8",
-                                "Access-Control-Allow-Headers": "Authorization, Content-Type",
-                                "Access-Control-Allow-Origin": "*"
-                            }
-                        })
-                            .then(response => response.json())
-                            .then(json => {
-                                if (json.error) {
+                        if (this.state.productQty !== 0) {
+                            swal({
+                                title: "Error !",
+                                text: "The product cannot be deleted because not is empty",
+                                icon: "error",
+                                button: "Ok",
+                            });
+                        } else {
+                            fetch(this.state.url + this.state.productId, {
+                                method: "delete",
+                                headers: {
+                                    "Content-Type": "application/json; ; charset=utf-8",
+                                    "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                                    "Access-Control-Allow-Origin": "*"
+                                }
+                            })
+                                .then(response => response.json())
+                                .then(json => {
+                                    if (json.error) {
+                                        swal({
+                                            title: "Error !",
+                                            text: "The product cannot be deleted because it is foreign key to the detail table",
+                                            icon: "error",
+                                            button: "Ok",
+                                        });
+                                    } else {
+                                        Swal.fire({
+                                            title: "Good job!",
+                                            text: json.successMessage,
+                                            icon: "success",
+                                            timer: 1000,
+                                            showConfirmButton: false,
+                                            timerProgressBar: true
+                                        });
+                                        this.getPaging(this.state.count, this.state.orderby, this.state.show);
+                                        this.getCount();
+                                        this.clear();
+                                    }
+                                })
+
+                                .catch((e) => {
                                     swal({
                                         title: "Error !",
-                                        text: "The product cannot be deleted because it is foreign key to the detail table",
+                                        text: "Error Connect to API",
                                         icon: "error",
                                         button: "Ok",
                                     });
-                                } else {
-                                    Swal.fire({
-                                        title: "Good job!",
-                                        text: json.successMessage,
-                                        icon: "success",
-                                        timer: 1000,
-                                        showConfirmButton: false,
-                                        timerProgressBar: true
-                                    });
-                                    this.getPaging(this.state.count, this.state.orderby, this.state.show);
-                                    this.getCount();
-                                    this.clear();
-                                }
-                            })
-
-                            .catch((e) => {
-                                alert("Failed fetching data!!", e)
-                                // this.setState({errorFetcing:true})
-                            });
+                                });
+                        }
                     } else {
                         //   swal("Your imaginary file is safe!");
                     }
@@ -189,10 +209,16 @@ class Produk extends Component {
                             this.setState({
                                 products: Product
                             })
-                            this.clear();
                         }
                     })
-                    .catch((e) => { alert("gagal") });
+                    .catch((e) => {
+                        swal({
+                            title: "Error !",
+                            text: "Error Connect to API",
+                            icon: "error",
+                            button: "Ok",
+                        });
+                    });
             } else if (this.state.productName !== "") {
                 this.getPaging(this.state.page, this.state.orderby, this.state.show, 1, this.state.productName);
                 this.getCountSearch(this.state.productName);
@@ -272,11 +298,16 @@ class Produk extends Component {
                         this.clearProses()
                         this.getApiProductsLast();
                         this.getCount();
-                        this.getPaging(this.state.count, this.state.orderby, this.state.show,0,"");
+                        this.getPaging(this.state.count, this.state.orderby, this.state.show, 0, "");
                     }
                 })
                 .catch(() => {
-                    alert("Failed sending data!!");
+                    swal({
+                        title: "Error !",
+                        text: "Error Connect to API",
+                        icon: "error",
+                        button: "Ok",
+                    });
                 });
         }
         this.edit = () => {
@@ -335,13 +366,22 @@ class Produk extends Component {
                     }
                 })
                 .catch(() => {
-                    alert("Failed sending data!!");
+                    swal({
+                        title: "Error !",
+                        text: "Error Connect to API",
+                        icon: "error",
+                        button: "Ok",
+                    });
                 });
         }
         this.setValue = el => {
             this.setState({
                 [el.target.name]: el.target.value,
             })
+            if (el.target.value === "") {
+                this.getPaging();
+                this.getCount();
+            }
         }
         this.handleChangeMinus = (event) => {
             this.setState({
@@ -408,8 +448,12 @@ class Produk extends Component {
                     });
                 })
                 .catch((e) => {
-                    alert("Failed fetching data!!", e)
-                    // this.setState({errorFetcing:true})
+                    swal({
+                        title: "Error !",
+                        text: "Error Connect to API",
+                        icon: "error",
+                        button: "Ok",
+                    });
                 });
         }
         this.getPaging = (value, orderby, show, minus, name) => {
@@ -434,8 +478,13 @@ class Produk extends Component {
                     });
                 })
                 .catch((e) => {
-                    alert("Failed fetching data!!", e)
-                    this.setState({errorFetcing:true})
+                    swal({
+                        title: "Error !",
+                        text: "Error Connect to API",
+                        icon: "error",
+                        button: "Ok",
+                    });
+                    this.setState({ errorFetcing: true })
                 });
         }
         this.getApiProductsLast = () => {
@@ -459,8 +508,12 @@ class Produk extends Component {
                     })
                 })
                 .catch((e) => {
-                    console.log(e)
-                    // alert("Failed sending data!!");
+                    swal({
+                        title: "Error !",
+                        text: "Error Connect to API",
+                        icon: "error",
+                        button: "Ok",
+                    });
                 });
         }
     }
@@ -472,11 +525,6 @@ class Produk extends Component {
         const { useStyles } = this.props
         const classes = () => useStyles;
         const { productId, productName, productDescription, orderby, show, checkedA } = this.state
-        console.log("this.state.count", this.state.count)
-        console.log("this.state.orderby", this.state.orderby)
-        console.log("this.state.show", this.state.show)
-        console.log("this.state.productName", this.state.productName)
-        console.log("this.state.products", this.state.products)
         return (
             <>
                 <DivClassSingle
@@ -487,7 +535,10 @@ class Produk extends Component {
                             className="cari">
                             <div data-tip="Show Product Qty < 10">
                                 <FormControlLabel
-                                    control={<Switch checked={checkedA} className="toogle" onChange={this.handleChangeMinus} name="checkedA" />}
+                                    control={<Switch checked={checkedA}
+                                        className="toogle"
+                                        onChange={this.handleChangeMinus}
+                                        name="checkedA" />}
                                 />
                             </div>
                             <Input
@@ -527,13 +578,13 @@ class Produk extends Component {
                                             src="https://i1.wp.com/dewankomputer.com/wp-content/uploads/2019/08/pesawat.gif?resize=84%2C208"></Img>
                                     </Center>
                                 </DivClassSingle>
-                                : 
+                                :
                                 this.state.products.map(
                                     (Item, idx) =>
                                         <DivClassSingle
                                             className="list-data"
                                             key={idx}
-                                            onClick={() => this.detail(Item.productId)} >
+                                            onClick={() => this.detail(Item.productId, Item.productQty)} >
                                             <H3>
                                                 {Item.productId}
                                             </H3>
