@@ -36,11 +36,7 @@
     width: 60%;
     height: 530px;
     background-color: white;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    scrollbar-face-color: #CE7E00;
-    scrollbar-shadow-color: #FFFFFF;
-    scrollbar-highlight-color: #6F4709;
+    color: black ;
 }
 
 .content-detail .faktur-header {
@@ -116,4 +112,32 @@
     margin-top: 20px;
     color: black;
 }
-
+@media all {
+    .page-break {
+      display: none;
+      justify-content: center;
+    }
+  }
+  
+  @media print {
+    html, body {
+      height: initial !important;
+      overflow: initial !important;
+      -webkit-print-color-adjust: exact;
+      color: black;
+    }
+  }
+  
+  @media print {
+    .page-break {
+      margin-top: 1rem;
+      display: block;
+      page-break-before: auto;
+    }
+  }
+  
+  @page {
+    size: auto;
+    margin: 20mm;
+    width: 100%;
+  }

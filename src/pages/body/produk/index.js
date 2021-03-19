@@ -62,7 +62,8 @@ class Produk extends Component {
                 page: value
             })
             this.getCount();
-            this.getPaging(value, this.state.orderby, this.state.show, this.state.minus, this.state.name);
+            console.log(this.state.productName);
+            this.getPaging(value, this.state.orderby, this.state.show, this.state.minus, this.state.productName);
         }
         this.detail = (id, qty) => {
             fetch(this.state.url + id, {
@@ -524,7 +525,14 @@ class Produk extends Component {
     render() {
         const { useStyles } = this.props
         const classes = () => useStyles;
-        const { productId, productName, productDescription, orderby, show, checkedA } = this.state
+        const {
+            productId,
+            productName,
+            productDescription,
+            orderby,
+            show,
+            checkedA
+        } = this.state
         return (
             <>
                 <DivClassSingle
@@ -533,7 +541,7 @@ class Produk extends Component {
                         className="data-left">
                         <DivClassSingle
                             className="cari">
-                            <div data-tip="Show Product Qty < 10">
+                            <div data-tip={(this.state.minus === 0 ?"Show Products are low" :"Show All")}>
                                 <FormControlLabel
                                     control={<Switch checked={checkedA}
                                         className="toogle"
@@ -589,7 +597,7 @@ class Produk extends Component {
                                                 {Item.productId}
                                             </H3>
                                             <P>
-                                                {Item.productName}
+                                                {Item.productName.substring(30, 0)}
                                             </P>
                                             <Small>
                                                 Product Qty :{Item.productQty}

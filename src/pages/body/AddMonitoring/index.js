@@ -29,7 +29,7 @@ class AddMonitoring extends Component {
                 {
                     productId: "",
                     tglExpiredProduct: null,
-                    harga:null,
+                    harga: null,
                     transTypeProduct: "",
                     productQty: ""
                 }
@@ -62,16 +62,16 @@ class AddMonitoring extends Component {
             console.log("pridct id", this.state.productList.productId)
         }
         this.onChangeSelectTrans = (transTypeProduct) => {
-                 this.state.productList[0].transTypeProduct = transTypeProduct;
-                let newproductList = this.state.productList;
-                this.setState({
-                    transTypeProduct: transTypeProduct,
-                    productList: newproductList,
-                    transTypeProduct: transTypeProduct,
-                    deskripsiDokumen: "Document " + (transTypeProduct == 0 ? "Bertambah" : "Berkurang")
-                });
-                console.log("state tarnas", transTypeProduct);
-            
+            this.state.productList[0].transTypeProduct = transTypeProduct;
+            let newproductList = this.state.productList;
+            this.setState({
+                transTypeProduct: transTypeProduct,
+                productList: newproductList,
+                transTypeProduct: transTypeProduct,
+                deskripsiDokumen: "Document " + (transTypeProduct == 0 ? "Bertambah" : "Berkurang")
+            });
+            console.log("state tarnas", transTypeProduct);
+
         }
         this.onChangeInput = (attribut, value, index) => {
             if (this.state.productList[0].productId === "") {
@@ -82,12 +82,21 @@ class AddMonitoring extends Component {
                     button: "Ok",
                 });
             } else {
+                console.log("TTTTTTTTTTTTTTTTTTTTTT",this.state.transTypeProduct)
                 this.state.productList[index][attribut] = value;
                 const newproductList = this.state.productList;
                 this.setState({
                     productList: newproductList,
                 });
+                if(this.state.transTypeProduct === 1){
+                    for(let i=0; i< this.state.productList.length; i++){
+                        this.state.productList[i]["tglExpiredProduct"]=null;
+                        this.state.productList[i]["harga"]=null;
+                    }
+                }
             }
+            console.log("transtype -----:", this.state.transTypeProduct)
+            console.log("prododuct id", this.state.productList[0].productId)
         }
         this.addChild = () => {
             const newproductList = this.state.productList;
@@ -141,7 +150,6 @@ class AddMonitoring extends Component {
                     }
                 });
         }
-
         this.setValue = el => {
             if (this.state.productList[0].transTypeProduct === "") {
                 swal({
@@ -275,10 +283,12 @@ class AddMonitoring extends Component {
         this.getApiProducts();
     }
     render() {
-        console.log("form AKTI", this.props.dataForm);
-        console.log("pridct id", this.state.productList.productId)
-        console.log("params", this.props.match.params.id)
-        const { tanggaDokumen, deskripsiDokumen, transTypeProduct, productList } = this.state
+        const {
+            tanggaDokumen,
+            deskripsiDokumen,
+            transTypeProduct,
+            productList
+        } = this.state
         var msgTotal = productList.reduce(function (prev, cur) {
             return Number(prev) + Number(cur.productQty);
         }, 0);
@@ -382,7 +392,10 @@ class AddMonitoring extends Component {
                                                 {
                                                     this.state.products.map(
                                                         (value, idx) =>
-                                                            <option key={idx} value={value.productId}>{value.productId}-{value.productName.substring(30, 0)}</option>
+                                                            <option key={idx}
+                                                                value={value.productId}>
+                                                                {value.productId}-{value.productName.substring(30, 0)}
+                                                            </option>
                                                     )
                                                 }
                                             </Select>

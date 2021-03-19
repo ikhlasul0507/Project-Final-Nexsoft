@@ -28,7 +28,6 @@ import {
 } from "../../../componen/table"
 import { yellow } from '@material-ui/core/colors';
 
-
 const useStyles = makeStyles((theme) => ({
     root: {
         '& > *': {
@@ -63,7 +62,7 @@ class MonitoringStok extends Component {
             this.setState({
                 [el.target.name]: el.target.value,
             })
-            if(el.target.value === ""){
+            if (el.target.value === "") {
                 this.getPaging();
                 this.getCount();
             }
@@ -73,15 +72,15 @@ class MonitoringStok extends Component {
                 page: value
             })
             this.getCount(this.state.kondisi);
-            this.getPaging(value, this.state.orderby, this.state.show, this.state.minus, this.state.name, this.state.productId,"","");
+            this.getPaging(value, this.state.orderby, this.state.show, this.state.minus, this.state.name, this.state.productId, "", "");
         }
         this.cari = () => {
             console.log(this.state.productId)
             if (this.state.productId !== "") {
-                this.getPaging(1, this.state.orderby, this.state.show, this.state.minus, this.state.productName, this.state.productId,"","");
+                this.getPaging(1, this.state.orderby, this.state.show, this.state.minus, this.state.productName, this.state.productId, "", "");
                 this.getCountSearchId(this.state.productId);
             } else if (this.state.productName !== "") {
-                this.getPaging(1, this.state.orderby, this.state.show, this.state.minus, this.state.productName, this.state.productId,"","");
+                this.getPaging(1, this.state.orderby, this.state.show, this.state.minus, this.state.productName, this.state.productId, "", "");
                 this.getCountSearch(this.state.productName);
             } else {
                 swal({
@@ -90,7 +89,7 @@ class MonitoringStok extends Component {
                     icon: "error",
                     button: "Ok",
                 });
-                this.getPaging(this.state.page, this.state.orderby, this.state.show, 1, this.state.productName, this.state.productId,"","");
+                this.getPaging(this.state.page, this.state.orderby, this.state.show, 1, this.state.productName, this.state.productId, "", "");
                 this.getCount();
             }
         }
@@ -114,7 +113,7 @@ class MonitoringStok extends Component {
             this.setState({
                 show: show
             })
-            this.getPaging(1, this.state.orderby, show, this.state.minus, this.state.name, this.state.productId,"","");
+            this.getPaging(1, this.state.orderby, show, this.state.minus, this.state.name, this.state.productId, "", "");
             this.getCount(this.state.kondisi);
         }
         this.handleChangeMinus = (event) => {
@@ -126,16 +125,18 @@ class MonitoringStok extends Component {
             if (minus) {
                 this.setState({
                     minus: 0,
-                    kondisi: 0
+                    kondisi: 0,
+                    page:1
                 })
-                this.getPaging(this.state.page, this.state.orderby, this.state.show, 0, this.state.name, this.state.productId,"","");
+                this.getPaging(1, this.state.orderby, this.state.show, 0, this.state.name, this.state.productId, "", "");
                 this.getCount(0);
             } else {
                 this.setState({
                     minus: 1,
-                    kondisi: 1
+                    kondisi: 1,
+                    page:1
                 })
-                this.getPaging(this.state.page, this.state.orderby, this.state.show, 1, this.state.name, this.state.productId,"","");
+                this.getPaging(1, this.state.orderby, this.state.show, 1, this.state.name, this.state.productId, "", "");
                 this.getCount(1);
             }
         };
@@ -274,7 +275,7 @@ class MonitoringStok extends Component {
                             showConfirmButton: false,
                             timerProgressBar: true
                         });
-                        this.getPaging(this.state.page, this.state.orderby, this.state.show, this.state.minus, this.state.name, this.state.productId,"","");
+                        this.getPaging(this.state.page, this.state.orderby, this.state.show, this.state.minus, this.state.name, this.state.productId, "", "");
                         this.getCount(this.state.kondisi);
                         this.clear();
                     }
@@ -300,7 +301,7 @@ class MonitoringStok extends Component {
                 .then(response => response.json())
                 .then(json => {
                     this.setState({
-                        count: Math.ceil((json) / this.state.show ),
+                        count: Math.ceil(json / this.state.show),
                         errorFetcing: true
                     });
                     console.log(json)
@@ -310,7 +311,7 @@ class MonitoringStok extends Component {
                     // this.setState({errorFetcing:true})
                 });
         }
-        this.getPaging = (value, orderby, show, minus, name, id,startDate,endDate) => {
+        this.getPaging = (value, orderby, show, minus, name, id, startDate, endDate) => {
             if (value) { } else { value = 1; }
             if (orderby) { } else { orderby = "asc" }
             if (show) { } else { show = 7 }
@@ -320,7 +321,7 @@ class MonitoringStok extends Component {
             if (startDate) { } else { startDate = "" }
             if (endDate) { } else { endDate = "" }
             console.log("MInus ", minus)
-            fetch(this.state.url + "paging/?page=" + value + "&limit=" + show + "&orderby=" + orderby + "&minus=" + minus + "&name=" + name + "&id=" + id+"&startDate=" + startDate+ "&endDate=" + endDate, {
+            fetch(this.state.url + "paging/?page=" + value + "&limit=" + show + "&orderby=" + orderby + "&minus=" + minus + "&name=" + name + "&id=" + id + "&startDate=" + startDate + "&endDate=" + endDate, {
                 method: "get",
                 headers: {
                     "Content-Type": "application/json; ; charset=utf-8",
@@ -393,9 +394,14 @@ class MonitoringStok extends Component {
                             </Button>
                         </div>
                         <ReactTooltip />
+                        <div data-tip={(this.state.minus === 0 ?"Show all" : "Show qty not 0")}>
                         <FormControlLabel
-                            control={<Switch checked={checkedA} className="toogle" onChange={this.handleChangeMinus} name="checkedA" />}
+                            control={<Switch checked={checkedA}
+                                className="toogle"
+                                onChange={this.handleChangeMinus}
+                                name="checkedA" />}
                         />
+                        </div>
                     </DivClassSingle>
                     <DivClassSingle className="judul">
                         <H2></H2>
@@ -490,8 +496,12 @@ class MonitoringStok extends Component {
                 </DivClassSingle>
                 <DivClassSingle className="pagination">
                     <P>Page: {this.state.page}</P>
-                    <DivClassSingle class={classes.root} className="data-pagination" >
-                        <Pagination count={this.state.count} page={this.state.page} onChange={this.handleChange} />
+                    <DivClassSingle
+                        class={classes.root}
+                        className="data-pagination" >
+                        <Pagination
+                            count={this.state.count}
+                            onChange={this.handleChange} />
                     </DivClassSingle>
                 </DivClassSingle>
             </DivClassSingle>

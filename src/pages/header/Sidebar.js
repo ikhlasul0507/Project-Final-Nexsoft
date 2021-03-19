@@ -110,13 +110,12 @@ const Sidebar = (props) => {
         }
     });
     return (
-        
-        
         <>
             <IconContext.Provider value={{ color: '#fff' }}>
                 <Nav>
                     <NavIcon to='#'>
-                        <FaIcons.FaBars onClick={showSidebar} />
+                        <FaIcons.FaBars onClick={(props.dataForm) ? showSidebar : ""} />
+                        {/* <FaIcons.FaBars onClick={(props.dataForm) ? showSidebar : alert("dad") } /> */}
                     </NavIcon>
                     <h5>
                         {
@@ -142,7 +141,7 @@ const Sidebar = (props) => {
                         <ReactTooltip />
                     </NavIconSh>
                 </Nav>
-
+ 
                 <SidebarNav sidebar={sidebar}>
                     <SidebarWrap>
                         <NavIcon to='#'>

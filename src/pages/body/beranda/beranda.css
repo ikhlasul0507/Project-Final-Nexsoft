@@ -72,3 +72,7 @@
     0 0 30px #FEFE00,
     0 0 40px #F7F700;
 }
+.productName{
+    text-align: left;
+   padding-left: 1%;
+}

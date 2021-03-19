@@ -75,7 +75,6 @@ class EditMonitoring extends Component {
             }
             console.log(this.state.productList)
         }
-
         this.onChangeInput = (attribut, value, index) => {
             if (this.state.productList[0].productId === "") {
                 swal({
@@ -144,7 +143,6 @@ class EditMonitoring extends Component {
                     }
                 });
         }
-
         this.setValue = el => {
             if (this.state.productList[0].transTypeProduct === "") {
                 swal({
@@ -191,7 +189,7 @@ class EditMonitoring extends Component {
             })
                 .then(response => response.json())
                 .then((json) => {
-                    console.log("json",json);
+                    console.log("json", json);
                     if (json.errors) {
 
                         swal({
@@ -310,16 +308,12 @@ class EditMonitoring extends Component {
 
         }
     }
-
     componentDidMount() {
         this.getApiStockDetail();
         this.getDateWithMoment();
         this.getApiProducts();
     }
     render() {
-        console.log("form AKTI", this.props.dataForm);
-        console.log("pridct id", this.state.productList.productId)
-        console.log("params", this.props.match.params.id)
         const { tanggaDokumen, deskripsiDokumen, transTypeProduct, stoks, productList } = this.state
         var msgTotal = productList.reduce(function (prev, cur) {
             return Number(prev) + Number(cur.productQty);
@@ -424,7 +418,10 @@ class EditMonitoring extends Component {
                                                 {
                                                     this.state.products.map(
                                                         (value, idx) =>
-                                                            <option key={idx} value={value.productId}>{value.productName}</option>
+                                                            <option key={idx}
+                                                                value={value.productId}>
+                                                                {value.productId}-{value.productName.substring(30, 0)}
+                                                            </option>
                                                     )
                                                 }
                                             </Select>
