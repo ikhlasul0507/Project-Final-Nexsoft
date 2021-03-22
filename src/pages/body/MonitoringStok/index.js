@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import "./monitor.css"
 import * as FaIcons from 'react-icons/fa';
-import { makeStyles } from '@material-ui/core/styles';
 import Pagination from '@material-ui/lab/Pagination';
 import Switch from '@material-ui/core/Switch';
 import swal from 'sweetalert';
@@ -15,8 +14,7 @@ import {
     Input,
     Option,
     Select,
-    P,
-    Center
+    P
 } from "../../../componen"
 import {
     Table,
@@ -27,14 +25,6 @@ import {
     Tr
 } from "../../../componen/table"
 import { yellow } from '@material-ui/core/colors';
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        '& > *': {
-            marginTop: theme.spacing(2),
-        },
-    },
-}));
 
 class MonitoringStok extends Component {
     constructor(props) {
@@ -50,7 +40,7 @@ class MonitoringStok extends Component {
             errorFetcing: false,
             id: "",
             page: 1,
-            count: "",
+            count: 0,
             orderby: "asc",
             show: "7",
             checkedA: true,
@@ -75,7 +65,6 @@ class MonitoringStok extends Component {
             this.getPaging(value, this.state.orderby, this.state.show, this.state.minus, this.state.name, this.state.productId, "", "");
         }
         this.cari = () => {
-            console.log(this.state.productId)
             if (this.state.productId !== "") {
                 this.getPaging(1, this.state.orderby, this.state.show, this.state.minus, this.state.productName, this.state.productId, "", "");
                 this.getCountSearchId(this.state.productId);
@@ -121,7 +110,6 @@ class MonitoringStok extends Component {
                 [event.target.name]: event.target.checked,
             })
             const minus = event.target.checked
-            console.log(minus)
             if (minus) {
                 this.setState({
                     minus: 0,
@@ -289,7 +277,6 @@ class MonitoringStok extends Component {
         }
         this.getCount = (kondisi) => {
             if (kondisi) { } else { kondisi = 0 }
-            console.log("kondisi :", kondisi)
             fetch(this.state.url + "count/" + kondisi, {
                 method: "get",
                 headers: {
@@ -304,7 +291,6 @@ class MonitoringStok extends Component {
                         count: Math.ceil(json / this.state.show),
                         errorFetcing: true
                     });
-                    console.log(json)
                 })
                 .catch((e) => {
                     alert("Failed fetching data!!", e)
@@ -320,7 +306,6 @@ class MonitoringStok extends Component {
             if (id) { } else { id = "" }
             if (startDate) { } else { startDate = "" }
             if (endDate) { } else { endDate = "" }
-            console.log("MInus ", minus)
             fetch(this.state.url + "paging/?page=" + value + "&limit=" + show + "&orderby=" + orderby + "&minus=" + minus + "&name=" + name + "&id=" + id + "&startDate=" + startDate + "&endDate=" + endDate, {
                 method: "get",
                 headers: {
@@ -335,7 +320,6 @@ class MonitoringStok extends Component {
                         stoks: json,
                         errorFetcing: true
                     });
-                    console.log("json ", json)
                 })
                 .catch((e) => {
                     alert("Failed fetching data!!", e)
@@ -464,8 +448,8 @@ class MonitoringStok extends Component {
                         </div>
                         <P className="pM">Show</P>
                         <div data-tip="Show Stock">
-                            <Select onChange={this.onChangeSelectShow} name="show" value={show}>
-                                <Option value="-">-Pilih-</Option>
+                            <Select onChange={this.onChangeSelectShow} name="show" defaultValue={show}>
+                            <option value="-" selected disabled>-Pilih-</option>
                                 <Option value="7">7</Option>
                                 <Option value="10">10</Option>
                                 <Option value="15">15</Option>

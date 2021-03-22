@@ -115,10 +115,10 @@
     position:fixed; */
 }
 .table .table-dataM thead .Th-head{
-    height: 200px;
+    height: 100px;
 }
 th {
-    height: 40px;
+    height: 40px!important
 }
 .table .table-dataM tbody tr {
     background-color: rgb(233, 233, 233);

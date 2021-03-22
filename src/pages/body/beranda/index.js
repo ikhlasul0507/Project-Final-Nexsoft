@@ -50,7 +50,6 @@ class Beranda extends Component {
         this.getApiProducts()
     }
     render() {
-        console.log("LOG :", this.state.products);
         const result = this.state.products.map(
             (value, idx) =>
                 <Tr key={idx}>

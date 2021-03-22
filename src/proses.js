@@ -39,7 +39,6 @@ class Proses extends Component {
         }
         this.doLogin = login => {
             const { username, password, recaptchaResponse } = login
-            console.log("asasa", username)
             fetch(this.state.url + `?username=${username}&password=${password}`, {
                 method: "post",
                 headers: {
@@ -89,7 +88,6 @@ class Proses extends Component {
             this.doLogin(login);
         }
         this.tampilPage = () => {
-            console.log("Captcha : ", this.props.dataLogin.recaptchaResponse)
             if (!this.props.checkLogin) {
                 return (
                     <Route path="/" exact component={(props) => <Login validate={this.validate} {...props} />}></Route>

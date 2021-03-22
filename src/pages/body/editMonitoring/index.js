@@ -69,8 +69,7 @@ class EditMonitoring extends Component {
                 let newproductList = this.state.productList;
                 this.setState({
                     transTypeProduct: transTypeProduct,
-                    productList: newproductList,
-                    transTypeProduct: transTypeProduct
+                    productList: newproductList
                 });
             }
             console.log(this.state.productList)
@@ -314,7 +313,7 @@ class EditMonitoring extends Component {
         this.getApiProducts();
     }
     render() {
-        const { tanggaDokumen, deskripsiDokumen, transTypeProduct, stoks, productList } = this.state
+        const { tanggaDokumen, deskripsiDokumen, transTypeProduct,productList } = this.state
         var msgTotal = productList.reduce(function (prev, cur) {
             return Number(prev) + Number(cur.productQty);
         }, 0);

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { H1, Img, P, Small } from '../../../componen';
+import { H1, Img,Small } from '../../../componen';
 import DivClassSingle from '../../../componen/div/divClassSingle';
 import {
     Table,

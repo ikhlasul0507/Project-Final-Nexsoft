@@ -4,7 +4,6 @@ import * as FaIcons from 'react-icons/fa';
 import swal from 'sweetalert';
 import Swal from 'sweetalert2'
 import Pagination from '@material-ui/lab/Pagination';
-import { makeStyles } from '@material-ui/core/styles';
 import ReactTooltip from 'react-tooltip';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -24,15 +23,6 @@ import {
     Select,
     Option
 } from "../../../componen"
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        '& > * + *': {
-            marginTop: theme.spacing(2),
-        },
-    },
-}));
-
 class Produk extends Component {
     constructor(props) {
         super(props);
@@ -49,7 +39,7 @@ class Produk extends Component {
             update: false,
             add: true,
             page: 1,
-            count: "",
+            count: 0,
             orderby: "asc",
             show: "5",
             checkedA: true,
@@ -536,12 +526,13 @@ class Produk extends Component {
         return (
             <>
                 <DivClassSingle
+
                     className="content">
                     <DivClassSingle
                         className="data-left">
                         <DivClassSingle
                             className="cari">
-                            <div data-tip={(this.state.minus === 0 ?"Show Products are low" :"Show All")}>
+                            <div data-tip={(this.state.minus === 0 ? "Show Products are low" : "Show All")}>
                                 <FormControlLabel
                                     control={<Switch checked={checkedA}
                                         className="toogle"
@@ -624,8 +615,8 @@ class Produk extends Component {
                                 <DivClassSingle className={classes.root}>
                                     <DivClassSingle className="judul-pagin">
                                         <P>Show:
-                                        <Select onChange={this.onChangeSelectShow} name="show" value={show}>
-                                                <Option value="-">-Pilih-</Option>
+                                        <Select onChange={this.onChangeSelectShow} name="show" defaultValue={show}>
+                                                <option value="" selected disabled>-Pilih-</option>
                                                 <Option value="5">5</Option>
                                                 <Option value="10">10</Option>
                                                 <Option value="15">15</Option>
@@ -636,8 +627,8 @@ class Produk extends Component {
                                     </P>
                                         <P>Page: {this.state.page}</P>
                                         <P>Order By:
-                                        <Select onChange={this.onChangeSelect} name="orderby" value={orderby}>
-                                                <option value="-" selected disabled>-Pilih-</option>
+                                        <Select onChange={this.onChangeSelect} name="orderby" defaultValue={orderby}>
+                                                <option value="" selected disabled>-Pilih-</option>
                                                 <Option value="asc">ASC</Option>
                                                 <Option value="desc">DESC</Option>
                                             </Select>
@@ -653,7 +644,7 @@ class Produk extends Component {
                         <DivClassSingle
                             className="navbar">
                             <H2>{(this.state.disabled) ? "Monitoring " : "Kelola "} Stock</H2>
-                            {this.state.productId === "" ? "" :
+                            {this.state.productDescription === "" ? "" :
                                 <> <div data-tip="Clear Product">
                                     <Button
                                         onClick={this.clear}>

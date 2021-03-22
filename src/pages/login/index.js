@@ -22,7 +22,6 @@ class Login extends Component {
         this.setState({
             recaptchaResponse: response,
         });
-        console.log("captcha :", this.state.recaptchaResponse)
     }
     setValue(e) {
         this.setState({

@@ -19,17 +19,9 @@ import {
     Thead,
     Tr
 } from "../../../componen/table"
-import { makeStyles } from '@material-ui/core/styles';
 import Pagination from '@material-ui/lab/Pagination';
 import ReactToPrint from 'react-to-print';
 import swal from 'sweetalert';
-const useStyles = makeStyles((theme) => ({
-    root: {
-        '& > *': {
-            marginTop: theme.spacing(2),
-        },
-    },
-}));
 class ReportMonitoring extends Component {
     constructor(props) {
         super(props);
@@ -47,7 +39,7 @@ class ReportMonitoring extends Component {
             errorFetcing: false,
             id: "",
             page: 1,
-            count: "",
+            count: 0,
             orderby: "asc",
             show: "12",
             minus: 0,
@@ -63,11 +55,9 @@ class ReportMonitoring extends Component {
                 } else if (this.state.startDate !== "" && this.state.endDate === "") {
                     this.getPaging(1, this.state.orderby, this.state.show, this.state.minus, this.state.productName, this.state.productId,this.state.startDate,this.state.endDate);
                     this.getCountSearchDate(this.state.startDate,"")
-                 //   this.getCountSearch(this.state.productName);
                 } else if (this.state.startDate === "" && this.state.endDate !== "") {
                     this.getPaging(1, this.state.orderby, this.state.show, this.state.minus, this.state.productName, this.state.productId,this.state.startDate,this.state.endDate);
                     this.getCountSearchDate("", this.state.endDate)
-                 //   this.getCountSearch(this.state.productName);
             } else if (this.state.startDate !== "" && this.state.endDate !== "") {
                 this.getPaging(1, this.state.orderby, this.state.show, this.state.minus, this.state.productName, this.state.productId, this.state.startDate, this.state.endDate);
                 this.getCountSearchDate(this.state.startDate, this.state.endDate)
@@ -134,7 +124,6 @@ class ReportMonitoring extends Component {
             if (id) { } else { id = "" }
             if (startDate) { } else { startDate = "" }
             if (endDate) { } else { endDate = "" }
-            console.log("MInus ", minus)
             fetch(this.state.url + "paging/?page=" + value + "&limit=" + show + "&orderby=" + orderby + "&minus=" + minus + "&name=" + name + "&id=" + id + "&startDate=" + startDate + "&endDate=" + endDate, {
                 method: "get",
                 headers: {
@@ -149,7 +138,6 @@ class ReportMonitoring extends Component {
                         stoks: json,
                         errorFetcing: true
                     });
-                    console.log("json ", json)
                 })
                 .catch((e) => {
                     alert("Failed fetching data!!", e)
@@ -171,7 +159,6 @@ class ReportMonitoring extends Component {
                         stoksPrint: json,
                         errorFetcing: true
                     });
-                    console.log("json cari ", json)
                 })
                 .catch((e) => {
                     alert("Failed fetching data!!", e)
@@ -180,7 +167,6 @@ class ReportMonitoring extends Component {
         }
         this.getCount = (kondisi) => {
             if (kondisi) { } else { kondisi = 1 }
-            console.log("kondisi :", kondisi)
             fetch(this.state.url + "count/" + kondisi, {
                 method: "get",
                 headers: {
@@ -195,7 +181,6 @@ class ReportMonitoring extends Component {
                         count: Math.ceil((json) / this.state.show),
                         errorFetcing: true
                     });
-                    console.log(json)
                 })
                 .catch((e) => {
                     alert("Failed fetching data!!", e)
@@ -227,7 +212,6 @@ class ReportMonitoring extends Component {
                 this.getPaging();
                 this.getCount();
             }
-            console.log(this.state.productId);
         }
         this.clear = () => {
             this.setState({
@@ -249,7 +233,6 @@ class ReportMonitoring extends Component {
     }
 
     render() {
-        console.log(this.state.stoks)
         const classes = () => this.props.useStyles();
         const { productId, startDate, endDate } = this.state
         const result = this.state.stoks.map(
@@ -335,7 +318,7 @@ class ReportMonitoring extends Component {
                                 stoksPrint={this.state.stoksPrint} />
                         </DivClassSingle>
                         <DivClassSingle className="table">
-                            <Table className="table-dataR" border="1px" cellSpacing="0" cellPadding="9px" style={{ color: "#000000" }}>
+                            <Table className="table-dataR" border="1px" cellSpacing="0" cellPadding="11px" style={{ color: "#000000" }}>
                                 <Thead>
                                     <Th>Document date</Th>
                                     <Th>Document number</Th>

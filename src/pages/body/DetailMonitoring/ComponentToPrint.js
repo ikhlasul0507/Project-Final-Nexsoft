@@ -7,8 +7,7 @@ import {
     Hr,
     Label,
     P,
-    B,
-    Center
+    B
 } from "../../../componen"
 import {
     Table,

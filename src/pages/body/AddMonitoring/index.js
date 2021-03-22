@@ -52,14 +52,24 @@ class AddMonitoring extends Component {
                     button: "Ok",
                 });
             } else {
+                var cekProduct = this.state.productList.findIndex(function(el){
+                    return el.productId === productId
+                })
+                if(cekProduct >= 0){
+                    swal({
+                        title: "Error !",
+                        text: "Product is already !",
+                        icon: "error",
+                        button: "Ok",
+                    });
+                }else{
                 this.state.productList[index].productId = productId;
                 let newproductList = this.state.productList;
                 this.setState({
                     productList: newproductList,
-
                 });
             }
-            console.log("pridct id", this.state.productList.productId)
+            }
         }
         this.onChangeSelectTrans = (transTypeProduct) => {
             this.state.productList[0].transTypeProduct = transTypeProduct;
@@ -67,11 +77,8 @@ class AddMonitoring extends Component {
             this.setState({
                 transTypeProduct: transTypeProduct,
                 productList: newproductList,
-                transTypeProduct: transTypeProduct,
                 deskripsiDokumen: "Document " + (transTypeProduct == 0 ? "Bertambah" : "Berkurang")
             });
-            console.log("state tarnas", transTypeProduct);
-
         }
         this.onChangeInput = (attribut, value, index) => {
             if (this.state.productList[0].productId === "") {
@@ -82,16 +89,17 @@ class AddMonitoring extends Component {
                     button: "Ok",
                 });
             } else {
-                console.log("TTTTTTTTTTTTTTTTTTTTTT",this.state.transTypeProduct)
+               
+                console.log("TTTTTTTTTTTTTTTTTTTTTT", this.state.transTypeProduct)
                 this.state.productList[index][attribut] = value;
                 const newproductList = this.state.productList;
                 this.setState({
                     productList: newproductList,
                 });
-                if(this.state.transTypeProduct === 1){
-                    for(let i=0; i< this.state.productList.length; i++){
-                        this.state.productList[i]["tglExpiredProduct"]=null;
-                        this.state.productList[i]["harga"]=null;
+                if (this.state.transTypeProduct === 1) {
+                    for (let i = 0; i < this.state.productList.length; i++) {
+                        this.state.productList[i]["tglExpiredProduct"] = null;
+                        this.state.productList[i]["harga"] = null;
                     }
                 }
             }
@@ -99,6 +107,7 @@ class AddMonitoring extends Component {
             console.log("prododuct id", this.state.productList[0].productId)
         }
         this.addChild = () => {
+            
             const newproductList = this.state.productList;
             newproductList.push({
                 productId: "",
@@ -400,7 +409,7 @@ class AddMonitoring extends Component {
                                                 }
                                             </Select>
                                         </DivClassSingle>
-                                        {(this.state.transTypeProduct) == 0 ?
+                                        {(this.state.transTypeProduct) == 0?
                                             <>
                                                 <DivClassSingle className="form-data">
                                                     <Label>Expired date</Label>

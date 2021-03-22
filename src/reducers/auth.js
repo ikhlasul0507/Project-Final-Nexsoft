@@ -7,9 +7,6 @@ let defaultState = {
 
 // combineReducer
 const authReducer = (state = defaultState, action) => {
-    console.warn("state:", state);
-    console.warn("action:", action);
-    console.warn("form aktif:", state.isFormActive);
     switch (action.type) {
         case "LOGIN_SUCCESS":
             return {
