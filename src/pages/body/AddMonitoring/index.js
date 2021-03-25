@@ -415,6 +415,7 @@ class AddMonitoring extends Component {
                                                     <Label>Expired date</Label>
                                                     <Input
                                                         type="date"
+                                                        minLength="2021-03-10"
                                                         value={value.tglExpiredProduct}
                                                         onChange={event => this.onChangeInput("tglExpiredProduct", event.target.value, index)}
                                                         name=""

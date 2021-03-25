@@ -7,7 +7,9 @@ import swal from 'sweetalert';
 import Swal from 'sweetalert2'
 import ReactTooltip from 'react-tooltip';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import DivClassSingle from "../../../componen/div/divClassSingle"
+import DivClassSingle from "../../../componen/div/divClassSingle";
+import moment from 'moment';
+import _ from "lodash";
 import {
     Button,
     H2,
@@ -31,9 +33,12 @@ class MonitoringStok extends Component {
         super(props);
         this.state = {
             stoks: [],
+            stoksSecond: [],
             stok: {},
             productId: "",
             ProductName: "",
+            tanggaDokumenNow: "",
+            tanggaDokumen: "",
             url: "http://localhost:8080/nd6/stock/",
             urlSearch: "http://localhost:8080/nd6/product/",
             detail: false,
@@ -82,10 +87,11 @@ class MonitoringStok extends Component {
                 this.getCount();
             }
         }
-        this.detail = idStok => {
+        this.detail = (idStok, tanggaDokumen) => {
             this.setState({
                 detail: true,
-                id: idStok
+                id: idStok,
+                tanggaDokumen: tanggaDokumen
             })
         }
         this.clear = () => {
@@ -114,7 +120,7 @@ class MonitoringStok extends Component {
                 this.setState({
                     minus: 0,
                     kondisi: 0,
-                    page:1
+                    page: 1
                 })
                 this.getPaging(1, this.state.orderby, this.state.show, 0, this.state.name, this.state.productId, "", "");
                 this.getCount(0);
@@ -122,7 +128,7 @@ class MonitoringStok extends Component {
                 this.setState({
                     minus: 1,
                     kondisi: 1,
-                    page:1
+                    page: 1
                 })
                 this.getPaging(1, this.state.orderby, this.state.show, 1, this.state.name, this.state.productId, "", "");
                 this.getCount(1);
@@ -316,6 +322,18 @@ class MonitoringStok extends Component {
             })
                 .then(response => response.json())
                 .then(json => {
+
+                    var newArray = json.filter(function (el) {
+                        return el.tanggaDokumen === moment().format('YYYY-MM-DD');
+                    });
+
+                    newArray = _.orderBy(newArray, el=>el.idStok, ['desc']);
+                    newArray.splice(2, newArray.length - 2);
+
+                    this.setState({
+                        stoksSecond: newArray
+                    });
+                    console.log("stoksSecond", newArray)
                     this.setState({
                         stoks: json,
                         errorFetcing: true
@@ -326,11 +344,18 @@ class MonitoringStok extends Component {
                     this.setState({ errorFetcing: true })
                 });
         }
+        this.getDateWithMoment = () => {
+            this.setState({
+                tanggaDokumenNow: moment().format('YYYY-MM-DD')
+            })
+        };
     }
 
     componentDidMount() {
         this.getPaging();
         this.getCount();
+        this.getDateWithMoment();
+
     }
 
     render() {
@@ -339,7 +364,7 @@ class MonitoringStok extends Component {
         const { checkedA, show, productId, productName } = this.state
         const result = this.state.stoks.map(
             (value, idx) =>
-                <Tr onClick={() => { this.detail(value.idStok) }} key={idx}>
+                <Tr onClick={() => { this.detail(value.idStok, value.tanggaDokumen) }} key={idx}>
                     <Td>{value.idStok}</Td>
                     <Td>{value.tanggaDokumen}</Td>
                     <Td>{value.deskripsiDokumen}</Td>
@@ -378,13 +403,13 @@ class MonitoringStok extends Component {
                             </Button>
                         </div>
                         <ReactTooltip />
-                        <div data-tip={(this.state.minus === 0 ?"Show all" : "Show qty not 0")}>
-                        <FormControlLabel
-                            control={<Switch checked={checkedA}
-                                className="toogle"
-                                onChange={this.handleChangeMinus}
-                                name="checkedA" />}
-                        />
+                        <div data-tip={(this.state.minus === 0 ? "Show all" : "Show qty not 0")}>
+                            <FormControlLabel
+                                control={<Switch checked={checkedA}
+                                    className="toogle"
+                                    onChange={this.handleChangeMinus}
+                                    name="checkedA" />}
+                            />
                         </div>
                     </DivClassSingle>
                     <DivClassSingle className="judul">
@@ -410,20 +435,24 @@ class MonitoringStok extends Component {
                                         <FaIcons.FaEye />
                                     </Button>
                                 </div>
-                                <div data-tip="Edit Stock">
-                                    <Button
-                                        onClick={() => {
-                                            this.props.history.push(`/edit-monitoring/${this.state.id}`)
-                                        }}
-                                    >
-                                        <FaIcons.FaPencilAlt />
-                                    </Button>
-                                </div>
-                                <div data-tip="Delete Stock">
-                                    <Button onClick={() => { this.delete(this.state.id) }}>
-                                        <FaIcons.FaTrash />
-                                    </Button>
-                                </div>
+                                {(this.state.stoksSecond.find(el => el.idStok === this.state.id && el.productList[0].status === 0))?
+                                    <>
+                                        <div data-tip="Edit Stock">
+                                            <Button
+                                                onClick={() => {
+                                                    this.props.history.push(`/edit-monitoring/${this.state.id}`)
+                                                }}
+                                            >
+                                                <FaIcons.FaPencilAlt />
+                                            </Button>
+                                        </div>
+                                        <div data-tip="Delete Stock">
+                                            <Button onClick={() => { this.delete(this.state.id) }}>
+                                                <FaIcons.FaTrash />
+                                            </Button>
+                                        </div>
+                                    </>
+                                    : ""}
                             </>
                             : ""
                         }
@@ -449,7 +478,7 @@ class MonitoringStok extends Component {
                         <P className="pM">Show</P>
                         <div data-tip="Show Stock">
                             <Select onChange={this.onChangeSelectShow} name="show" defaultValue={show}>
-                            <option value="-" selected disabled>-Pilih-</option>
+                                <option value="-" selected disabled>-Pilih-</option>
                                 <Option value="7">7</Option>
                                 <Option value="10">10</Option>
                                 <Option value="15">15</Option>

@@ -52,12 +52,12 @@ class ReportMonitoring extends Component {
             if (this.state.productId !== "") {
                 this.getPaging(1, this.state.orderby, this.state.show, this.state.minus, this.state.productName, this.state.productId, this.state.startDate, this.state.endDate);
                 this.getCountSearchId(this.state.productId);
-                } else if (this.state.startDate !== "" && this.state.endDate === "") {
-                    this.getPaging(1, this.state.orderby, this.state.show, this.state.minus, this.state.productName, this.state.productId,this.state.startDate,this.state.endDate);
-                    this.getCountSearchDate(this.state.startDate,"")
-                } else if (this.state.startDate === "" && this.state.endDate !== "") {
-                    this.getPaging(1, this.state.orderby, this.state.show, this.state.minus, this.state.productName, this.state.productId,this.state.startDate,this.state.endDate);
-                    this.getCountSearchDate("", this.state.endDate)
+            } else if (this.state.startDate !== "" && this.state.endDate === "") {
+                this.getPaging(1, this.state.orderby, this.state.show, this.state.minus, this.state.productName, this.state.productId, this.state.startDate, this.state.endDate);
+                this.getCountSearchDate(this.state.startDate, "")
+            } else if (this.state.startDate === "" && this.state.endDate !== "") {
+                this.getPaging(1, this.state.orderby, this.state.show, this.state.minus, this.state.productName, this.state.productId, this.state.startDate, this.state.endDate);
+                this.getCountSearchDate("", this.state.endDate)
             } else if (this.state.startDate !== "" && this.state.endDate !== "") {
                 this.getPaging(1, this.state.orderby, this.state.show, this.state.minus, this.state.productName, this.state.productId, this.state.startDate, this.state.endDate);
                 this.getCountSearchDate(this.state.startDate, this.state.endDate)
@@ -166,7 +166,7 @@ class ReportMonitoring extends Component {
                 });
         }
         this.getCount = (kondisi) => {
-            if (kondisi) { } else { kondisi = 1 }
+            if (kondisi) { } else { kondisi = 3 }
             fetch(this.state.url + "count/" + kondisi, {
                 method: "get",
                 headers: {
@@ -196,6 +196,7 @@ class ReportMonitoring extends Component {
             } else if (this.state.startDate !== "" && this.state.endDate !== "") {
                 this.getCountSearchDate(this.state.startDate, this.state.endDate)
             } else if (this.state.startDate === "" && this.state.endDate !== "") {
+
                 this.getCountSearchDate("", this.state.endDate)
             } else if (this.state.startDate !== "" && this.state.endDate === "") {
                 this.getCountSearchDate(this.state.startDate, "")
@@ -224,6 +225,7 @@ class ReportMonitoring extends Component {
                 endDate: ""
             })
             this.getCount();
+            this.getPaging();
         }
     }
     componentDidMount() {

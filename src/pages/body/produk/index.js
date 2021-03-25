@@ -29,7 +29,9 @@ class Produk extends Component {
         this.state = {
             disabled: true,
             productId: "",
+            productIdCari: "",
             productName: "",
+            productNameCari: "",
             productDescription: "",
             productQty: "",
             products: [],
@@ -51,9 +53,14 @@ class Produk extends Component {
             this.setState({
                 page: value
             })
-            this.getCount();
+            console.log("ajgsajshagsh",this.state.productNameCari)
+            if(this.state.productNameCari !== ""){
+                this.getCountSearch(this.state.productNameCari);
+            }else{
+                this.getCount(this.state.minus);
+            }
             console.log(this.state.productName);
-            this.getPaging(value, this.state.orderby, this.state.show, this.state.minus, this.state.productName);
+            this.getPaging(value, this.state.orderby, this.state.show, this.state.minus, this.state.productNameCari);
         }
         this.detail = (id, qty) => {
             fetch(this.state.url + id, {
@@ -131,8 +138,8 @@ class Produk extends Component {
                                             showConfirmButton: false,
                                             timerProgressBar: true
                                         });
-                                        this.getPaging(this.state.count, this.state.orderby, this.state.show);
-                                        this.getCount();
+                                        this.getPaging(this.state.count, this.state.orderby, this.state.show, this.state.minus, "");
+                                        this.getCount(this.state.minus);
                                         this.clear();
                                     }
                                 })
@@ -170,13 +177,15 @@ class Produk extends Component {
                 edit: "",
                 hapus: "",
                 update: false,
-                add: true
+                add: true,
+                productId:"",
+                productName:"",
+                productDescription:""
             })
         }
         this.cari = () => {
-            console.log(this.state.productName)
-            if (this.state.productId !== "") {
-                fetch(this.state.url + this.state.productId, {
+            if (this.state.productIdCari !== "") {
+                fetch(this.state.url + this.state.productIdCari, {
                     method: "get",
                     headers: {
                         "Content-Type": "application/json; ; charset=utf-8",
@@ -187,10 +196,10 @@ class Produk extends Component {
                     .then(response => response.json())
                     .then(json => {
                         console.log(json)
-                        if (json.errorMessage) {
+                        if (json.error) {
                             swal({
                                 title: "Error !",
-                                text: json.errorMessage,
+                                text: "Data Not  Found",
                                 icon: "error",
                                 button: "Ok",
                             });
@@ -198,7 +207,8 @@ class Produk extends Component {
                             let Product = [];
                             Product.push(json)
                             this.setState({
-                                products: Product
+                                products: Product,
+                                count: 1
                             })
                         }
                     })
@@ -210,11 +220,9 @@ class Produk extends Component {
                             button: "Ok",
                         });
                     });
-            } else if (this.state.productName !== "") {
-                this.getPaging(this.state.page, this.state.orderby, this.state.show, 1, this.state.productName);
-                this.getCountSearch(this.state.productName);
-                // this.getCount();
-                // this.getPaging();
+            } else if (this.state.productNameCari !== "") {
+                this.getPaging(this.state.page, this.state.orderby, this.state.show, 1, this.state.productNameCari);
+                this.getCountSearch(this.state.productNameCari);
             } else {
                 swal({
                     title: "Error !",
@@ -287,18 +295,12 @@ class Produk extends Component {
                             timerProgressBar: true
                         });
                         this.clearProses()
-                        this.getApiProductsLast();
-                        this.getCount();
+                        this.getCount(0);
                         this.getPaging(this.state.count, this.state.orderby, this.state.show, 0, "");
                     }
                 })
                 .catch(() => {
-                    swal({
-                        title: "Error !",
-                        text: "Error Connect to API",
-                        icon: "error",
-                        button: "Ok",
-                    });
+                   
                 });
         }
         this.edit = () => {
@@ -369,9 +371,14 @@ class Produk extends Component {
             this.setState({
                 [el.target.name]: el.target.value,
             })
-            if (el.target.value === "") {
+            if(el.target.name === "productName" && el.target.value.length > 100){
+                alert("The product name must be under 100 characters")
+            }else if(el.target.name === "productDescription" && el.target.value.length > 1000){
+                alert("The product name must be under 1000 characters")
+            }else if(el.target.value === "") {
                 this.getPaging();
                 this.getCount();
+                this.clear();
             }
         }
         this.handleChangeMinus = (event) => {
@@ -379,11 +386,19 @@ class Produk extends Component {
                 [event.target.name]: event.target.checked,
             })
             const minus = event.target.checked
-            if (minus)
-                this.getPaging(this.state.page, this.state.orderby, this.state.show, 0);
-            else
-                this.getPaging(this.state.page, this.state.orderby, this.state.show, 1);
-            this.getCount();
+            if (minus) {
+                this.setState({
+                    minus: 0
+                })
+                this.getPaging(this.state.page, this.state.orderby, this.state.show, 0, "");
+                this.getCount(0);
+            } else {
+                this.setState({
+                    minus: 1
+                })
+                this.getPaging(this.state.page, this.state.orderby, this.state.show, 1, "");
+                this.getCount(1);
+            }
         };
         this.onChangeSelect = el => {
             const orderby = el.target.value
@@ -399,10 +414,11 @@ class Produk extends Component {
                 show: show
             })
             this.getPaging(1, this.state.orderby, show);
-            this.getCount();
+            this.getCount(this.state.minus);
         }
-        this.getCount = () => {
-            fetch(this.state.url + "count", {
+        this.getCount = (minus) => {
+            if (minus) { } else { minus = 0 }
+            fetch(this.state.url + "count/" + minus, {
                 method: "get",
                 headers: {
                     "Content-Type": "application/json; ; charset=utf-8",
@@ -478,35 +494,6 @@ class Produk extends Component {
                     this.setState({ errorFetcing: true })
                 });
         }
-        this.getApiProductsLast = () => {
-            fetch(this.state.urlLast, {
-                method: "get",
-                headers: {
-                    "Content-Type": "application/json; ; charset=utf-8",
-                    "Access-Control-Allow-Headers": "Authorization, Content-Type",
-                    "Access-Control-Allow-Origin": "*"
-                },
-            })
-                .then(response => response.json())
-                .then((json) => {
-                    this.setState({
-                        productId: json.productId,
-                        productName: json.productName,
-                        productDescription: json.productDescription,
-                        errorFetcing: true,
-                        disabled: true,
-                        page: this.state.page
-                    })
-                })
-                .catch((e) => {
-                    swal({
-                        title: "Error !",
-                        text: "Error Connect to API",
-                        icon: "error",
-                        button: "Ok",
-                    });
-                });
-        }
     }
     componentDidMount() {
         this.getPaging();
@@ -516,8 +503,9 @@ class Produk extends Component {
         const { useStyles } = this.props
         const classes = () => useStyles;
         const {
-            productId,
+            productIdCari,
             productName,
+            productNameCari,
             productDescription,
             orderby,
             show,
@@ -533,6 +521,7 @@ class Produk extends Component {
                         <DivClassSingle
                             className="cari">
                             <div data-tip={(this.state.minus === 0 ? "Show Products are low" : "Show All")}>
+                            
                                 <FormControlLabel
                                     control={<Switch checked={checkedA}
                                         className="toogle"
@@ -543,16 +532,16 @@ class Produk extends Component {
                             <Input
                                 type="text"
                                 className="input"
-                                name="productId"
+                                name="productIdCari"
                                 placeholder="Product Id..."
-                                value={productId}
+                                value={productIdCari}
                                 onChange={this.setValue} />
                             <Input
                                 type="text"
                                 className="input"
-                                name="productName"
+                                name="productNameCari"
                                 placeholder="Product Name..."
-                                value={productName}
+                                value={productNameCari}
                                 onChange={this.setValue} />
                             <div data-tip="Search">
                                 <Button
@@ -566,6 +555,7 @@ class Produk extends Component {
                         </DivClassSingle>
                         <Hr />
                         <DivClassSingle className={(this.state.show <= 5) ? "list" : "scroll"}>
+                            
                             {this.state.products.length <= 0 ?
                                 <DivClassSingle
                                     className="list-data">
@@ -615,7 +605,7 @@ class Produk extends Component {
                                 <DivClassSingle className={classes.root}>
                                     <DivClassSingle className="judul-pagin">
                                         <P>Show:
-                                        <Select onChange={this.onChangeSelectShow} name="show" defaultValue={show}>
+                                        <Select onChange={this.onChangeSelectShow} name="show" value={show}>
                                                 <option value="" selected disabled>-Pilih-</option>
                                                 <Option value="5">5</Option>
                                                 <Option value="10">10</Option>
@@ -627,7 +617,7 @@ class Produk extends Component {
                                     </P>
                                         <P>Page: {this.state.page}</P>
                                         <P>Order By:
-                                        <Select onChange={this.onChangeSelect} name="orderby" defaultValue={orderby}>
+                                        <Select onChange={this.onChangeSelect} name="orderby" value={orderby}>
                                                 <option value="" selected disabled>-Pilih-</option>
                                                 <Option value="asc">ASC</Option>
                                                 <Option value="desc">DESC</Option>
@@ -643,7 +633,18 @@ class Produk extends Component {
                         className="data-right">
                         <DivClassSingle
                             className="navbar">
-                            <H2>{(this.state.disabled) ? "Monitoring " : "Kelola "} Stock</H2>
+                            <H2>{(this.state.disabled) ? "Monitoring " : "Kelola "} Stock {this.state.productId}</H2>
+                            <DivClassSingle className="btn-navbar">
+                            {(this.state.add) ?
+                                <div data-tip="Add Product">
+                                    <Button
+                                        onClick={this.save}>
+                                        <FaIcons.FaPlus />
+                                    </Button>
+                                    <ReactTooltip />
+                                </div>
+
+                                : ""}
                             {this.state.productDescription === "" ? "" :
                                 <> <div data-tip="Clear Product">
                                     <Button
@@ -666,17 +667,8 @@ class Produk extends Component {
                                     <ReactTooltip />
                                 </>
                             }
-                            {(this.state.add) ?
-                                <div data-tip="Add Product">
-                                    <Button
-                                        onClick={this.save}>
-                                        <FaIcons.FaPlus />
-                                    </Button>
-                                    <ReactTooltip />
-                                </div>
-
-                                : ""}
-
+                            
+                            </DivClassSingle>
                         </DivClassSingle>
                         <Hr className="hr" />
                         <DivClassSingle
@@ -684,6 +676,7 @@ class Produk extends Component {
                             <Label>Product Name</Label>
                             <Input
                                 type="text"
+                                maxlength="100"
                                 className="input"
                                 name="productName"
                                 disabled={(this.state.disabled) ? "disabled" : ""}

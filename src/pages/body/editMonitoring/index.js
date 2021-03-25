@@ -13,7 +13,6 @@ import DivClassSingle from "../../../componen/div/divClassSingle"
 import * as FaIcons from 'react-icons/fa';
 import swal from 'sweetalert';
 import Swal from 'sweetalert2'
-import moment from 'moment';
 import { connect } from 'react-redux'
 import ReactTooltip from 'react-tooltip';
 class EditMonitoring extends Component {
@@ -25,6 +24,7 @@ class EditMonitoring extends Component {
             products: [],
             transTypeProduct: "",
             tanggaDokumen: "",
+            tanggaDokumenUpdate: "",
             deskripsiDokumen: "",
             productList: [
                 {
@@ -38,12 +38,7 @@ class EditMonitoring extends Component {
             url: "http://localhost:8080/nd6/stock/",
             urlProducts: "http://localhost:8080/nd6/product/"
         }
-        this.getDateWithMoment = () => {
-            this.setState({
-                tanggaDokumen: moment().format('YYYY-MM-DD')
-                // tanggaDokumen: moment().format('DD/mm/YYYY')
-            })
-        };
+        
         this.onChangeSelectBarang = (productId, index) => {
             if (this.state.productList[0].transTypeProduct === "") {
                 swal({
@@ -171,12 +166,15 @@ class EditMonitoring extends Component {
             this.editToApi();
         }
         this.editToApi = () => {
+            console.log("tnagagl pudate", this.state.tanggaDokumenUpdate)
             const objek = {
                 idStok: this.props.match.params.id,
                 tanggaDokumen: this.state.tanggaDokumen,
+                tanggalDokumenUpdate: this.state.tanggaDokumenUpdate,
                 deskripsiDokumen: this.state.deskripsiDokumen,
                 productList: this.state.productList
             }
+            console.log("object", objek)
             fetch(this.state.url + this.props.match.params.id, {
                 method: "put",
                 headers: {
@@ -185,6 +183,7 @@ class EditMonitoring extends Component {
                     "Access-Control-Allow-Origin": "*"
                 },
                 body: JSON.stringify(objek)
+                
             })
                 .then(response => response.json())
                 .then((json) => {
@@ -292,6 +291,7 @@ class EditMonitoring extends Component {
                     this.setState({
                         productList: this.state.stoks.productList,
                         tanggaDokumen: this.state.stoks.tanggaDokumen,
+                        tanggaDokumenUpdate: this.state.stoks.tanggalDokumenUpdate,
                         deskripsiDokumen: this.state.stoks.deskripsiDokumen
                     })
                 })
@@ -309,11 +309,11 @@ class EditMonitoring extends Component {
     }
     componentDidMount() {
         this.getApiStockDetail();
-        this.getDateWithMoment();
+        // this.getDateWithMoment();
         this.getApiProducts();
     }
     render() {
-        const { tanggaDokumen, deskripsiDokumen, transTypeProduct,productList } = this.state
+        const { tanggaDokumen, deskripsiDokumen, transTypeProduct, productList, tanggaDokumenUpdate } = this.state
         var msgTotal = productList.reduce(function (prev, cur) {
             return Number(prev) + Number(cur.productQty);
         }, 0);
@@ -329,6 +329,7 @@ class EditMonitoring extends Component {
                             <Select
                                 className="selectA"
                                 value={transTypeProduct}
+                                disabled="true"
                                 onChange={event => this.onChangeSelectTrans(event.target.value)}
                             >
                                 <option selected>--Pilih--</option>
@@ -341,8 +342,19 @@ class EditMonitoring extends Component {
                             <Input
                                 type="date"
                                 value={tanggaDokumen}
+                                disabled
                                 onChange={this.setValue}
                                 name="tanggaDokumen"
+                            />
+                        </DivClassSingle>
+                        <DivClassSingle className="form-data">
+                            <Label>Document Updated</Label>
+                            <Input
+                                type="date"
+                                value={tanggaDokumenUpdate}
+                                disabled
+                                onChange={this.setValue}
+                                name="tanggaDokumenUpdate"
                             />
                         </DivClassSingle>
                         <DivClassSingle className="form-data">
@@ -425,25 +437,28 @@ class EditMonitoring extends Component {
                                                 }
                                             </Select>
                                         </DivClassSingle>
-                                        <DivClassSingle className="form-data">
-                                            <Label>Expired date</Label>
-                                            <Input
-                                                type="date"
-                                                value={value.tglExpiredProduct}
-                                                onChange={event => this.onChangeInput("tglExpiredProduct", event.target.value, index)}
-                                                name=""
-                                            />
-                                        </DivClassSingle>
-                                        <DivClassSingle className="form-data">
-                                            <Label>Harga (Rp)</Label>
-                                            <Input
-                                                type="number"
-                                                value={value.harga}
-                                                name="" placeholder="Harga (Rp)..."
-                                                onChange={event => this.onChangeInput("harga", event.target.value, index)}
-                                            />
-                                        </DivClassSingle>
-                                        {/* <DivClassSingle className="form-data"> */}
+                                        {(this.state.transTypeProduct) == 0 ?
+                                            <>
+                                                <DivClassSingle className="form-data">
+                                                    <Label>Expired date</Label>
+                                                    <Input
+                                                        type="date"
+                                                        value={value.tglExpiredProduct}
+                                                        onChange={event => this.onChangeInput("tglExpiredProduct", event.target.value, index)}
+                                                        name=""
+                                                    />
+                                                </DivClassSingle>
+                                                <DivClassSingle className="form-data">
+                                                    <Label>Harga (Rp)</Label>
+                                                    <Input
+                                                        type="number"
+                                                        value={value.harga}
+                                                        name="" placeholder="Harga (Rp)..."
+                                                        onChange={event => this.onChangeInput("harga", event.target.value, index)}
+                                                    />
+                                                </DivClassSingle>
+                                            </>
+                                            : ""}
                                         <Input
                                             type="hidden"
                                             value={transTypeProduct}

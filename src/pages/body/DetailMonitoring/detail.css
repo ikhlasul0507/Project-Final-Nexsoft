@@ -37,6 +37,11 @@
     height: 530px;
     background-color: white;
     color: black ;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    scrollbar-face-color: #CE7E00;
+    scrollbar-shadow-color: #FFFFFF;
+    scrollbar-highlight-color: #6F4709;
 }
 
 .content-detail .faktur-header {
@@ -44,6 +49,19 @@
     padding-top: 20px;
     padding-left: 6%;
     padding-right: 6%;
+    display: flex;
+    flex-direction: row;
+}
+.content-detail .faktur-header .faktur-header-img{
+    width: 30%;
+    margin-bottom: 15px;
+}
+.content-detail .faktur-header .faktur-header-judul{
+    width: 70%;
+}
+.content-detail .faktur-header .faktur-header-img img{
+    height: 100%;
+    width: 60%;
 }
 
 .content-detail .faktur-header .hr1 {
@@ -107,7 +125,18 @@
 .content-detail .table-detail table {
     width: 100%;
 }
+.content-detail .table-detail table thead th{
+    height: 20px!important;
+    background-color: black;
+    color: aliceblue;
+}
 
+.footer-content{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 50px;
+}
 .footer-content label {
     margin-top: 20px;
     color: black;
@@ -126,6 +155,25 @@
       -webkit-print-color-adjust: exact;
       color: black;
     }
+    .content-detail .faktur-header {
+        color: black;
+        padding-top: 20px;
+        padding-left: 6%;
+        padding-right: 6%;
+        display: flex;
+        flex-direction: row;
+    }
+    .content-detail .faktur-header .faktur-header-img{
+        width: 30%;
+        margin-bottom: 15px;
+    }
+    .content-detail .faktur-header .faktur-header-judul{
+        width: 70%;
+    }
+    .content-detail .faktur-header .faktur-header-img img{
+        height: 15%;
+        width: 60%;
+    }
   }
   
   @media print {
@@ -137,7 +185,7 @@
   }
   
   @page {
-    size: auto;
-    margin: 20mm;
+    size: "a4";
+    margin: 10mm;
     width: 100%;
   }

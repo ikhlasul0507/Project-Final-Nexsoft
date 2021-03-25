@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import "./detail.css"
 import DivClassSingle from "../../../componen/div/divClassSingle"
+import Nd6 from "../../../assets/img/nd6.png"
 import {
     H2,
     H1,
     Hr,
     Label,
     P,
-    B
+    B,
+    Img
 } from "../../../componen"
 import {
     Table,
@@ -33,11 +35,18 @@ class ComponentToPrint extends Component {
         return (
             <DivClassSingle className="content-detail">
                 <DivClassSingle className="faktur-header">
-                    <H2>PT Paramadaksa Teknologi Nusantara</H2>
-                    <P>Tangerang - Indonesia</P>
-                    <Hr className="hr1" />
-                    <Hr />
+                    <DivClassSingle className="faktur-header-img">
+                        <Img src={Nd6}></Img>
+                    </DivClassSingle>
+                    <DivClassSingle className="faktur-header-judul">
+                        <H2>PT Paramadaksa Teknologi Nusantara</H2>
+                        <P>Tangerang - Indonesia</P>
+                        
+                    </DivClassSingle>
+                   
                 </DivClassSingle>
+                <Hr className="hr1" />
+                    <Hr />
                 <DivClassSingle className="faktur-content">
                     <H1>INVOICE {(this.props.trans) === 0 ? "PEMBELIAN" : "PENJUALAN"}</H1>
                     <DivClassSingle className="faktur-content-header">
@@ -55,6 +64,14 @@ class ComponentToPrint extends Component {
                                 {this.props.stokDetail.tanggaDokumen}
                                 </Label><br />
                             </DivClassSingle>
+                            {(this.props.stokDetail.tanggalDokumenUpdate !== null) ? 
+                            <DivClassSingle className="field-label">
+                                <Label className="label">Date document update</Label>
+                                <Label>:
+                                {this.props.stokDetail.tanggalDokumenUpdate}
+                                </Label><br />
+                            </DivClassSingle>
+                            :""}
                             <b><Label className="label">Transaction Total</Label></b>
                             <DivClassSingle className="field-label">
                                 <Label className="label">Totals Item</Label>
@@ -102,6 +119,7 @@ class ComponentToPrint extends Component {
                     </DivClassSingle>
                     <DivClassSingle className="footer-content">
                         <Label><B>Date Print : {this.props.printDate}</B></Label>
+                        <Label>(......................................)</Label>
                     </DivClassSingle>
                 </DivClassSingle>
             </DivClassSingle>

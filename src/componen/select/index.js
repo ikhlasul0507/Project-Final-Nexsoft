@@ -11,6 +11,7 @@ class Select extends Component {
             <select 
             className={this.props.className} 
             name={this.props.name}
+            disabled={this.props.disabled}
             onChange={this.props.onChange}
             value={this.props.value}
             >

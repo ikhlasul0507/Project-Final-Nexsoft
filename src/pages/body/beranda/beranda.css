@@ -3,7 +3,7 @@
     margin: auto;
     height: 400px;
     background-color: aliceblue;
-    margin-top: 8%;
+    margin-top: 3%;
     display: flex;
     flex-direction: row;
 }
@@ -24,6 +24,12 @@
       0 0 25px #FFFF2B,
       0 0 30px #FEFE00,
       0 0 40px #F7F700;
+}
+/* h3{
+    margin-top: -19px;
+} */
+.container .data-kanan .h3{
+    margin-top: -19;
 }
 .container .data-kanan .img{
     width: 70%;
@@ -71,6 +77,67 @@
     0 0 25px #FFFF2B,
     0 0 30px #FEFE00,
     0 0 40px #F7F700;
+}
+.data-footer{
+    width: 60%;
+    margin: auto;
+    height: 130;
+    background-color: black;
+    display: flex;
+    flex-direction: row;
+}
+.data-footer .footer-kiri{
+    height: 115px;
+    margin-top: 7px;
+    width: 33%;
+    border: 3px solid white;
+}
+.data-footer .footer-tengah{
+    height: 115px;
+    border: 3px solid white;
+    margin-top: 7px;
+    width: 33%;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.data-footer .footer-kanan{
+    height: 115px;
+    border: 3px solid white;
+    margin-top: 7px;
+    width: 33%;
+}
+.data-footer p{
+    text-align: center;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-weight:755px;
+    font-size:14px;
+    background:black;
+    color:#fff;
+    text-shadow:
+      0 0 3px #FFFFA0,
+      0 0 5px #FFFF4D,
+      0 0 9px #FFFF41,
+      0 0 20px #FFFF2A,
+      0 0 25px #FFFF2B,
+      0 0 30px #FEFE00,
+      0 0 40px #F7F700;
+}
+.data-footer h1{
+    text-align: center;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-weight:755px;
+    font-size:50px;
+    margin-top: -18px;
+    background:black;
+    color:#fff;
+    text-shadow:
+      0 0 3px #FFFFA0,
+      0 0 5px #FFFF4D,
+      0 0 9px #FFFF41,
+      0 0 20px #FFFF2A,
+      0 0 25px #FFFF2B,
+      0 0 30px #FEFE00,
+      0 0 40px #F7F700;
 }
 .productName{
     text-align: left;

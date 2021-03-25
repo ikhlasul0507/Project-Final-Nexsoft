@@ -159,12 +159,12 @@ hr {
 
 .data-right .form-data .textarea {
     width: 25%;
-    height: 165px;
+    height: 384px;
 }
 
 .data-right .form-data .textarea-input {
-    width: 45%;
-    height: 170px;
+    width: 65%;
+    height: 390px;
     border-radius: 5px;
     padding-top: 10px;
     border: none;
@@ -173,7 +173,7 @@ hr {
 }
 
 .data-right .form-data .input {
-    width: 45%;
+    width: 65%;
     height: 30px;
     padding-left: 20px;
     background-color: white;

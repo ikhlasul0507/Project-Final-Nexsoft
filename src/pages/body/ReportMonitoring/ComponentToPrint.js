@@ -15,7 +15,7 @@ class ComponentToPrint extends Component {
 
         const result = this.props.stoksPrint.map(
             (value, idx) =>
-                <Tr onClick={() => { this.detail(value.idStok) }} key={idx}>
+                <Tr key={idx}>
                     <Td>{value.tanggaDokumen}</Td>
                     <Td>{value.idStok}</Td>
                     <Td>{(value.productList[0].transTypeProduct) === 1 ? "Penjualan" : "Pembelian"}</Td>
@@ -30,7 +30,7 @@ class ComponentToPrint extends Component {
                     <Img src={Nd6} className="img" />
                     <H1>REPORT MONITORING STOCK <br/><Small>PT Paramadaksa Teknologi Nusantara</Small></H1>
                 </DivClassSingle>
-                <Table className="table-dataR" border="1px" cellSpacing="0" cellPadding="11px" style={{ color: "#000000" }}>
+                <Table className="table-dataR" border="1px" cellSpacing="0" cellPadding="5" style={{ color: "#000000" }}>
                     <Thead>
                         <Th>Document date</Th>
                         <Th>Document number</Th>
