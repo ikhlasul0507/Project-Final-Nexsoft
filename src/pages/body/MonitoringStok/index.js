@@ -73,9 +73,15 @@ class MonitoringStok extends Component {
             if (this.state.productId !== "") {
                 this.getPaging(1, this.state.orderby, this.state.show, this.state.minus, this.state.productName, this.state.productId, "", "");
                 this.getCountSearchId(this.state.productId);
+                this.setState({
+                    page:1
+                })
             } else if (this.state.productName !== "") {
                 this.getPaging(1, this.state.orderby, this.state.show, this.state.minus, this.state.productName, this.state.productId, "", "");
                 this.getCountSearch(this.state.productName);
+                this.setState({
+                    page:1
+                })
             } else {
                 swal({
                     title: "Error !",
@@ -327,7 +333,7 @@ class MonitoringStok extends Component {
                         return el.tanggaDokumen === moment().format('YYYY-MM-DD');
                     });
 
-                    newArray = _.orderBy(newArray, el=>el.idStok, ['desc']);
+                    newArray = _.orderBy(newArray, el => el.idStok, ['desc']);
                     newArray.splice(2, newArray.length - 2);
 
                     this.setState({
@@ -364,17 +370,35 @@ class MonitoringStok extends Component {
         const { checkedA, show, productId, productName } = this.state
         const result = this.state.stoks.map(
             (value, idx) =>
-                <Tr onClick={() => { this.detail(value.idStok, value.tanggaDokumen) }} key={idx}>
-                    <Td>{value.idStok}</Td>
-                    <Td>{value.tanggaDokumen}</Td>
-                    <Td>{value.deskripsiDokumen}</Td>
-                    <Td className={{ backgroundColor: yellow }}>
-                        Jenis Dokumen : {(value.productList[0].transTypeProduct) === 1 ? "Penjualan" : "Pembelian"}<br />
-                        <b >Total Qty Stock: {value.totalStock}</b><br />
-                        <b >Count Stock : {value.countStock}</b><br />
-                        <b >Net Amount : {value.netAmount}</b>
-                    </Td>
-                </Tr>
+                <>
+                    <Tr onClick={() => { this.detail(value.idStok, value.tanggaDokumen) }} key={idx}>
+                        <Td >
+                            <div data-tip="Select Row">
+                            {value.idStok}
+                            </div>
+                        </Td>
+                        <Td >
+                            <div data-tip="Select Row">
+                            {value.tanggaDokumen}
+                            </div>
+                        </Td>
+                        <Td>
+                            <div data-tip="Select Row">
+                            {value.deskripsiDokumen.substring(30, 0)}
+                            </div>
+                        </Td>
+                        <Td>
+                            <div data-tip="Select Row">
+                                Jenis Dokumen : {(value.productList[0].transTypeProduct) === 1 ? "Penjualan" : "Pembelian"}<br />
+                                <b >Total Qty Stock: {value.totalStock}</b><br />
+                                <b >Count Stock : {value.countStock}</b><br />
+                                <b >Net Amount : {value.netAmount}</b>
+                            </div>
+                        </Td>
+                    </Tr>
+
+                    <ReactTooltip />
+                </>
         )
         return (
 
@@ -435,7 +459,7 @@ class MonitoringStok extends Component {
                                         <FaIcons.FaEye />
                                     </Button>
                                 </div>
-                                {(this.state.stoksSecond.find(el => el.idStok === this.state.id && el.productList[0].status === 0))?
+                                {(this.state.stoksSecond.find(el => el.idStok === this.state.id && el.productList[0].status === 0)) ?
                                     <>
                                         <div data-tip="Edit Stock">
                                             <Button

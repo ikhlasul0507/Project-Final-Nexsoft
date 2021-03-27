@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { H1, Img,Small } from '../../../componen';
+import { H1, Hr, Img,Small } from '../../../componen';
 import DivClassSingle from '../../../componen/div/divClassSingle';
 import {
     Table,
@@ -18,7 +18,7 @@ class ComponentToPrint extends Component {
                 <Tr key={idx}>
                     <Td>{value.tanggaDokumen}</Td>
                     <Td>{value.idStok}</Td>
-                    <Td>{(value.productList[0].transTypeProduct) === 1 ? "Penjualan" : "Pembelian"}</Td>
+                    <Td>{(value.productList[0].transTypeProduct) === 1 ? "Sales" : "Purchase"}</Td>
                     <Td>{value.countStock}</Td>
                     <Td>{value.totalStock}</Td>
                 </Tr>
@@ -30,6 +30,7 @@ class ComponentToPrint extends Component {
                     <Img src={Nd6} className="img" />
                     <H1>REPORT MONITORING STOCK <br/><Small>PT Paramadaksa Teknologi Nusantara</Small></H1>
                 </DivClassSingle>
+                <Hr/>
                 <Table className="table-dataR" border="1px" cellSpacing="0" cellPadding="5" style={{ color: "#000000" }}>
                     <Thead>
                         <Th>Document date</Th>

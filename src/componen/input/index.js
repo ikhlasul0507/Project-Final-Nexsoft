@@ -18,6 +18,8 @@ class Input extends Component {
                 disabled={this.props.disabled}
                 maxLength={this.props.maxLength}
                 minLength={this.props.minLength}
+                min={this.props.min}
+                onKeyDown={this.props.onKeyDown}
             >
             </input>
         );

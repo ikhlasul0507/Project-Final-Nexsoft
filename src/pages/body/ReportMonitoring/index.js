@@ -242,7 +242,7 @@ class ReportMonitoring extends Component {
                 <Tr onClick={() => { this.detail(value.idStok) }} key={idx}>
                     <Td>{value.tanggaDokumen}</Td>
                     <Td>{value.idStok}</Td>
-                    <Td>{(value.productList[0].transTypeProduct) === 1 ? "Penjualan" : "Pembelian"}</Td>
+                    <Td>{(value.productList[0].transTypeProduct) === 1 ? "Sales" : "Purchase"}</Td>
                     <Td>{value.countStock}</Td>
                     <Td>{value.totalStock}</Td>
                 </Tr>

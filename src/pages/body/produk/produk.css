@@ -24,6 +24,10 @@
     width: 30;
     color: white;
 }
+.navbar .btn-navbar{
+    display: flex;
+    flex-direction: row;
+}
 
 .navbar h4 {
     color: black;

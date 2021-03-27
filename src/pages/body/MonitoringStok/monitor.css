@@ -124,6 +124,7 @@ th {
     background-color: rgb(233, 233, 233);
     color: black;
     cursor: pointer;
+    width: 100%;
     
 }
 
@@ -140,7 +141,11 @@ th {
     cursor: pointer;
 }
 
-
+.table .table-dataM tbody tr::selection,::-moz-selection {
+    background-color: rgb(10, 3, 3);
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+}
 .pagination {
     background-color: #ddd;
     display: inline-block;

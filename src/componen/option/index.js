@@ -11,6 +11,8 @@ class Option extends Component {
             <option
                 value={this.props.value}
                 key={this.props.value}
+                disabled={this.props.disabled}
+                selected={this.props.selected}
             >
                 {this.props.children}
             </option>

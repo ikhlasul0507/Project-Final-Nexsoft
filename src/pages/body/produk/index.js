@@ -208,7 +208,8 @@ class Produk extends Component {
                             Product.push(json)
                             this.setState({
                                 products: Product,
-                                count: 1
+                                count: 1,
+                                page:1
                             })
                         }
                     })
@@ -223,6 +224,9 @@ class Produk extends Component {
             } else if (this.state.productNameCari !== "") {
                 this.getPaging(this.state.page, this.state.orderby, this.state.show, 1, this.state.productNameCari);
                 this.getCountSearch(this.state.productNameCari);
+                this.setState({
+                    page:1
+                })
             } else {
                 swal({
                     title: "Error !",
@@ -371,14 +375,16 @@ class Produk extends Component {
             this.setState({
                 [el.target.name]: el.target.value,
             })
-            if(el.target.name === "productName" && el.target.value.length > 100){
-                alert("The product name must be under 100 characters")
-            }else if(el.target.name === "productDescription" && el.target.value.length > 1000){
+            if(el.target.name === "productName" && el.target.value.length > 1000){
                 alert("The product name must be under 1000 characters")
+                this.setState({
+                    productName:""
+                })
             }else if(el.target.value === "") {
                 this.getPaging();
                 this.getCount();
                 this.clear();
+                this.save();
             }
         }
         this.handleChangeMinus = (event) => {
@@ -635,18 +641,8 @@ class Produk extends Component {
                             className="navbar">
                             <H2>{(this.state.disabled) ? "Monitoring " : "Kelola "} Stock {this.state.productId}</H2>
                             <DivClassSingle className="btn-navbar">
-                            {(this.state.add) ?
-                                <div data-tip="Add Product">
-                                    <Button
-                                        onClick={this.save}>
-                                        <FaIcons.FaPlus />
-                                    </Button>
-                                    <ReactTooltip />
-                                </div>
-
-                                : ""}
-                            {this.state.productDescription === "" ? "" :
-                                <> <div data-tip="Clear Product">
+                            {this.state.productId    === "" ? "" :
+                                <> <div data-tip="Clear Form">
                                     <Button
                                         onClick={this.clear}>
                                         <FaIcons.FaBan />
@@ -668,6 +664,17 @@ class Produk extends Component {
                                 </>
                             }
                             
+                            {(this.state.add) ?
+                                <div data-tip="Add Product">
+                                    <Button
+                                        onClick={this.save}>
+                                        <FaIcons.FaPlus />
+                                    </Button>
+                                    <ReactTooltip />
+                                </div>
+
+                                : ""}
+                           
                             </DivClassSingle>
                         </DivClassSingle>
                         <Hr className="hr" />

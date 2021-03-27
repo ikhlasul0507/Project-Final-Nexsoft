@@ -48,7 +48,7 @@ class ComponentToPrint extends Component {
                 <Hr className="hr1" />
                     <Hr />
                 <DivClassSingle className="faktur-content">
-                    <H1>INVOICE {(this.props.trans) === 0 ? "PEMBELIAN" : "PENJUALAN"}</H1>
+                    <H1>INVOICE {(this.props.trans) === 0 ? "PURCHASE" : "SALES"}</H1>
                     <DivClassSingle className="faktur-content-header">
                         <DivClassSingle className="faktur-content-header-kiri">
                             <B><Label className="label">Transaction Header</Label></B>

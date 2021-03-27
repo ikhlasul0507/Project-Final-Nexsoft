@@ -154,14 +154,24 @@
       overflow: initial !important;
       -webkit-print-color-adjust: exact;
       color: black;
+      border: 1px solid black;
+    }
+    .content-detail {
+        margin: auto;
+        width: 100%;
+        height: 100%; 
+        background-color: white;
+        color: black ;
+        overflow-y: hidden !important;
+        overflow-x: hidden !important;
     }
     .content-detail .faktur-header {
         color: black;
-        padding-top: 20px;
         padding-left: 6%;
         padding-right: 6%;
         display: flex;
         flex-direction: row;
+        height: 80px;
     }
     .content-detail .faktur-header .faktur-header-img{
         width: 30%;
@@ -171,9 +181,18 @@
         width: 70%;
     }
     .content-detail .faktur-header .faktur-header-img img{
-        height: 15%;
+        height: 90%;
         width: 60%;
     }
+    .content-detail .faktur-content {
+        color: black;
+        padding-left: 6%;
+        padding-right: 6%;
+    }
+    .content-detail .table-detail table{
+        font-size: 10px;
+    }
+    
   }
   
   @media print {
@@ -181,11 +200,12 @@
       margin-top: 1rem;
       display: block;
       page-break-before: auto;
+      /* margin:1px 1px 1px 1px; */
     }
   }
   
   @page {
-    size: "a4";
+    size: A4 portrait;
     margin: 10mm;
     width: 100%;
   }

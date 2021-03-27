@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import "./beranda.css"
 import Nd6 from "../../../assets/img/nd6.png"
+import { Line } from 'react-chartjs-2';
 import {
     Button,
     H1,
@@ -23,9 +24,10 @@ class Beranda extends Component {
         super(props);
         this.state = {
             products: [],
-            totalProducts :"",
-            totalPurchase:"",
-            totalSales:"",
+            totalProducts: "",
+            totalPurchase: "",
+            totalSales: "",
+            stokGraph:{},
             urlProducts: "http://localhost:8080/nd6/productLast/"
         }
         this.getCount = () => {
@@ -35,6 +37,7 @@ class Beranda extends Component {
                     "Content-Type": "application/json; ; charset=utf-8",
                     "Access-Control-Allow-Headers": "Authorization, Content-Type",
                     "Access-Control-Allow-Origin": "*"
+                    
                 }
             })
                 .then(response => response.json())
@@ -117,7 +120,6 @@ class Beranda extends Component {
         this.getCountSales()
     }
     render() {
-        console.log(this.state.totalProducts)
         const result = this.state.products.map(
             (value, idx) =>
                 <Tr key={idx}>
@@ -129,12 +131,12 @@ class Beranda extends Component {
             <div>
                 <div className="container">
                     <div className="data-kanan">
-                    <marquee>Welcome to the stock monitoring application</marquee>
+                        <marquee>Welcome to the stock monitoring application</marquee>
                         <Center>
                             <Img src={Nd6} className="img" />
                             <Hr />
                             <H1>APLIKASI</H1>
-                            <P>SISMONTOK<br/>(Sistem Monitoring Stok)</P>
+                            <P>SISMONTOK<br />(Sistem Monitoring Stok)</P>
                         </Center>
                     </div>
                     <div className="data-kiri">
@@ -156,15 +158,16 @@ class Beranda extends Component {
                 </div>
                 <div className="data-footer">
                     <div className="footer-kiri">
-                        <p>Purchase documents</p><hr/>
+                        <p>Purchase documents</p><hr />
                         <h1>{this.state.totalPurchase}</h1>
+
                     </div>
                     <div className="footer-tengah">
-                        <p>Total product</p><hr/>
+                        <p>Total product</p><hr />
                         <h1>{this.state.totalProducts}</h1>
                     </div>
                     <div className="footer-kanan">
-                        <p>Sales document</p><hr/>
+                        <p>Sales document</p><hr />
                         <h1>{this.state.totalSales}</h1>
                     </div>
                 </div>

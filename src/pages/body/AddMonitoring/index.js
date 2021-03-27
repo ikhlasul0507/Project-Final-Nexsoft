@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import "./addMonitoring.css"
+import Nd6 from "../../../assets/img/nd6.png"
 import {
     Button,
     Input,
@@ -7,7 +8,8 @@ import {
     P,
     Textarea,
     Select,
-    Option
+    Option,
+    Img
 } from "../../../componen"
 import DivClassSingle from "../../../componen/div/divClassSingle"
 import * as FaIcons from 'react-icons/fa';
@@ -51,6 +53,7 @@ class AddMonitoring extends Component {
                     icon: "error",
                     button: "Ok",
                 });
+                this.clear();
             } else {
                 var cekProduct = this.state.productList.findIndex(function(el){
                     return el.productId === productId
@@ -88,6 +91,7 @@ class AddMonitoring extends Component {
                     icon: "error",
                     button: "Ok",
                 });
+                this.clear();
             } else {
                
                 console.log("TTTTTTTTTTTTTTTTTTTTTT", this.state.transTypeProduct)
@@ -315,7 +319,7 @@ class AddMonitoring extends Component {
                                 value={transTypeProduct}
                                 onChange={event => this.onChangeSelectTrans(event.target.value)}
                             >
-                                <option selected>--Pilih--</option>
+                                <Option value="" disabled="disabled">--Pilih--</Option>
                                 <Option value="0">Bertambah</Option>
                                 <Option value="1">Berkurang</Option>
                             </Select>
@@ -327,6 +331,7 @@ class AddMonitoring extends Component {
                                 value={tanggaDokumen}
                                 onChange={this.setValue}
                                 name="tanggaDokumen"
+                                onKeyDown={(e)=>{e.preventDefault()}}
                             />
                         </DivClassSingle>
                         <DivClassSingle className="form-data">
@@ -386,6 +391,8 @@ class AddMonitoring extends Component {
 
                     </DivClassSingle>
                     <DivClassSingle className="add-kanan">
+                    {(this.state.transTypeProduct !=="")?
+                    <>
                         {
                             this.state.productList.map((value, index) => {
                                 return (
@@ -397,7 +404,7 @@ class AddMonitoring extends Component {
                                                 value={value.productId}
                                                 onChange={event => this.onChangeSelectBarang(event.target.value, index)}
                                             >
-                                                <Option>--Pilih--</Option>
+                                                 <Option value="" disabled="disabled">--Pilih--</Option>
                                                 {
                                                     this.state.products.map(
                                                         (value, idx) =>
@@ -415,10 +422,10 @@ class AddMonitoring extends Component {
                                                     <Label>Expired date</Label>
                                                     <Input
                                                         type="date"
-                                                        minLength="2021-03-10"
+                                                        min={tanggaDokumen}
                                                         value={value.tglExpiredProduct}
                                                         onChange={event => this.onChangeInput("tglExpiredProduct", event.target.value, index)}
-                                                        name=""
+                                                        onKeyDown={(e)=>{e.preventDefault()}}
                                                     />
                                                 </DivClassSingle>
                                                 <DivClassSingle className="form-data">
@@ -438,17 +445,6 @@ class AddMonitoring extends Component {
                                             name="" placeholder="Harga (Rp)..."
                                             onChange={event => this.onChangeInput("transTypeProduct", this.state.transTypeProduct, index)}
                                         />
-                                        {/* <Label>Trans Type</Label>
-                                            <Select
-                                                className="selectA"
-                                                value={value.transTypeProduct}
-                                                onChange={event => this.onChangeSelectTrans(event.target.value, index)}
-                                            >
-                                                <Option>--Pilih--</Option>
-                                                <Option value="0">Bertambah</Option>
-                                                <Option value="1">Berkurang</Option>
-                                            </Select> */}
-                                        {/* </DivClassSingle> */}
                                         <DivClassSingle className="form-data">
                                             <Label>Product Quantity</Label>
                                             <Input
@@ -485,6 +481,10 @@ class AddMonitoring extends Component {
                                 <FaIcons.FaPlus />
                             </Button>
                         </div>
+                        </>
+                    :
+                    <Img src={Nd6} className="img-add" />
+                    }
                     </DivClassSingle>
                 </DivClassSingle>
             </>
