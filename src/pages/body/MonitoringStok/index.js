@@ -66,6 +66,9 @@ class MonitoringStok extends Component {
             this.setState({
                 page: value
             })
+            if(this.state.productId !== "")
+            this.getCountSearchId(this.state.productId);
+            else
             this.getCount(this.state.kondisi);
             this.getPaging(value, this.state.orderby, this.state.show, this.state.minus, this.state.name, this.state.productId, "", "");
         }
@@ -315,7 +318,7 @@ class MonitoringStok extends Component {
             if (show) { } else { show = 7 }
             if (minus) { } else { minus = 0 }
             if (name) { } else { name = "" }
-            if (id) { } else { id = "" }
+            if (id) { } else { id = "" } 
             if (startDate) { } else { startDate = "" }
             if (endDate) { } else { endDate = "" }
             fetch(this.state.url + "paging/?page=" + value + "&limit=" + show + "&orderby=" + orderby + "&minus=" + minus + "&name=" + name + "&id=" + id + "&startDate=" + startDate + "&endDate=" + endDate, {

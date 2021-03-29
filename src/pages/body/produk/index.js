@@ -53,10 +53,9 @@ class Produk extends Component {
             this.setState({
                 page: value
             })
-            console.log("ajgsajshagsh",this.state.productNameCari)
-            if(this.state.productNameCari !== ""){
+            if (this.state.productNameCari !== "") {
                 this.getCountSearch(this.state.productNameCari);
-            }else{
+            } else {
                 this.getCount(this.state.minus);
             }
             console.log(this.state.productName);
@@ -178,9 +177,9 @@ class Produk extends Component {
                 hapus: "",
                 update: false,
                 add: true,
-                productId:"",
-                productName:"",
-                productDescription:""
+                productId: "",
+                productName: "",
+                productDescription: ""
             })
         }
         this.cari = () => {
@@ -197,19 +196,16 @@ class Produk extends Component {
                     .then(json => {
                         console.log(json)
                         if (json.error) {
-                            swal({
-                                title: "Error !",
-                                text: "Data Not  Found",
-                                icon: "error",
-                                button: "Ok",
-                            });
+                            this.setState({
+                                products: []
+                            })
                         } else {
                             let Product = [];
                             Product.push(json)
                             this.setState({
                                 products: Product,
                                 count: 1,
-                                page:1
+                                page: 1
                             })
                         }
                     })
@@ -225,7 +221,7 @@ class Produk extends Component {
                 this.getPaging(this.state.page, this.state.orderby, this.state.show, 1, this.state.productNameCari);
                 this.getCountSearch(this.state.productNameCari);
                 this.setState({
-                    page:1
+                    page: 1
                 })
             } else {
                 swal({
@@ -304,7 +300,7 @@ class Produk extends Component {
                     }
                 })
                 .catch(() => {
-                   
+
                 });
         }
         this.edit = () => {
@@ -375,16 +371,19 @@ class Produk extends Component {
             this.setState({
                 [el.target.name]: el.target.value,
             })
-            if(el.target.name === "productName" && el.target.value.length > 1000){
+            if (el.target.name === "productName" && el.target.value.length > 1000) {
                 alert("The product name must be under 1000 characters")
                 this.setState({
-                    productName:""
+                    productName: ""
                 })
-            }else if(el.target.value === "") {
+            } else if (el.target.name === "productIdCari" && el.target.value.length > 8) {
+                alert("The product Id must be under 8 characters")
+                this.setState({
+                    productIdCari: ""
+                })
+            } else if (el.target.value === "") {
                 this.getPaging();
                 this.getCount();
-                this.clear();
-                this.save();
             }
         }
         this.handleChangeMinus = (event) => {
@@ -396,13 +395,13 @@ class Produk extends Component {
                 this.setState({
                     minus: 0
                 })
-                this.getPaging(this.state.page, this.state.orderby, this.state.show, 0, "");
+                this.getPaging(1, this.state.orderby, this.state.show, 0, "");
                 this.getCount(0);
             } else {
                 this.setState({
                     minus: 1
                 })
-                this.getPaging(this.state.page, this.state.orderby, this.state.show, 1, "");
+                this.getPaging(1, this.state.orderby, this.state.show, 1, "");
                 this.getCount(1);
             }
         };
@@ -527,7 +526,7 @@ class Produk extends Component {
                         <DivClassSingle
                             className="cari">
                             <div data-tip={(this.state.minus === 0 ? "Show Products are low" : "Show All")}>
-                            
+
                                 <FormControlLabel
                                     control={<Switch checked={checkedA}
                                         className="toogle"
@@ -561,7 +560,7 @@ class Produk extends Component {
                         </DivClassSingle>
                         <Hr />
                         <DivClassSingle className={(this.state.show <= 5) ? "list" : "scroll"}>
-                            
+
                             {this.state.products.length <= 0 ?
                                 <DivClassSingle
                                     className="list-data">
@@ -641,40 +640,40 @@ class Produk extends Component {
                             className="navbar">
                             <H2>{(this.state.disabled) ? "Monitoring " : "Kelola "} Stock {this.state.productId}</H2>
                             <DivClassSingle className="btn-navbar">
-                            {this.state.productId    === "" ? "" :
-                                <> <div data-tip="Clear Form">
-                                    <Button
-                                        onClick={this.clear}>
-                                        <FaIcons.FaBan />
-                                    </Button>
-                                </div>
-                                    <div data-tip="Edit Product">
+                                {this.state.productId === "" ? "" :
+                                    <> <div data-tip="Clear Form">
                                         <Button
-                                            onClick={this.edit}>
-                                            <FaIcons.FaPencilAlt />
+                                            onClick={this.clear}>
+                                            <FaIcons.FaBan />
                                         </Button>
                                     </div>
-                                    <div data-tip="Delete Product">
-                                        <Button
-                                            onClick={() => { this.delete() }}>
-                                            <FaIcons.FaTrash />
-                                        </Button>
-                                    </div>
-                                    <ReactTooltip />
-                                </>
-                            }
-                            
-                            {(this.state.add) ?
-                                <div data-tip="Add Product">
-                                    <Button
-                                        onClick={this.save}>
-                                        <FaIcons.FaPlus />
-                                    </Button>
-                                    <ReactTooltip />
-                                </div>
+                                        <div data-tip="Edit Product">
+                                            <Button
+                                                onClick={this.edit}>
+                                                <FaIcons.FaPencilAlt />
+                                            </Button>
+                                        </div>
+                                        <div data-tip="Delete Product">
+                                            <Button
+                                                onClick={() => { this.delete() }}>
+                                                <FaIcons.FaTrash />
+                                            </Button>
+                                        </div>
+                                        <ReactTooltip />
+                                    </>
+                                }
 
-                                : ""}
-                           
+                                {(this.state.add) ?
+                                    <div data-tip="Add Product">
+                                        <Button
+                                            onClick={this.save}>
+                                            <FaIcons.FaPlus />
+                                        </Button>
+                                        <ReactTooltip />
+                                    </div>
+
+                                    : ""}
+
                             </DivClassSingle>
                         </DivClassSingle>
                         <Hr className="hr" />
